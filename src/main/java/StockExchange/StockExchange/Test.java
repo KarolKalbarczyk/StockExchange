@@ -1,10 +1,14 @@
 package StockExchange.StockExchange;
 
-import StockExchange.StockExchange.Specs.ShareSpecs;
+import StockExchange.StockExchange.Entities.Company;
+import StockExchange.StockExchange.Entities.Person;
+import StockExchange.StockExchange.Entities.Share;
+import StockExchange.StockExchange.Repositories.ShareRepository;
+import StockExchange.StockExchange.Repositories.TraderRepository;
+import StockExchange.StockExchange.Specs.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.event.ApplicationStartedEvent;
 import org.springframework.context.event.EventListener;
-import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Component;
 
 import javax.persistence.EntityManager;
@@ -18,6 +22,7 @@ public class Test {
     @Autowired
     TraderRepository repo;
 
+
     @Autowired
     ShareRepository shareRepository;
 
@@ -28,7 +33,7 @@ public class Test {
     @EventListener(ApplicationStartedEvent.class)
     public void test() {
 
-        int[] cash = {5,10,15,4,25};
+        int[] cash = {6,10,15,4,25};
         int[] wel = {9,19,25,11,17};
         ArrayList<Company> companies = new ArrayList<>();
         ArrayList<Person> person = new ArrayList<>();
@@ -46,9 +51,12 @@ public class Test {
             shareRepository.save(share);
         }
 
-        List<Share> a = shareRepository.findAll(Specification.where((ShareSpecs.joinValue(
-                ShareSpecs.valueInBetween(8,11,Person_.wealth),Share_.owner))));
+        List<Share> a = GenericSpecs.a(manager);
+
+        //List<Share> a = shareRepository.findAll(Specification.where((ShareSpecs.joinvalue(
+          //      CompanySpecs.predicate(),Share_.owner))));
         System.out.println(a);
     }
+
 
 }

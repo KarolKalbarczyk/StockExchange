@@ -1,6 +1,4 @@
-package StockExchange.StockExchange;
-
-import org.springframework.lang.Nullable;
+package StockExchange.StockExchange.Entities;
 
 import javax.persistence.*;
 import java.util.Collection;
@@ -18,10 +16,16 @@ public class Share extends BasicEntity{
     @JoinColumn(name = "trader_id")
     private Trader owner;
 
-   /* @OneToMany(orphanRemoval = true,
+    @OneToMany(orphanRemoval = true,
     cascade = CascadeType.ALL,
     mappedBy = "share")
-    private Collection<StockTransaction> transactions;*/
+    private Collection<StockTransaction> transactions;
+
+    @OneToOne(orphanRemoval = true,
+    cascade = CascadeType.ALL,
+    mappedBy = "share",
+    fetch = FetchType.LAZY)
+    private Offer offer;
 
     public Share(Company company){
         owner = company;
@@ -33,8 +37,8 @@ public class Share extends BasicEntity{
     @Override
     public String toString() {
         return "Share{" +
-                //"company=" + company +
-                "owner=" + owner +
+                "company=" + company +
+                "offer=" + offer +
                 '}';
     }
 
@@ -57,5 +61,13 @@ public class Share extends BasicEntity{
 
     public void setOwner(Trader owner) {
         this.owner = owner;
+    }
+
+    public Offer getOffer() {
+        return offer;
+    }
+
+    public void setOffer(Offer offer) {
+        this.offer = offer;
     }
 }

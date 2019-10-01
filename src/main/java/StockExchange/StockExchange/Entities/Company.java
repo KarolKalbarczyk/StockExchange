@@ -1,4 +1,4 @@
-package StockExchange.StockExchange;
+package StockExchange.StockExchange.Entities;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -13,12 +13,6 @@ public class Company extends Trader{
     private Collection<Share> shares = new ArrayList<>();
     private int value;
 
-    public Share newShare(){
-        var share = new Share(this);
-        shares.add(share);
-        return share;
-    }
-
     public Company() {
     }
 
@@ -31,6 +25,12 @@ public class Company extends Trader{
         return "Company{" +
                 "value=" + value +
                 '}';
+    }
+
+    public Share newShare(){
+        var share = new Share(this);
+        shares.add(share);
+        return share;
     }
 
     public Collection<Share> getShares() {

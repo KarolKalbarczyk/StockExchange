@@ -1,4 +1,4 @@
-package StockExchange.StockExchange;
+package StockExchange.StockExchange.Entities;
 
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -10,4 +10,12 @@ public class BasicEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     protected long id;
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
 }

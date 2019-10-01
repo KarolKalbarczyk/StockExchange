@@ -1,11 +1,8 @@
 package StockExchange.StockExchange.Specs;
 
 import StockExchange.StockExchange.*;
+import StockExchange.StockExchange.Entities.Share;
 import org.springframework.data.jpa.domain.Specification;
-
-import javax.persistence.criteria.*;
-import javax.persistence.metamodel.Attribute;
-import javax.persistence.metamodel.SingularAttribute;
 
 public class ShareSpecs  extends GenericSpecs{
 
@@ -27,6 +24,10 @@ public class ShareSpecs  extends GenericSpecs{
 
 
     public static Specification<Share> ownerName(String name){
+        return equalStringJoin(name, Trader_.name, Share_.owner);
+    }
+
+    public static Specification<Share> date(String name){
         return equalStringJoin(name, Trader_.name, Share_.owner);
     }
 

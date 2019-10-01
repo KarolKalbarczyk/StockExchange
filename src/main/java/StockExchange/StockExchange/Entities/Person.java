@@ -1,7 +1,6 @@
-package StockExchange.StockExchange;
+package StockExchange.StockExchange.Entities;
 
 import javax.persistence.*;
-import java.util.Collection;
 
 @Entity
 @Table(name = "person")
@@ -14,6 +13,4 @@ public class Person extends Trader{
     public Person(int wealth) {
         this.wealth = wealth;
     }
-
-
 }
