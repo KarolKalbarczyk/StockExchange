@@ -2,6 +2,9 @@ package StockExchange.StockExchange.Specs;
 
 import StockExchange.StockExchange.*;
 import StockExchange.StockExchange.Entities.Share;
+import StockExchange.StockExchange.Entities.Share_;
+import StockExchange.StockExchange.Entities.Company_;
+import StockExchange.StockExchange.Entities.Trader_;
 import org.springframework.data.jpa.domain.Specification;
 
 public class ShareSpecs  extends GenericSpecs{

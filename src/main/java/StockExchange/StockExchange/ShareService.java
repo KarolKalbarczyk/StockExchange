@@ -8,6 +8,9 @@ import StockExchange.StockExchange.Repositories.TransactionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.LinkedList;
+import java.util.List;
+
 public class ShareService {
     @Autowired
     ShareRepository shareRepository;
@@ -31,6 +34,12 @@ public class ShareService {
         share.setOffer(null);
     }
 
+    public boolean hasOffer(long shareId){
+        var share = shareRepository.getOne(shareId);
+        var offer = offerRepository.findOneByShare(share);
+        return offer.isPresent();
+    }
+
     public void exchangeMoney(Trader buyer, Trader seller, int money){
         seller.changeWealth(money);
         buyer.changeWealth(-money);
@@ -41,6 +50,7 @@ public class ShareService {
         transactionRepository.save(transaction);
     }
 
+    @Transactional
     public void createShare(long companyId){
         var company = new Company();
         company.setId(companyId);
@@ -48,15 +58,18 @@ public class ShareService {
         shareRepository.save(share);
     }
 
-    public void revokeShare(long companyId, long shareId){
+    @Transactional
+    public void revokeShare(long companyId, long shareId) throws IllegalAccessException{
         var company = traderRepository.getOne(companyId);
         var share = shareRepository.findAndJoinOwner(shareId);
-        if(share.getOwner().equals(company)){
-            return;
+        if(!share.getOwner().equals(company)){
+            throw new IllegalAccessException("you can't revoke share that you do not own");
         }
         share.setOwner(null);
         share.setCompany(null);
     }
+
+
 
 
 }

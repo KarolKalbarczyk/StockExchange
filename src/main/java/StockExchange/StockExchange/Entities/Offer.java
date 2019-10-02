@@ -14,6 +14,15 @@ public class Offer extends BasicEntity {
     @JoinColumn(name = "trader_id")
     private Trader owner;
 
+    public Offer() {
+    }
+
+    public Offer(int cost, Share share, Trader owner) {
+        this.cost = cost;
+        this.share = share;
+        this.owner = owner;
+    }
+
     public int getCost() {
         return cost;
     }

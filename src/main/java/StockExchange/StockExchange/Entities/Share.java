@@ -16,6 +16,7 @@ public class Share extends BasicEntity{
     @JoinColumn(name = "trader_id")
     private Trader owner;
 
+    int value;
     @OneToMany(orphanRemoval = true,
     cascade = CascadeType.ALL,
     mappedBy = "share")
@@ -27,6 +28,8 @@ public class Share extends BasicEntity{
     fetch = FetchType.LAZY)
     private Offer offer;
 
+    int test;
+
     public Share(Company company){
         owner = company;
         this.company = company;
@@ -37,8 +40,8 @@ public class Share extends BasicEntity{
     @Override
     public String toString() {
         return "Share{" +
-                "company=" + company +
-                "offer=" + offer +
+               // "company=" + company +
+                //"offer=" + offer +
                 '}';
     }
 

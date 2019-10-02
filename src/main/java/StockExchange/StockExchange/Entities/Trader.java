@@ -1,5 +1,7 @@
 package StockExchange.StockExchange.Entities;
 
+import StockExchange.StockExchange.User;
+
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -28,6 +30,10 @@ public abstract class Trader  extends  BasicEntity{
         trader.changeWealth(-cost);
         share.changeOwner(trader);
     }
+
+    @OneToOne(fetch = FetchType.LAZY)
+    @MapsId
+    private User user;
 
     @Override
     public String toString() {

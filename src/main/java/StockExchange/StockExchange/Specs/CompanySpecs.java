@@ -1,7 +1,7 @@
 package StockExchange.StockExchange.Specs;
 
 import StockExchange.StockExchange.Entities.Company;
-import StockExchange.StockExchange.Company_;
+import StockExchange.StockExchange.Entities.Company_;
 import org.springframework.data.jpa.domain.Specification;
 
 import javax.persistence.criteria.CriteriaBuilder;
