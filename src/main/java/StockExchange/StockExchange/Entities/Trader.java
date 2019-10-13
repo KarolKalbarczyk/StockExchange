@@ -1,8 +1,10 @@
 package StockExchange.StockExchange.Entities;
 
-import StockExchange.StockExchange.User;
+import StockExchange.StockExchange.UserData;
 
 import javax.persistence.*;
+import javax.validation.constraints.Digits;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collection;
 
@@ -10,7 +12,8 @@ import java.util.Collection;
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 public abstract class Trader  extends  BasicEntity{
 
-    protected int wealth;
+    @Digits(integer = 10,fraction = 2)
+    protected BigDecimal wealth;
     protected String name;
 
     @OneToMany(cascade = CascadeType.ALL,
@@ -23,28 +26,20 @@ public abstract class Trader  extends  BasicEntity{
             mappedBy = "owner")
     protected Collection<Offer> offers = new ArrayList<>();
 
-    public void sellShare(Trader trader,
-                              Share share, int cost) {
-        ownedShares.remove(share);
-        wealth += cost;
-        trader.changeWealth(-cost);
-        share.changeOwner(trader);
-    }
-
-    @OneToOne(fetch = FetchType.LAZY)
-    @MapsId
-    private User user;
+    //@OneToOne(fetch = FetchType.LAZY)
+   // @MapsId
+   // private UserData account;
 
     @Override
     public String toString() {
         return "Trader{" +
-                "wealth=" + wealth +
+                "cost=" + wealth +
                 ", name='" + name + '\'' +
                 '}';
     }
 
-    public void changeWealth(int amount){
-        wealth += amount;
+    public void changeWealth(BigDecimal amount){
+        wealth.add(amount);
     }
 
     public Collection<Share> getOwnedShares() {
@@ -55,11 +50,11 @@ public abstract class Trader  extends  BasicEntity{
         this.ownedShares = ownedShares;
     }
 
-    public int getWealth() {
+    public BigDecimal getWealth() {
         return wealth;
     }
 
-    public void setWealth(int wealth) {
+    public void setWealth(BigDecimal wealth) {
         this.wealth = wealth;
     }
 

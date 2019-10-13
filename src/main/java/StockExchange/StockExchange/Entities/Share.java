@@ -6,25 +6,22 @@ import java.util.Collection;
 @Entity
 @Table(name = "share")
 public class Share extends BasicEntity{
-    @ManyToOne(fetch = FetchType.LAZY,
-    cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "company_id")
     private Company company;
 
-    @ManyToOne(fetch = FetchType.LAZY,
-            cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "trader_id")
     private Trader owner;
 
-    int value;
-    @OneToMany(orphanRemoval = true,
+    /*@OneToMany(orphanRemoval = true,
     cascade = CascadeType.ALL,
     mappedBy = "share")
-    private Collection<StockTransaction> transactions;
+    private Collection<StockTransaction> transactions;*/
 
     @OneToOne(orphanRemoval = true,
-    cascade = CascadeType.ALL,
-    mappedBy = "share",
+            cascade = CascadeType.ALL
+            ,mappedBy = "share",
     fetch = FetchType.LAZY)
     private Offer offer;
 
@@ -33,6 +30,7 @@ public class Share extends BasicEntity{
     public Share(Company company){
         owner = company;
         this.company = company;
+        this.test = company.getValue()*2;
     }
 
     public Share(){}
@@ -47,7 +45,11 @@ public class Share extends BasicEntity{
 
     public void changeOwner(Trader owner){
         this.owner = owner;
-        owner.getOwnedShares().add(this);
+    }
+
+    @PreRemove
+    public void remove(){
+        offer = null;
     }
 
     public Company getCompany() {

@@ -16,8 +16,10 @@ public interface ShareRepository extends JpaRepository<Share,Long>, JpaSpecifica
      List<Share> findAllByOwner(Trader owner);
      List<Share> findAllByCompany(Company company);
 
-     @Query("Select s,t from share s join s.trader t where id = ?1")
-     Share findAndJoinOwner(long id);
+     //@Query("Select s from Share s join s.trader t where s.id = 1")
+     //Share findAndJoinOwner(long id);
+
+
 
 
 }

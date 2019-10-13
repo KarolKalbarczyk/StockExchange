@@ -1,6 +1,7 @@
 package StockExchange.StockExchange.Entities;
 
 import javax.persistence.*;
+import java.math.BigDecimal;
 
 @Entity
 @Table(name = "person")
@@ -10,7 +11,7 @@ public class Person extends Trader{
     public Person() {
     }
 
-    public Person(int wealth) {
+    public Person(BigDecimal wealth) {
         this.wealth = wealth;
     }
 }

@@ -36,7 +36,7 @@ public class ShareSpecs  extends GenericSpecs{
 
 
    /* public static  Specification<Share> ValueinaBetween(int min, int max, SingularAttribute attr) {
-        Specification<Trader> a = valueInBetween(0,5,Company_.wealth);
+        Specification<Trader> a = valueInBetween(0,5,Company_.cost);
         return (From root, Query query, CriteriaBuilder criteriaBuilder) -> {
             root.get(Share_.id);
             criteriaBuilder.between(root.get(Share_.id), min, max);

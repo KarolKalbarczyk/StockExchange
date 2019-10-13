@@ -1,33 +1,41 @@
 package StockExchange.StockExchange.Entities;
 
 import javax.persistence.*;
+import javax.validation.constraints.Digits;
+import java.math.BigDecimal;
 
 @Entity
 public class Offer extends BasicEntity {
-    int cost;
 
-    @OneToOne(cascade = CascadeType.ALL,
-    fetch = FetchType.LAZY)
+    @Digits(integer = 10,fraction = 2)
+    protected BigDecimal cost;
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "share_id")
     private Share share;
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne()
     @JoinColumn(name = "trader_id")
     private Trader owner;
 
     public Offer() {
     }
 
-    public Offer(int cost, Share share, Trader owner) {
+    public Offer(@Digits(integer = 10, fraction = 2) BigDecimal cost,
+                 Share share, Trader owner) {
         this.cost = cost;
         this.share = share;
         this.owner = owner;
     }
 
-    public int getCost() {
+    @PreRemove
+    public void preRemove(){
+        share = null;
+    }
+
+    public BigDecimal getCost() {
         return cost;
     }
 
-    public void setCost(int cost) {
+    public void setCost(BigDecimal cost) {
         this.cost = cost;
     }
 

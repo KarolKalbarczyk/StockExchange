@@ -4,6 +4,8 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.Immutable;
 
 import javax.persistence.*;
+import javax.validation.constraints.Digits;
+import java.math.BigDecimal;
 import java.util.Calendar;
 
 @Entity
@@ -15,13 +17,14 @@ public class StockTransaction extends BasicEntity {
     @Temporal(TemporalType.TIMESTAMP)
     @CreationTimestamp
     private Calendar date;
-    private int finalCost;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "seller_id")
     private Trader seller;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "buyer_id")
     private Trader buyer;
+    @Digits(integer = 10,fraction = 2)
+    protected BigDecimal finalCost;
 
     public StockTransaction() {
     }
