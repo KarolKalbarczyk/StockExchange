@@ -1,4 +1,4 @@
-package StockExchange.StockExchange;
+package StockExchange.StockExchange.Services;
 
 import StockExchange.StockExchange.Entities.*;
 import StockExchange.StockExchange.Repositories.OfferRepository;
@@ -16,23 +16,14 @@ import java.util.LinkedList;
 import java.util.List;
 
 @Service
-public class ShareService {
-    @Autowired
-    ShareRepository shareRepository;
-    @Autowired
-    TraderRepository traderRepository;
-    @Autowired
-    OfferRepository offerRepository;
-    @Autowired
-    TransactionRepository transactionRepository;
-    @PersistenceContext
-    EntityManager manager;
+public class ShareService extends MainService {
+
 
     @Transactional
-    public void exchangeShare(long shareId, long offerId, long buyerId){
+    public void exchangeShare(long offerId, String account){
         var offer = offerRepository.getOne(offerId);
-        var buyer = traderRepository.getOne(buyerId);
-        var share = shareRepository.getOne(shareId);
+        var buyer = traderRepository.findOneByAccountLogin(account);
+        var share = offer.getShare();
         exchangeShare(share,offer,buyer);
     }
 
@@ -42,8 +33,6 @@ public class ShareService {
         createTransaction(share,offer,buyer);
         share.setOwner(buyer);
         offerRepository.delete(offer);
-        offer.setOwner(null);
-        share.setOffer(null);
     }
 
     public boolean hasOffer(long shareId){
@@ -53,7 +42,7 @@ public class ShareService {
     }
 
     public void exchangeMoney(Trader buyer, Trader seller, BigDecimal money){
-        if(buyer.getWealth().compareTo(money) >= 0) throw new IllegalCallerException("not enough money for this transcation");
+        if(buyer.getWealth().compareTo(money) <= 0) throw new IllegalCallerException("not enough money for this transcation");
         seller.changeWealth( money);
         buyer.changeWealth(money.negate());
     }

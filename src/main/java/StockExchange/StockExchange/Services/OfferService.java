@@ -1,4 +1,4 @@
-package StockExchange.StockExchange;
+package StockExchange.StockExchange.Services;
 
 import StockExchange.StockExchange.Entities.Offer;
 import StockExchange.StockExchange.Entities.Person;
@@ -14,15 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.math.BigDecimal;
 
 @Service
-public class OfferService {
-    @Autowired
-    ShareRepository shareRepository;
-    @Autowired
-    TraderRepository traderRepository;
-    @Autowired
-    OfferRepository offerRepository;
-    @Autowired
-    TransactionRepository transactionRepository;
+public class OfferService extends MainService{
 
     @Transactional
     public void createOffer(long shareId, long traderId, BigDecimal cost){

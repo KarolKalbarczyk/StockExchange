@@ -8,8 +8,8 @@ import java.math.BigDecimal;
 public class Offer extends BasicEntity {
 
     @Digits(integer = 10,fraction = 2)
-    protected BigDecimal cost;
-    @OneToOne(fetch = FetchType.LAZY)
+    private BigDecimal cost;
+    @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "share_id")
     private Share share;
     @ManyToOne()
@@ -28,6 +28,7 @@ public class Offer extends BasicEntity {
 
     @PreRemove
     public void preRemove(){
+        owner = null;
         share = null;
     }
 

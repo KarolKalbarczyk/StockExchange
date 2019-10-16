@@ -1,17 +1,16 @@
 package StockExchange.StockExchange;
 
 import StockExchange.StockExchange.Entities.*;
-import StockExchange.StockExchange.Entities.Share_;
 import StockExchange.StockExchange.Repositories.OfferRepository;
 import StockExchange.StockExchange.Repositories.ShareRepository;
 import StockExchange.StockExchange.Repositories.TraderRepository;
-import StockExchange.StockExchange.Specs.*;
+import StockExchange.StockExchange.Services.OfferService;
+import StockExchange.StockExchange.Services.ShareService;
 import StockExchange.StockExchange.StringCriteria.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.event.ApplicationStartedEvent;
 import org.springframework.context.event.EventListener;
 import org.springframework.core.annotation.Order;
-import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -22,7 +21,6 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
-import static StockExchange.StockExchange.StringCriteria.CompanyCriteria.valueInBetween;
 import static StockExchange.StockExchange.StringCriteria.ShareCriteria.*;
 import static StockExchange.StockExchange.StringCriteria.TraderCriteria.*;
 
@@ -115,14 +113,16 @@ public class Test {
     @Order(5)
     public void testExchangeShareWhenNotEnoughMoney(){
         var person = new Person();
-        person.setWealth(new BigDecimal(50));
+        person.setWealth(new BigDecimal(40));
         traderRepository.save(person);
-        shareService.exchangeShare(shares.get(0).getId(),offers.get(0).getId(),person.getId());
+        try {
+            shareService.exchangeShare(shares.get(0).getId(), offers.get(0).getId(), person.getId());
+        }catch (Exception e){}
         List<Share> list1 = shareRepository.findAllByOwner(traders.get(0));
         List<Share> list2 = shareRepository.findAllByOwner(person);
         assert list1.size() == 1;
         assert list2.size() == 0;
-        traderRepository.delete(person);
+        //traderRepository.delete(person);
     }
 
     @EventListener(ApplicationStartedEvent.class)
@@ -136,6 +136,13 @@ public class Test {
         List<Share> list2 = shareRepository.findAllByOwner(person);
         assert list1.size() == 0;
         assert list2.size() == 1;
+    }
+
+    @EventListener(ApplicationStartedEvent.class)
+    @Order(7)
+    public void testCompletion(){
+        var share = shareRepository.findOneById(shares.get(0).getId());
+        assert share.getOffer() == null;
     }
 
 /* @EventListener(ApplicationStartedEvent.class)

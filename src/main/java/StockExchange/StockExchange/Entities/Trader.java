@@ -1,7 +1,5 @@
 package StockExchange.StockExchange.Entities;
 
-import StockExchange.StockExchange.UserData;
-
 import javax.persistence.*;
 import javax.validation.constraints.Digits;
 import java.math.BigDecimal;
@@ -12,9 +10,9 @@ import java.util.Collection;
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 public abstract class Trader  extends  BasicEntity{
 
-    @Digits(integer = 10,fraction = 2)
-    protected BigDecimal wealth;
     protected String name;
+    @Digits(integer = 10,fraction = 2)
+    protected BigDecimal wealth = new BigDecimal(0);
 
     @OneToMany(cascade = CascadeType.ALL,
             fetch = FetchType.LAZY,orphanRemoval = true,
@@ -26,9 +24,9 @@ public abstract class Trader  extends  BasicEntity{
             mappedBy = "owner")
     protected Collection<Offer> offers = new ArrayList<>();
 
-    //@OneToOne(fetch = FetchType.LAZY)
-   // @MapsId
-   // private UserData account;
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "account_id")
+    private Account account;
 
     @Override
     public String toString() {

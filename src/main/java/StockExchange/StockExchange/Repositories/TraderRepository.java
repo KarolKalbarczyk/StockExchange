@@ -11,4 +11,5 @@ import java.util.List;
 @Repository
 public interface TraderRepository  extends JpaRepository<Trader,Long>, JpaSpecificationExecutor<Trader> {
     Trader findOneByName(String name);
+    Trader findOneByAccountLogin(String login);
 }
