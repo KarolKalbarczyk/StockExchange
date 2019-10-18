@@ -13,11 +13,15 @@ public class GenericCriteria {
 
 
     public  static <T> Criteria<T> valueInRange(Class<T> clazz, Attribute<T,? extends Number> attr, double min, double max){
-        return ()-> List.of(String.format(Locale.ENGLISH," %s.%s between %f and %f",clazz.getSimpleName().toLowerCase(),attr.getName(),min,max));
+        return ()-> List.of(String.format(Locale.ENGLISH,
+                " %s.%s between %f and %f",
+                clazz.getSimpleName().toLowerCase(),attr.getName(),min,max));
     }
 
     public static  <T> Criteria<T> valueEqual(Class<T> clazz, Attribute<T,? extends Number> attr, double value){
-        return ()-> List.of(String.format(Locale.ENGLISH," %s.%s = %f",clazz.getSimpleName().toLowerCase(),attr.getName(),value));
+        return ()-> List.of(String.format(Locale.ENGLISH,
+                " %s.%s = %f",clazz.getSimpleName().toLowerCase(),
+                attr.getName(),value));
     }
 
     public static  <T> Criteria<T> stringEqual(Class<T> clazz, Attribute<T,String> attr,String name){

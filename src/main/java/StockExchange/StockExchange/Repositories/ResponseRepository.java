@@ -1,9 +1,10 @@
 package StockExchange.StockExchange.Repositories;
 
-import StockExchange.StockExchange.Entities.Responses.Language;
-import StockExchange.StockExchange.Entities.Responses.Response;
+import StockExchange.StockExchange.Entities.Response;
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import java.util.Locale;
+
 public interface ResponseRepository extends JpaRepository<Response,Long> {
-    Response findOneByNameAndLanguage(String name, Language language);
+    Response findOneByNameAndLocale(String name, Locale locale);
 }

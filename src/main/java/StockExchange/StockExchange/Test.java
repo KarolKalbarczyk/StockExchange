@@ -1,6 +1,7 @@
 package StockExchange.StockExchange;
 
 import StockExchange.StockExchange.Entities.*;
+import StockExchange.StockExchange.Repositories.AccountRepository;
 import StockExchange.StockExchange.Repositories.OfferRepository;
 import StockExchange.StockExchange.Repositories.ShareRepository;
 import StockExchange.StockExchange.Repositories.TraderRepository;
@@ -39,7 +40,8 @@ public class Test {
     OfferService offerService;
     @Autowired
     OfferRepository offerRepository;
-
+    @Autowired
+    AccountRepository accountRepository;
 
     @PersistenceContext
     EntityManager manager;
@@ -55,11 +57,17 @@ public class Test {
     public void prepare(){
         var company = new Company(10);
         traders.add(company);
+        //shares.add(shareService.createShare(company.getId()));
+        //shareRepository.save(shares.get(0));
+        Account account = new Account("name");
+        account.setAccount(company);
+        company.setAccount(account);
         traderRepository.save(company);
-        shares.add(shareService.createShare(company.getId()));
-        shareRepository.save(shares.get(0));
+        accountRepository.save(account);
+        long id = accountRepository.getTraderId("name");
+        System.out.println("CCCC"+id);
     }
-
+/*
      @EventListener(ApplicationStartedEvent.class)
      @Order(1)
      public void testShareCreation(){
@@ -116,7 +124,7 @@ public class Test {
         person.setWealth(new BigDecimal(40));
         traderRepository.save(person);
         try {
-            shareService.exchangeShare(shares.get(0).getId(), offers.get(0).getId(), person.getId());
+            //shareService.exchangeShare(offers.get(0).getId(), person.getId());
         }catch (Exception e){}
         List<Share> list1 = shareRepository.findAllByOwner(traders.get(0));
         List<Share> list2 = shareRepository.findAllByOwner(person);
@@ -131,7 +139,7 @@ public class Test {
         var person = new Person();
         person.setWealth(new BigDecimal(50));
         traderRepository.save(person);
-        shareService.exchangeShare(shares.get(0).getId(),offers.get(0).getId(),person.getId());
+        //shareService.exchangeShare(offers.get(0).getId(),person.getId());
         List<Share> list1 = shareRepository.findAllByOwner(traders.get(0));
         List<Share> list2 = shareRepository.findAllByOwner(person);
         assert list1.size() == 0;

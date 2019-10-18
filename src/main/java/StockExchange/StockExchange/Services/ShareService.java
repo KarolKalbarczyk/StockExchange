@@ -20,9 +20,9 @@ public class ShareService extends MainService {
 
 
     @Transactional
-    public void exchangeShare(long offerId, String account){
+    public void exchangeShare(long offerId, String accountName){
         var offer = offerRepository.getOne(offerId);
-        var buyer = traderRepository.findOneByAccountLogin(account);
+        var buyer = traderRepository.findOneByAccountLogin(accountName);
         var share = offer.getShare();
         exchangeShare(share,offer,buyer);
     }
@@ -52,9 +52,9 @@ public class ShareService extends MainService {
         transactionRepository.save(transaction);
     }
 
-    @Transactional
-    public Share createShare(long companyId){
-        var company = manager.getReference(Company.class,companyId);
+   /* @Transactional
+    public Share createShare(String accountName){
+        var company = traderRepository.findOneByAccountLogin(accountName);
         var share = new Share(company);
         shareRepository.save(share);
         return share;
