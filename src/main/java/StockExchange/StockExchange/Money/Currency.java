@@ -24,17 +24,18 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 public enum Currency {
-    Dolar("USD");
+    USA("USD"),
+    PL("PLN");
 
 
     Currency(String name){this.name = name;};
 
     private final String name;
-    private final String HTTP_ADRESS = "https://api.exchangerate-api.com/v4/latest/";
+    private final String HTTP_ADRESS = "https://api.exchangerate-api.com/v4/latest/USD";
 
-    public double get() {
+    public double getRate() {
         try{
-            URL url = new URL("https://api.exchangerate-api.com/v4/latest/USD");
+            URL url = new URL(HTTP_ADRESS);
             HttpURLConnection con = (HttpURLConnection) url.openConnection();
             con.setRequestMethod("GET");
             try (BufferedReader br = new BufferedReader(

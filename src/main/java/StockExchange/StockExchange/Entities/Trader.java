@@ -74,4 +74,12 @@ public abstract class Trader  extends  BasicEntity{
     public void setOffers(Collection<Offer> offers) {
         this.offers = offers;
     }
+
+    public Account getAccount() {
+        return account;
+    }
+
+    public void setAccount(Account account) {
+        this.account = account;
+    }
 }

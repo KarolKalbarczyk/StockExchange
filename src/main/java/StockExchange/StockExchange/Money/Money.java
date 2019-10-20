@@ -19,6 +19,6 @@ public interface Money extends Serializable{
     public Money div(long n);
     public Money div(BigDecimal n);
 
-    public long inDiffCurrency(Currency currency);
+    public String getMoneyInPresentCurrency();
 
 }

@@ -66,6 +66,7 @@ public class Test {
         traderRepository.save(company);
         var company2 =traderRepository.findOneById(company.getId());
         Company company3 = (Company) company2;
+        System.out.println(company3.getValue());
         System.out.println(company2);
     }
 /*

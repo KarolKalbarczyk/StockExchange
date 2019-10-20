@@ -50,8 +50,8 @@ public class Company extends Trader{
         this.shares = shares;
     }
 
-    public Money getValue() {
-        return value;
+    public String getValue() {
+        return value.getMoneyInPresentCurrency();
     }
 
     public void setValue(Money value) {

@@ -1,5 +1,7 @@
 package StockExchange.StockExchange.Money;
 
+import org.springframework.context.i18n.LocaleContextHolder;
+
 import javax.management.relation.RoleUnresolved;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -71,7 +73,13 @@ public class MoneyImpl implements Money {
     }
 
     @Override
-    public long inDiffCurrency(Currency currency) {
-        return 0;
+    public String getMoneyInPresentCurrency(){
+       var locale = LocaleContextHolder.getLocale();
+       var currency = Currency.valueOf(locale.getCountry());
+       var rate = new BigDecimal(currency.getRate());
+       var moneyToDisplay = this.money.multiply(rate).
+               setScale(2,RoundingMode.HALF_UP);
+       var a = moneyToDisplay.toString();
+       return a;
     }
 }

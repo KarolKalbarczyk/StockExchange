@@ -14,10 +14,10 @@ public class Message extends BasicEntity {
     @Size(max = 600)
     String text;
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "account_id")
+    @JoinColumn(name = "sender_id")
     private Account sender;
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "account_id")
+    @JoinColumn(name = "receiver_id")
     private Account receiver;
     @CreationTimestamp
     @Temporal(TemporalType.TIMESTAMP)
