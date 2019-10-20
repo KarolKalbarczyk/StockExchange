@@ -1,5 +1,7 @@
 package StockExchange.StockExchange.Entities;
 
+import org.hibernate.annotations.CacheConcurrencyStrategy;
+
 import javax.persistence.*;
 import javax.validation.constraints.Digits;
 import java.math.BigDecimal;
@@ -8,6 +10,7 @@ import java.util.Collection;
 
 @Entity
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+@org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.TRANSACTIONAL)
 public abstract class Trader  extends  BasicEntity{
 
     protected String name;

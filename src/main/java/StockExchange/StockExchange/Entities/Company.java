@@ -1,6 +1,11 @@
 package StockExchange.StockExchange.Entities;
 
+import StockExchange.StockExchange.Money.Money;
+import StockExchange.StockExchange.Money.MoneyImpl;
+
 import javax.persistence.*;
+import javax.validation.constraints.Digits;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collection;
 @Entity
@@ -11,14 +16,18 @@ public class Company extends Trader{
             fetch = FetchType.LAZY,orphanRemoval = true,
             mappedBy = "company")
     private Collection<Share> shares = new ArrayList<>();
-    private int value;
+    //@Digits(integer = 10,fraction = 2)
+    private Money value;
+   // Money a = new Money();
 
     public Company() {
     }
 
-    public Company(int value) {
-        this.value = value;
+    public Company(long value) {
+        this.value = new MoneyImpl();
+        this.value.setAmount(value);
     }
+
 
     @Override
     public String toString() {
@@ -41,11 +50,11 @@ public class Company extends Trader{
         this.shares = shares;
     }
 
-    public int getValue() {
+    public Money getValue() {
         return value;
     }
 
-    public void setValue(int value) {
+    public void setValue(Money value) {
         this.value = value;
     }
 }
