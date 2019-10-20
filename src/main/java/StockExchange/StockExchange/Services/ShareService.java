@@ -18,6 +18,7 @@ import java.util.List;
 @Service
 public class ShareService extends MainService {
 
+    private String NOT_COMPANY = "notCompany";
 
     @Transactional
     public void exchangeShare(long offerId, String accountName){
@@ -52,24 +53,35 @@ public class ShareService extends MainService {
         transactionRepository.save(transaction);
     }
 
-   /* @Transactional
-    public Share createShare(String accountName){
+    @Transactional
+    public Share createShareIfCompany(String accountName,int cost){
         var company = traderRepository.findOneByAccountLogin(accountName);
+        if(company instanceof Company) return createShareAndOffer((Company) company,cost);
+        else throw new IllegalCallerException(responseService.getMessage(NOT_COMPANY));
+    }
+
+    private Share createShareAndOffer(Company company,int cost){
         var share = new Share(company);
+        var properCost = new BigDecimal(cost);
+        var a= new BigDecimal(5);
+        var offer = new Offer(properCost,share,company);
         shareRepository.save(share);
+        offerRepository.save(offer);
         return share;
     }
 
-  /*  @Transactional
-    public void revokeShare(long companyId, long shareId) throws IllegalAccessException{
-        var company = traderRepository.getOne(companyId);
-        var share = shareRepository.findAndJoinOwner(shareId);
+    @Transactional
+    public void revokeShare(String accountName, long shareId) throws IllegalAccessException{
+        var company = traderRepository.findOneByAccountLogin(accountName);
+        var share = shareRepository.findOneById(shareId);
         if(!share.getOwner().equals(company)){
             throw new IllegalAccessException("you can't revoke share that you do not own");
+        }else {
+            share.setOwner(null);
+            share.setCompany(null);
+            share.setOffer(null);
         }
-        share.setOwner(null);
-        share.setCompany(null);
-    }*/
+    }
 
 
 

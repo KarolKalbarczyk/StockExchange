@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 
 import java.text.MessageFormat;
 
-@Service
+@Service("ResponseService")
 public class ResponseService {
     @Autowired
     ResponseRepository repository;

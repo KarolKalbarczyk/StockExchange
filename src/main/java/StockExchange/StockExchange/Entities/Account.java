@@ -12,7 +12,8 @@ import java.util.List;
 public class Account extends BasicEntity {
     private String login;
     private String password;
-    @OneToOne(fetch = FetchType.LAZY,
+    @OneToOne(cascade = CascadeType.ALL,
+            fetch = FetchType.LAZY,
     mappedBy = "account")
     private Trader account;
     @OneToMany(fetch = FetchType.LAZY,

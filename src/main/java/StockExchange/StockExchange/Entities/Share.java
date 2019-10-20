@@ -30,7 +30,7 @@ public class Share extends BasicEntity{
     public Share(Company company){
         owner = company;
         this.company = company;
-        this.test = company.getValue()*2;
+       // this.test = company.getValue().intValue()*2;
     }
 
     public Share(){}

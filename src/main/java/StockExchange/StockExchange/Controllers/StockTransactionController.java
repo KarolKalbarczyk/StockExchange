@@ -27,9 +27,10 @@ public class StockTransactionController {
         return new ResponseEntity(message,HttpStatus.OK);
     }
 
-   /* @PostMapping
-    public ResponseEntity<Void> createShare(Principal principal){
-        //shareService.createShare(principal.getName());
-        return null;
-    }*/
+    @PostMapping("/aa")
+    public ResponseEntity<String> createShare(@RequestBody int cost,Principal principal){
+        shareService.createShareIfCompany(principal.getName(),cost);
+        var message = responseService.getMessage(SUCCESS);
+        return new ResponseEntity(message,HttpStatus.OK);
+    }
 }

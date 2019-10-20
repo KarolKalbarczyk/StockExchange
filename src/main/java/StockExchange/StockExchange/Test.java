@@ -57,15 +57,16 @@ public class Test {
     public void prepare(){
         var company = new Company(10);
         traders.add(company);
-        //shares.add(shareService.createShare(company.getId()));
+       // shares.add(shareService.createShareIfCompany("a",50));
         //shareRepository.save(shares.get(0));
         Account account = new Account("name");
         account.setAccount(company);
         company.setAccount(account);
-        traderRepository.save(company);
         accountRepository.save(account);
-        long id = accountRepository.getTraderId("name");
-        System.out.println("CCCC"+id);
+        traderRepository.save(company);
+        var company2 =traderRepository.findOneById(company.getId());
+        Company company3 = (Company) company2;
+        System.out.println(company2);
     }
 /*
      @EventListener(ApplicationStartedEvent.class)

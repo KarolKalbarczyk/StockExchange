@@ -23,6 +23,7 @@ public class Offer extends BasicEntity {
                  Share share, Trader owner) {
         this.cost = cost;
         this.share = share;
+        share.setOffer(this);
         this.owner = owner;
     }
 
