@@ -17,10 +17,10 @@ import java.math.BigDecimal;
 public class OfferService extends MainService{
 
     @Transactional
-    public void createOffer(long shareId, long traderId, BigDecimal cost){
+    public void createOffer(long shareId, String accountLogin, int cost){
         var share = shareRepository.getOne(shareId);
-        var trader = traderRepository.getOne(traderId);
-        var offer = new Offer(cost,share,trader);
+        var trader = traderRepository.findOneByAccountLogin(accountLogin);
+        var offer = new Offer(new BigDecimal(cost),share,trader);
         share.setOffer(offer);
         offerRepository.save(offer);
     }

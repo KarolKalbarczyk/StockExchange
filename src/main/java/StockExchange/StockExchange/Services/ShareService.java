@@ -1,6 +1,8 @@
 package StockExchange.StockExchange.Services;
 
 import StockExchange.StockExchange.Entities.*;
+import StockExchange.StockExchange.Money.Money;
+import StockExchange.StockExchange.Money.MoneyFactory;
 import StockExchange.StockExchange.Repositories.OfferRepository;
 import StockExchange.StockExchange.Repositories.ShareRepository;
 import StockExchange.StockExchange.Repositories.TraderRepository;
@@ -42,10 +44,11 @@ public class ShareService extends MainService {
         return offer.isPresent();
     }
 
-    public void exchangeMoney(Trader buyer, Trader seller, BigDecimal money){
-        if(buyer.getWealth().compareTo(money) <= 0) throw new IllegalCallerException("not enough money for this transcation");
+    public void exchangeMoney(Trader buyer, Trader seller, Money money){
+        if(buyer.getWealth().compareTo(money) < 0)
+            throw new IllegalCallerException("not enough money for this transcation");
         seller.changeWealth( money);
-        buyer.changeWealth(money.negate());
+        buyer.get;
     }
 
     private void createTransaction(Share share, Offer offer, Trader buyer){
@@ -54,7 +57,7 @@ public class ShareService extends MainService {
     }
 
     @Transactional
-    public Share createShareIfCompany(String accountName,int cost){
+    public Share createShareAndOfferIfCompany(String accountName, int cost){
         var company = traderRepository.findOneByAccountLogin(accountName);
         if(company instanceof Company) return createShareAndOffer((Company) company,cost);
         else throw new IllegalCallerException(responseService.getMessage(NOT_COMPANY));
@@ -62,8 +65,7 @@ public class ShareService extends MainService {
 
     private Share createShareAndOffer(Company company,int cost){
         var share = new Share(company);
-        var properCost = new BigDecimal(cost);
-        var a= new BigDecimal(5);
+        Money properCost = MoneyFactory.getMoney(cost);
         var offer = new Offer(properCost,share,company);
         shareRepository.save(share);
         offerRepository.save(offer);

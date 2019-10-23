@@ -26,7 +26,7 @@ public class StockExchangeApplicationTests {
     @Mock
     MessageSource messageSource;
    // @InjectMocks
-   // StockTransactionController controller;
+   // ShareController controller;
     @Mock
     Principal principal;
 

@@ -4,20 +4,25 @@ import StockExchange.StockExchange.Entities.Trader;
 import StockExchange.StockExchange.Entities.Trader_;
 
 import javax.persistence.metamodel.Attribute;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
 
-public class GenericCriteria {
+public abstract class GenericCriteria {
 
 
-    public  static <T> Criteria<T> valueInRange(Class<T> clazz, Attribute<T,? extends Number> attr, double min, double max){
-        return ()-> List.of(String.format(Locale.ENGLISH," %s.%s between %f and %f",clazz.getSimpleName().toLowerCase(),attr.getName(),min,max));
+    public  static <T> Criteria<T> valueInRange(Class<T> clazz, Attribute<T,?> attr, double min, double max){
+        var maxS = new BigDecimal(max).setScale(2, RoundingMode.HALF_UP).toString();
+        var minS = new BigDecimal(min).setScale(2, RoundingMode.HALF_UP).toString();
+        return ()-> List.of(String.format(Locale.ENGLISH," %s.%s between %s and %s",clazz.getSimpleName().toLowerCase(),attr.getName(),minS,maxS));
     }
 
     public static  <T> Criteria<T> valueEqual(Class<T> clazz, Attribute<T,? extends Number> attr, double value){
-        return ()-> List.of(String.format(Locale.ENGLISH," %s.%s = %f",clazz.getSimpleName().toLowerCase(),attr.getName(),value));
+        var val = new BigDecimal(value).setScale(2, RoundingMode.HALF_UP).toString();
+        return ()-> List.of(String.format(Locale.ENGLISH," %s.%s = %s",clazz.getSimpleName().toLowerCase(),attr.getName(),val));
     }
 
     public static  <T> Criteria<T> stringEqual(Class<T> clazz, Attribute<T,String> attr,String name){

@@ -1,6 +1,5 @@
 package StockExchange.StockExchange.Controllers;
 
-import StockExchange.StockExchange.Entities.Company;
 import StockExchange.StockExchange.Services.ResponseService;
 import StockExchange.StockExchange.Services.ShareService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,8 +10,8 @@ import org.springframework.web.bind.annotation.*;
 import java.security.Principal;
 
 @RestController
-@RequestMapping("/transcation")
-public class StockTransactionController {
+@RequestMapping("/share")
+public class ShareController {
     private final String SUCCESS = "succes";
 
     @Autowired
@@ -20,7 +19,7 @@ public class StockTransactionController {
     @Autowired
     ResponseService responseService;
 
-    @PostMapping
+    @PostMapping("/buy")
     public ResponseEntity<String> runTranscation(
             @RequestBody long offerId, Principal principal){
         shareService.exchangeShare(offerId,principal.getName());
@@ -28,16 +27,23 @@ public class StockTransactionController {
         return new ResponseEntity(message,HttpStatus.OK);
     }
 
-    @PostMapping("/aa")
+    @PostMapping()
     public ResponseEntity<String> createShare(@RequestBody int cost,Principal principal){
-        shareService.createShareIfCompany(principal.getName(),cost);
+        shareService.createShareAndOfferIfCompany(principal.getName(),cost);
         var message = responseService.getMessage(SUCCESS);
         return new ResponseEntity(message,HttpStatus.OK);
     }
 
-    @GetMapping
-    public Company test(){
-        Company company = new Company(10);
-        return company;
+    @DeleteMapping()
+    public ResponseEntity<String> revokeShare(@RequestBody long id,Principal principal ) throws IllegalAccessException{
+        shareService.revokeShare(principal.getName(),id);
+        var message = responseService.getMessage(SUCCESS);
+        return new ResponseEntity(message,HttpStatus.OK);
     }
+
+
+
+
+
+
 }

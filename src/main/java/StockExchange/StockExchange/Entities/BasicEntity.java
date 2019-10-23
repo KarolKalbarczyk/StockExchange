@@ -6,7 +6,7 @@ import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
 
 @MappedSuperclass
-public class BasicEntity {
+class BasicEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     protected long id;

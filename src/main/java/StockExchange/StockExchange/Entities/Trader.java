@@ -1,5 +1,6 @@
 package StockExchange.StockExchange.Entities;
 
+import StockExchange.StockExchange.Money.Money;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 import javax.persistence.*;
@@ -15,7 +16,7 @@ public abstract class Trader  extends  BasicEntity{
 
     protected String name;
     @Digits(integer = 10,fraction = 2)
-    protected BigDecimal wealth = new BigDecimal(0);
+    protected Money wealth;
 
     @OneToMany(cascade = CascadeType.ALL,
             fetch = FetchType.LAZY,orphanRemoval = true,
@@ -39,7 +40,7 @@ public abstract class Trader  extends  BasicEntity{
                 '}';
     }
 
-    public void changeWealth(BigDecimal amount){
+    public void changeWealth(Money amount){
         wealth.add(amount);
     }
 
@@ -51,11 +52,11 @@ public abstract class Trader  extends  BasicEntity{
         this.ownedShares = ownedShares;
     }
 
-    public BigDecimal getWealth() {
+    public Money getWealth() {
         return wealth;
     }
 
-    public void setWealth(BigDecimal wealth) {
+    public void setWealth(Money wealth) {
         this.wealth = wealth;
     }
 

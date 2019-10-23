@@ -17,6 +17,10 @@ public class MoneyImpl implements Money {
         return this;
     }
 
+    MoneyImpl(long n){
+        this.setAmount(n);
+    }
+
     @Override
     public void setAmount(long n) {
         money = new BigDecimal(n);
@@ -29,6 +33,11 @@ public class MoneyImpl implements Money {
     }
 
     @Override
+    public void setAmount(Money n) {
+        this.money = (BigDecimal) n.getValue();
+    }
+
+    @Override
     public Money add(long n) {
         return add(new BigDecimal(n));
     }
@@ -36,6 +45,13 @@ public class MoneyImpl implements Money {
     @Override
     public Money add(BigDecimal n) {
         var d = money.add(n);
+        return setUpDecimal(d);
+    }
+
+    @Override
+    public Money add(Money n) {
+        BigDecimal d = (BigDecimal) n.getValue();
+        d = money.add(d);
         return setUpDecimal(d);
     }
 
@@ -51,6 +67,13 @@ public class MoneyImpl implements Money {
     }
 
     @Override
+    public Money subtract(Money n) {
+        BigDecimal d = (BigDecimal) n.getValue();
+        d = money.subtract(d);
+        return setUpDecimal(d);
+    }
+
+    @Override
     public Money multiply(long n) {
         return multiply(new BigDecimal(n));
     }
@@ -58,6 +81,13 @@ public class MoneyImpl implements Money {
     @Override
     public Money multiply(BigDecimal n) {
         var d = money.multiply(n);
+        return setUpDecimal(d);
+    }
+
+    @Override
+    public Money multiply(Money n) {
+        BigDecimal d = (BigDecimal) n.getValue();
+        d = money.multiply(d);
         return setUpDecimal(d);
     }
 
@@ -73,6 +103,13 @@ public class MoneyImpl implements Money {
     }
 
     @Override
+    public Money div(Money n) {
+        BigDecimal d = (BigDecimal) n.getValue();
+        d = money.divide(d);
+        return setUpDecimal(d);
+    }
+
+    @Override
     public String getMoneyInPresentCurrency(){
        var locale = LocaleContextHolder.getLocale();
        var currency = Currency.valueOf(locale.getCountry());
@@ -81,5 +118,15 @@ public class MoneyImpl implements Money {
                setScale(2,RoundingMode.HALF_UP);
        var a = moneyToDisplay.toString();
        return a;
+    }
+
+    @Override
+    public Number getValue(){
+        return money;
+    }
+
+    @Override
+    public int compareTo(Money money){
+        return this.money.compareTo((BigDecimal) money.getValue());
     }
 }

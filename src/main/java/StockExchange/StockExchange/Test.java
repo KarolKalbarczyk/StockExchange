@@ -13,17 +13,12 @@ import org.springframework.boot.context.event.ApplicationStartedEvent;
 import org.springframework.context.event.EventListener;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
 
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
-
-import static StockExchange.StockExchange.StringCriteria.ShareCriteria.*;
-import static StockExchange.StockExchange.StringCriteria.TraderCriteria.*;
 
 @Component
 public class Test {
@@ -31,7 +26,7 @@ public class Test {
     @Autowired
     TraderRepository traderRepository;
     @Autowired
-    QueryConstructor queryConstructor;
+    QueryConstructorImpl queryConstructorImpl;
     @Autowired
     ShareRepository shareRepository;
     @Autowired
@@ -57,7 +52,7 @@ public class Test {
     public void prepare(){
         var company = new Company(10);
         traders.add(company);
-       // shares.add(shareService.createShareIfCompany("a",50));
+       // shares.add(shareService.createShareAndOfferIfCompany("a",50));
         //shareRepository.save(shares.get(0));
         Account account = new Account("name");
         account.setAccount(company);
@@ -73,7 +68,7 @@ public class Test {
      @EventListener(ApplicationStartedEvent.class)
      @Order(1)
      public void testShareCreation(){
-         List<Trader> a = queryConstructor.createQuery(Trader.class,joinShare(testcheck(15,25)));
+         List<Trader> a = queryConstructorImpl.createQuery(Trader.class,joinShare(testcheck(15,25)));
          System.out.println("shareCreation");
          System.out.println(a);
          assert a.size() == 1;
@@ -86,7 +81,7 @@ public class Test {
         Share share = shareRepository.findAll().get(0);
         var company = traderRepository.findAll().get(0);
         offerService.createOffer(share.getId(),company.getId(),new BigDecimal(50));
-        List<Offer> a = queryConstructor.createQuery(Offer.class, OfferCriteria.costEquals(50));
+        List<Offer> a = queryConstructorImpl.createQuery(Offer.class, OfferCriteria.costEquals(50));
         assert a.size() == 1;
         Share share3 = shareRepository.findAll().get(0);
         offerRepository.delete(a.get(0));
@@ -180,8 +175,8 @@ public class Test {
         System.out.println("AAAAAAAAAAAAAAAAAAAAAAAAAAAA");
 
         //List<Share> a = shareRepository.findAll(ShareSpecs.companyValueInRange(5,15));
-        //List<Share> a = queryConstructor.createQuery(Share.class, testcheck(5,15), joinCompany(valueInBetween(5,15)), joinOwner(wealthInRange(5,15)) );
-        List<Trader> a = queryConstructor.createQuery(Trader.class,joinShare(testcheck(5,15)));
+        //List<Share> a = queryConstructorImpl.createQuery(Share.class, testcheck(5,15), joinCompany(valueInBetween(5,15)), joinOwner(wealthInRange(5,15)) );
+        List<Trader> a = queryConstructorImpl.createQuery(Trader.class,joinShare(testcheck(5,15)));
         System.out.println(a);
     }*/
 

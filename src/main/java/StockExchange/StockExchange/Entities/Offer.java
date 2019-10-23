@@ -1,5 +1,7 @@
 package StockExchange.StockExchange.Entities;
 
+import StockExchange.StockExchange.Money.Money;
+
 import javax.persistence.*;
 import javax.validation.constraints.Digits;
 import java.math.BigDecimal;
@@ -8,7 +10,7 @@ import java.math.BigDecimal;
 public class Offer extends BasicEntity {
 
     @Digits(integer = 10,fraction = 2)
-    private BigDecimal cost;
+    private Money cost;
     @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "share_id")
     private Share share;
@@ -19,7 +21,7 @@ public class Offer extends BasicEntity {
     public Offer() {
     }
 
-    public Offer(@Digits(integer = 10, fraction = 2) BigDecimal cost,
+    public Offer(Money cost,
                  Share share, Trader owner) {
         this.cost = cost;
         this.share = share;
@@ -33,11 +35,11 @@ public class Offer extends BasicEntity {
         share = null;
     }
 
-    public BigDecimal getCost() {
+    public Money getCost() {
         return cost;
     }
 
-    public void setCost(BigDecimal cost) {
+    public void setCost(Money cost) {
         this.cost = cost;
     }
 
