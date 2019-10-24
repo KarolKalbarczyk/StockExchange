@@ -20,7 +20,7 @@ public abstract class GenericCriteria {
         return ()-> List.of(String.format(Locale.ENGLISH," %s.%s between %s and %s",clazz.getSimpleName().toLowerCase(),attr.getName(),minS,maxS));
     }
 
-    public static  <T> Criteria<T> valueEqual(Class<T> clazz, Attribute<T,? extends Number> attr, double value){
+    public static  <T> Criteria<T> valueEqual(Class<T> clazz, Attribute<T,?> attr, double value){
         var val = new BigDecimal(value).setScale(2, RoundingMode.HALF_UP).toString();
         return ()-> List.of(String.format(Locale.ENGLISH," %s.%s = %s",clazz.getSimpleName().toLowerCase(),attr.getName(),val));
     }

@@ -20,7 +20,9 @@ import java.util.List;
 @Service
 public class ShareService extends MainService {
 
-    private String NOT_COMPANY = "notCompany";
+    private final String NOT_COMPANY = "notCompany";
+    private final String NO_MONEY = "noMoney";
+    private final String NOT_OWNER = "notOwner";
 
     @Transactional
     public void exchangeShare(long offerId, String accountName){
@@ -46,9 +48,9 @@ public class ShareService extends MainService {
 
     public void exchangeMoney(Trader buyer, Trader seller, Money money){
         if(buyer.getWealth().compareTo(money) < 0)
-            throw new IllegalCallerException("not enough money for this transcation");
-        seller.changeWealth( money);
-        buyer.get;
+            throw new IllegalCallerException(responseService.getMessage(NO_MONEY));
+        seller.addWealth(money);
+        buyer.subtractWealth(money);
     }
 
     private void createTransaction(Share share, Offer offer, Trader buyer){
@@ -73,11 +75,11 @@ public class ShareService extends MainService {
     }
 
     @Transactional
-    public void revokeShare(String accountName, long shareId) throws IllegalAccessException{
+    public void revokeShare(String accountName, long shareId){
         var company = traderRepository.findOneByAccountLogin(accountName);
         var share = shareRepository.findOneById(shareId);
-        if(!share.getOwner().equals(company)){
-            throw new IllegalAccessException("you can't revoke share that you do not own");
+        if(!share.getOwner().equals(company) || !share.getCompany().equals(company)){
+            throw new IllegalCallerException(responseService.getMessage(NOT_OWNER));
         }else {
             share.setOwner(null);
             share.setCompany(null);

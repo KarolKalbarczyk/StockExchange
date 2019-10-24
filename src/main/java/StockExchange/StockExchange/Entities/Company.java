@@ -1,6 +1,7 @@
 package StockExchange.StockExchange.Entities;
 
 import StockExchange.StockExchange.Money.Money;
+import StockExchange.StockExchange.Money.MoneyFactory;
 import StockExchange.StockExchange.Money.MoneyImpl;
 
 import javax.persistence.*;
@@ -24,8 +25,7 @@ public class Company extends Trader{
     }
 
     public Company(long value) {
-        this.value = new MoneyImpl();
-        this.value.setAmount(value);
+        this.value = MoneyFactory.getMoney(value);
     }
 
 

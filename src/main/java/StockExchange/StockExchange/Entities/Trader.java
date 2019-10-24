@@ -40,8 +40,11 @@ public abstract class Trader  extends  BasicEntity{
                 '}';
     }
 
-    public void changeWealth(Money amount){
+    public void addWealth(Money amount){
         wealth.add(amount);
+    }
+    public void subtractWealth(Money amount){
+        wealth.subtract(amount);
     }
 
     public Collection<Share> getOwnedShares() {

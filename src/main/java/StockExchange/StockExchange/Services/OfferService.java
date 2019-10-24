@@ -3,6 +3,7 @@ package StockExchange.StockExchange.Services;
 import StockExchange.StockExchange.Entities.Offer;
 import StockExchange.StockExchange.Entities.Person;
 import StockExchange.StockExchange.Entities.Share;
+import StockExchange.StockExchange.Money.MoneyFactory;
 import StockExchange.StockExchange.Repositories.OfferRepository;
 import StockExchange.StockExchange.Repositories.ShareRepository;
 import StockExchange.StockExchange.Repositories.TraderRepository;
@@ -20,7 +21,7 @@ public class OfferService extends MainService{
     public void createOffer(long shareId, String accountLogin, int cost){
         var share = shareRepository.getOne(shareId);
         var trader = traderRepository.findOneByAccountLogin(accountLogin);
-        var offer = new Offer(new BigDecimal(cost),share,trader);
+        var offer = new Offer(MoneyFactory.getMoney(cost),share,trader);
         share.setOffer(offer);
         offerRepository.save(offer);
     }

@@ -11,8 +11,5 @@ public class Person extends Trader{
     public Person() {
     }
 
-    public Person(BigDecimal wealth) {
-        this.wealth = wealth;
-    }
 
 }

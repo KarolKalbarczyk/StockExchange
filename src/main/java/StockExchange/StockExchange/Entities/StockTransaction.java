@@ -1,5 +1,6 @@
 package StockExchange.StockExchange.Entities;
 
+import StockExchange.StockExchange.Money.Money;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.Immutable;
 
@@ -24,7 +25,7 @@ public class StockTransaction extends BasicEntity {
     @JoinColumn(name = "buyer_id")
     private Trader buyer;
     @Digits(integer = 10,fraction = 2)
-    protected BigDecimal finalCost;
+    private Money finalCost;
 
     public StockTransaction() {
     }

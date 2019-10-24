@@ -1,5 +1,6 @@
 package StockExchange.StockExchange;
 
+import StockExchange.StockExchange.Controllers.ShareController;
 import StockExchange.StockExchange.Services.ShareService;
 import org.junit.Assert;
 import org.junit.Before;
@@ -25,12 +26,12 @@ public class StockExchangeApplicationTests {
     ShareService shareService;
     @Mock
     MessageSource messageSource;
-   // @InjectMocks
-   // ShareController controller;
+    @InjectMocks
+    ShareController controller;
     @Mock
     Principal principal;
 
-/*
+
     @Before
     public void init(){
         MockitoAnnotations.initMocks(this);
@@ -42,7 +43,7 @@ public class StockExchangeApplicationTests {
         var name = "name";
         var message = "good";
         var messageUs = "usgood";
-//        Mockito.when(LocaleContextHolder.getLocale()).thenReturn(Locale.ENGLISH);
+        Mockito.when(LocaleContextHolder.getLocale()).thenReturn(Locale.ENGLISH);
         Mockito.when(messageSource.getMessage(key,null,Locale.ENGLISH)).thenReturn(message);
         Mockito.when(principal.getName()).thenReturn(name);
         var response = controller.runTranscation(1,principal);
@@ -51,7 +52,16 @@ public class StockExchangeApplicationTests {
         Mockito.when(messageSource.getMessage(key,null,Locale.US)).thenReturn(messageUs);
         Assert.assertTrue(response.getBody().equals(messageUs));
     }
-*/
+
+    @Test
+    public void caughtErrorFromController(){
+        Mockito.when(principal.getName()).thenReturn("name");
+        Mockito.when(shareService.createShareAndOfferIfCompany(principal.getName(),50)).
+                thenThrow(new IllegalCallerException("error"));
+        var response =  controller.createShare(50,principal);
+        Assert.assertEquals(response.getBody(),"error");
+    }
+
 	@Test
 	public void contextLoads() {
 	}
