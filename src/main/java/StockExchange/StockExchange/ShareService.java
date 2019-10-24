@@ -56,6 +56,7 @@ public class ShareService {
         }
         share.setOwner(null);
         share.setCompany(null);
+        share.setOffer(null);
     }
 
 
