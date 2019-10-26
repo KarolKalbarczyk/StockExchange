@@ -17,15 +17,13 @@ public class Company extends Trader{
             fetch = FetchType.LAZY,orphanRemoval = true,
             mappedBy = "company")
     private Collection<Share> shares = new ArrayList<>();
-    //@Digits(integer = 10,fraction = 2)
-    private Money value;
-   // Money a = new Money();
+    private String value;
 
     public Company() {
     }
 
     public Company(long value) {
-        this.value = MoneyFactory.getMoney(value);
+        this.value = Long.toString(value);
     }
 
 
@@ -51,10 +49,10 @@ public class Company extends Trader{
     }
 
     public String getValue() {
-        return value.getMoneyInPresentCurrency();
+        return MoneyFactory.getMoney(value).getMoneyInPresentCurrency();
     }
 
     public void setValue(Money value) {
-        this.value = value;
+        this.value = value.getAsString();
     }
 }

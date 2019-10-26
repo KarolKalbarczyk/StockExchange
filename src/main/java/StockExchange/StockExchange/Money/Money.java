@@ -26,4 +26,5 @@ public interface Money extends Serializable,Comparable<Money>{
 
     public String getMoneyInPresentCurrency();
     public Number getValue();
+    public String getAsString();
 }

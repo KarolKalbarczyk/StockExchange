@@ -6,4 +6,7 @@ public class MoneyFactory {
     public static Money getMoney(long amount){
         return new MoneyImpl(amount);
     }
+    public static Money getMoney(String amount){
+        return new MoneyImpl(amount);
+    }
 }

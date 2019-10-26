@@ -47,7 +47,7 @@ public class Test {
 
 
 
-    @EventListener(ApplicationStartedEvent.class)
+  /*  @EventListener(ApplicationStartedEvent.class)
     @Order(0)
     public void prepare(){
         var company = new Company(10);

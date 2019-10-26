@@ -4,6 +4,7 @@ package StockExchange.StockExchange.Repositories;
 import StockExchange.StockExchange.Entities.Offer;
 import StockExchange.StockExchange.Entities.Share;
 import StockExchange.StockExchange.Entities.Trader;
+import StockExchange.StockExchange.Money.Money;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.stereotype.Repository;
@@ -16,5 +17,6 @@ public interface OfferRepository  extends JpaRepository<Offer,Long>, JpaSpecific
 
     Optional<Offer> findOneByShare(Share share);
     List<Offer> findAllByShare(Share share);
+    Offer findOneByCost(Money money);
 }
 

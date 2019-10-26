@@ -1,6 +1,7 @@
 package StockExchange.StockExchange.Entities;
 
 import StockExchange.StockExchange.Money.Money;
+import StockExchange.StockExchange.Money.MoneyFactory;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 import javax.persistence.*;
@@ -15,8 +16,7 @@ import java.util.Collection;
 public abstract class Trader  extends  BasicEntity{
 
     protected String name;
-    @Digits(integer = 10,fraction = 2)
-    protected Money wealth;
+    protected String wealth;
 
     @OneToMany(cascade = CascadeType.ALL,
             fetch = FetchType.LAZY,orphanRemoval = true,
@@ -41,10 +41,10 @@ public abstract class Trader  extends  BasicEntity{
     }
 
     public void addWealth(Money amount){
-        wealth.add(amount);
+        wealth = MoneyFactory.getMoney(wealth).add(amount).getAsString();
     }
     public void subtractWealth(Money amount){
-        wealth.subtract(amount);
+        wealth = MoneyFactory.getMoney(wealth).subtract(amount).getAsString();
     }
 
     public Collection<Share> getOwnedShares() {
@@ -56,11 +56,11 @@ public abstract class Trader  extends  BasicEntity{
     }
 
     public Money getWealth() {
-        return wealth;
+        return MoneyFactory.getMoney(wealth);
     }
 
     public void setWealth(Money wealth) {
-        this.wealth = wealth;
+        this.wealth = wealth.getAsString();
     }
 
     public String getName() {

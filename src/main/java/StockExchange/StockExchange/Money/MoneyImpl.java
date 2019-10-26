@@ -20,6 +20,9 @@ public class MoneyImpl implements Money {
     MoneyImpl(long n){
         this.setAmount(n);
     }
+    MoneyImpl(String n){
+        this.setAmount(Long.parseLong(n));
+    }
 
     @Override
     public void setAmount(long n) {
@@ -123,6 +126,11 @@ public class MoneyImpl implements Money {
     @Override
     public Number getValue(){
         return money;
+    }
+
+    @Override
+    public String getAsString(){
+        return money.toString();
     }
 
     @Override

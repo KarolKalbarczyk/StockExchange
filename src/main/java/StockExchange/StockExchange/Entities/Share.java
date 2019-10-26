@@ -4,7 +4,7 @@ import javax.persistence.*;
 import java.util.Collection;
 
 @Entity
-@Table(name = "share")
+@Table(name = "share_")
 public class Share extends BasicEntity{
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "company_id")
