@@ -24,15 +24,14 @@ public class StockTransaction extends BasicEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "buyer_id")
     private Trader buyer;
-    @Digits(integer = 10,fraction = 2)
-    private Money finalCost;
+    private String finalCost;
 
     public StockTransaction() {
     }
 
     public StockTransaction(Share share,Offer offer, Trader buyer) {
         this.share = share;
-        this.finalCost = offer.getCost();
+        this.finalCost = offer.getCost().getAsString();
         this.seller = offer.getOwner();
         this.buyer = buyer;
     }

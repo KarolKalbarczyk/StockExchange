@@ -25,8 +25,6 @@ import org.springframework.test.context.junit4.SpringRunner;
 public class DatabaseTest {
     @Autowired
     TestEntityManager manager;
-    @Mock
-    OfferRepository offerRepository2;
     @InjectMocks
     ShareService shareService;
     @Autowired
@@ -38,16 +36,43 @@ public class DatabaseTest {
 
     Resource testOfferCreation;
 
+    long shareid = 7;
+    long offerid = 4;
+
     @Before
     public void init(){
         MockitoAnnotations.initMocks(this);
     }
 
-    @Test
-    @Sql("/offerNotPresent.sql")
-    public void testNotHavingOffer(){
-        Company trader  = traderRepository.findCompanyByName("comp").get();
-       // Assert.assertFalse(shareService.hasOffer(1l));
+    @org.junit.jupiter.api.Test
+    @Sql(scripts = {"/offerNotPresent.sql","/offerPresent.sql"})
+    @Sql(scripts = {"/revertOfferPresent.sql","/revertOfferNotPresent.sql"},executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
+    public void testRemovingShareRemovesOffer(){
+        var share = shareRepository.findOneById(shareid);
+        shareRepository.delete(share);
+        var offer = offerRepository.findOneById(offerid);
+        Assert.assertNull(offer);
     }
+
+    @org.junit.jupiter.api.Test
+    @Sql(scripts = {"/offerNotPresent.sql","/offerPresent.sql"})
+    @Sql(scripts = {"/revertOfferPresent.sql","/revertOfferNotPresent.sql"},executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
+    public void testRemovingOfferDoesntRemoveShare(){
+        var offer = offerRepository.findOneById(offerid);
+        offerRepository.delete(offer);
+        var share = shareRepository.findOneById(shareid);
+        Assert.assertNotNull(share);
+    }
+
+
+    @org.junit.jupiter.api.Test
+    @Sql(scripts = {"/offerNotPresent.sql","/offerPresent.sql"})
+    @Sql(scripts = {"/revertOfferPresent.sql","/revertOfferNotPresent.sql"},executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
+    public void testRemovingOffer(){
+        offerRepository.deleteById(offerid);
+        var offer = offerRepository.findOneById(offerid);
+        Assert.assertNotNull(offer);
+    }
+
 
 }

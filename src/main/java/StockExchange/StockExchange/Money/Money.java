@@ -3,7 +3,7 @@ package StockExchange.StockExchange.Money;
 import java.io.Serializable;
 import java.math.BigDecimal;
 
-public interface Money extends Serializable,Comparable<Money>{
+public interface Money extends Comparable<Money>{
     public void setAmount(long n);
     public void setAmount(BigDecimal n);
     public void setAmount(Money n);

@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import java.util.concurrent.atomic.AtomicInteger;
 
 @Service
 public class MessageService extends MainService {
@@ -18,7 +19,9 @@ public class MessageService extends MainService {
         var receiver = accountRepository.getOne(receiverId);
         var message = new Message(title,text,sender,receiver);
         messageRepository.save(message);
+        AtomicInteger a = new AtomicInteger(0);
     }
+
 
 
 }

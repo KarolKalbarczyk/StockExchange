@@ -23,21 +23,23 @@ public class ShareService extends MainService {
     private final String NOT_COMPANY = "notCompany";
     private final String NO_MONEY = "noMoney";
     private final String NOT_OWNER = "notOwner";
+    private final String YOURE_OWNER = "youreOwner";
 
     @Transactional
     public void exchangeShare(long offerId, String accountName){
-        var offer = offerRepository.getOne(offerId);
+        var offer = offerRepository.findOneById(offerId);
         var buyer = traderRepository.findOneByAccountLogin(accountName);
         var share = offer.getShare();
         exchangeShare(share,offer,buyer);
+        share.setOffer(null);
     }
 
     @Transactional
     private void exchangeShare(Share share,Offer offer,Trader buyer){
+        if (offer.getOwner().equals(buyer)) throw new IllegalCallerException(YOURE_OWNER);
         exchangeMoney(buyer,offer.getOwner(),offer.getCost());
         createTransaction(share,offer,buyer);
         share.setOwner(buyer);
-        offerRepository.delete(offer);
     }
 
     public boolean hasOffer(long shareId){
@@ -85,9 +87,7 @@ public class ShareService extends MainService {
         if(!share.getOwner().equals(company) || !share.getCompany().equals(company)){
             throw new IllegalCallerException(responseService.getMessage(NOT_OWNER));
         }else {
-            share.setOwner(null);
-            share.setCompany(null);
-            share.setOffer(null);
+            shareRepository.delete(share);
         }
     }
 

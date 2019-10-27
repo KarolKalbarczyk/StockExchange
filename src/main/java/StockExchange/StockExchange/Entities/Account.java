@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
-@Entity(name = "_Account")
+@Entity(name = "account_")
 public class Account extends BasicEntity {
     private String login;
     private String password;

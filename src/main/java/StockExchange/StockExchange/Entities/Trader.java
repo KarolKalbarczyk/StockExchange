@@ -9,6 +9,7 @@ import javax.validation.constraints.Digits;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Objects;
 
 @Entity(name = "trader")
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
@@ -86,5 +87,18 @@ public abstract class Trader  extends  BasicEntity{
 
     public void setAccount(Account account) {
         this.account = account;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Trader)) return false;
+        Trader trader = (Trader) o;
+        return Objects.equals(name, trader.name);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(name);
     }
 }
