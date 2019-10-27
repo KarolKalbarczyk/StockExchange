@@ -5,6 +5,7 @@ import org.springframework.context.i18n.LocaleContextHolder;
 import javax.management.relation.RoleUnresolved;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.util.Objects;
 
 public class MoneyImpl implements Money {
 
@@ -21,7 +22,10 @@ public class MoneyImpl implements Money {
         this.setAmount(n);
     }
     MoneyImpl(String n){
-        this.setAmount(Long.parseLong(n));
+        var d = new BigDecimal(n);
+        d = d.divide(HUNDRED);
+        d .setScale(2,RoundingMode.HALF_UP);
+        this.setAmount(d);
     }
 
     @Override
@@ -129,8 +133,21 @@ public class MoneyImpl implements Money {
     }
 
     @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof MoneyImpl)) return false;
+        MoneyImpl money1 = (MoneyImpl) o;
+        return Objects.equals(money, money1.money);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(money);
+    }
+
+    @Override
     public String getAsString(){
-        return money.toString();
+        return money.multiply(HUNDRED).toString();
     }
 
     @Override

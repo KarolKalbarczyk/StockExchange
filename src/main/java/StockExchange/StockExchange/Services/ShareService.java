@@ -60,9 +60,13 @@ public class ShareService extends MainService {
 
     @Transactional
     public Share createShareAndOfferIfCompany(String accountName, int cost){
-        var company = traderRepository.findOneByAccountLogin(accountName);
-        if(company instanceof Company) return createShareAndOffer((Company) company,cost);
-        else throw new IllegalCallerException(responseService.getMessage(NOT_COMPANY));
+        var company = traderRepository.findCompanyByName(accountName);
+        if(company.isPresent()){
+           return createShareAndOffer(company.get(), cost);
+        }
+        else {
+            throw new IllegalCallerException(responseService.getMessage(NOT_COMPANY));
+        }
     }
 
     private Share createShareAndOffer(Company company,int cost){

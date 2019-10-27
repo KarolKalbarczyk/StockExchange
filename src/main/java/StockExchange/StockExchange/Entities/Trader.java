@@ -10,12 +10,13 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collection;
 
-@Entity
+@Entity(name = "trader")
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.TRANSACTIONAL)
 public abstract class Trader  extends  BasicEntity{
 
     protected String name;
+    @Basic(fetch = FetchType.EAGER)
     protected String wealth;
 
     @OneToMany(cascade = CascadeType.ALL,
