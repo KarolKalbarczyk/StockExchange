@@ -19,7 +19,6 @@ public class MessageService extends MainService {
         var receiver = accountRepository.getOne(receiverId);
         var message = new Message(title,text,sender,receiver);
         messageRepository.save(message);
-        AtomicInteger a = new AtomicInteger(0);
     }
 
 

@@ -129,7 +129,7 @@ public class MoneyImpl implements Money {
 
     @Override
     public Number getValue(){
-        return money;
+        return money.multiply(HUNDRED);
     }
 
     @Override

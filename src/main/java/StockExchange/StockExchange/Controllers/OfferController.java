@@ -13,20 +13,29 @@ import java.security.Principal;
 
 @RestController
 @CrossOrigin("*")
-@RequestMapping("offer")
+@RequestMapping("/offer")
 public class OfferController {
     private final String CREATION_SUCCESS = "creationSucces";
+    private final String REVOKE_SUCCESS = "creationSucces";
     @Autowired
     ResponseService responseService;
     @Autowired
     OfferService offerService;
 
-    @PostMapping("/offer")
-    public ResponseEntity<String> createOffer(@RequestBody long shareId,
+    @PostMapping
+    public ResponseEntity<String> createOffer(@RequestParam long shareId,
                                               @RequestBody int cost,
                                               Principal principal){
         offerService.createOffer(shareId,principal.getName(),cost);
         var message = responseService.getMessage(CREATION_SUCCESS);
+        return new ResponseEntity(message, HttpStatus.OK);
+    }
+
+    @DeleteMapping
+    public ResponseEntity<String> revokeOffer(@RequestBody long offerId,
+                                              Principal principal){
+        offerService.revokeOffer(offerId,principal.getName());
+        var message = responseService.getMessage(REVOKE_SUCCESS);
         return new ResponseEntity(message, HttpStatus.OK);
     }
 }

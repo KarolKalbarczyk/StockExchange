@@ -6,6 +6,7 @@ import StockExchange.StockExchange.Money.MoneyFactory;
 import javax.persistence.*;
 import javax.validation.constraints.Digits;
 import java.math.BigDecimal;
+import java.util.Objects;
 
 @Entity
 public class Offer extends BasicEntity {
@@ -31,6 +32,8 @@ public class Offer extends BasicEntity {
 
     @PreRemove
     public void preRemove(){
+        owner.getOffers().remove(this);
+        share.setOffer(null);
         owner = null;
         share = null;
     }
@@ -57,5 +60,18 @@ public class Offer extends BasicEntity {
 
     public void setOwner(Trader owner) {
         this.owner = owner;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Offer)) return false;
+        Offer offer = (Offer) o;
+        return Objects.equals(cost, offer.cost) && Objects.equals(id,offer.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(cost);
     }
 }

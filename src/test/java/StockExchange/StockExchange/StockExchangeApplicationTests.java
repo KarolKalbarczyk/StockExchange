@@ -11,20 +11,17 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
-import org.springframework.format.number.money.MonetaryAmountFormatter;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.RequestBuilder;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import java.security.Principal;
 import java.util.Locale;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.handler;
+
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @RunWith(SpringRunner.class)
@@ -62,7 +59,7 @@ public class StockExchangeApplicationTests {
         Mockito.when(LocaleContextHolder.getLocale()).thenReturn(Locale.ENGLISH);
         Mockito.when(messageSource.getMessage(key,null,Locale.ENGLISH)).thenReturn(message);
         Mockito.when(principal.getName()).thenReturn(name);
-        var response = controller.runTranscation(1,principal);
+        var response = controller.buyShare(1,principal);
         Assert.assertTrue(response.getBody().equals(message));
         Mockito.when(LocaleContextHolder.getLocale()).thenReturn(Locale.US);
         Mockito.when(messageSource.getMessage(key,null,Locale.US)).thenReturn(messageUs);

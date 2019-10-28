@@ -20,7 +20,7 @@ public class ShareController {
     ResponseService responseService;
 
     @PostMapping("/buy")
-    public ResponseEntity<String> runTranscation(
+    public ResponseEntity<String> buyShare(
             @RequestBody long offerId, Principal principal){
         shareService.exchangeShare(offerId,principal.getName());
         var message = responseService.getMessage(SUCCESS);
