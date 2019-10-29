@@ -17,12 +17,11 @@ public class QueryConstructorImpl implements QueryConstructor {
     public <T> Query createQuery(Class<T> clazz, Criteria<T>... criterias){
         var classname = clazz.getSimpleName();
         var lowercase = classname.toLowerCase();
-        String select = String.format("select %s from %s %s" ,lowercase,classname,lowercase);
-        StringBuilder join = new StringBuilder();
-        StringBuilder where = new StringBuilder(" where");
-        var whereUsed = false;
+        var select = String.format("select %s from %s %s" ,lowercase,classname,lowercase);
+        var join = new StringBuilder();
+        var where = new StringBuilder(" where");
         for(var criteria:criterias){
-            analyzeList(criteria.where(),join,where,whereUsed);
+            analyzeList(criteria.where(),join,where);
         }
         where.setLength(where.length()-3);
         String query = select+join.toString()+where.toString();
@@ -31,7 +30,7 @@ public class QueryConstructorImpl implements QueryConstructor {
         return manager.createQuery(query);
     }
 
-    private void analyzeList(List<String> list,StringBuilder join,StringBuilder where,boolean whereUsed){
+    private void analyzeList(List<String> list,StringBuilder join,StringBuilder where){
         for(var str: list){
             if(str.charAt(1) == 'j') join.append(str);
             else {

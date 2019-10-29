@@ -10,7 +10,7 @@ import javax.persistence.PersistenceContext;
 
 @Service
 @DependsOn(value = "ResponseService")
-public class MainService {
+class MainService {
     @Autowired
     protected ShareRepository shareRepository;
     @Autowired

@@ -19,7 +19,9 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class ShareService extends MainService {
+public class ShareService{
+    @Autowired
+    MainService main;
 
     private final String NOT_COMPANY = "notCompany";
     private final String NO_MONEY = "noMoney";
@@ -30,8 +32,8 @@ public class ShareService extends MainService {
 
     @Transactional
     public void exchangeShare(long offerId, String accountName){
-        var optOffer = offerRepository.findOneById(offerId);
-        var buyer = traderRepository.findOneByAccountLogin(accountName);
+        var optOffer = main.offerRepository.findOneById(offerId);
+        var buyer = main.traderRepository.findOneByAccountLogin(accountName);
         optOffer.ifPresentOrElse(offer -> {
             var share = offer.getShare();
             exchangeShare(share, offer, buyer);
@@ -47,31 +49,31 @@ public class ShareService extends MainService {
     }
 
     public boolean hasOffer(long shareId){
-        var share = shareRepository.getOne(shareId);
-        var offer = offerRepository.findOneByShare(share);
+        var share = main.shareRepository.getOne(shareId);
+        var offer = main.offerRepository.findOneByShare(share);
         return offer.isPresent();
     }
 
     public void exchangeMoney(Trader buyer, Trader seller, Money money){
         if(buyer.getWealth().compareTo(money) < 0)
-            throw new IllegalCallerException(responseService.getMessage(NO_MONEY));
+            throw new IllegalCallerException(main.responseService.getMessage(NO_MONEY));
         seller.addWealth(money);
         buyer.subtractWealth(money);
     }
 
     private void createTransaction(Share share, Offer offer, Trader buyer){
         var transaction = new StockTransaction(share,offer,buyer);
-        transactionRepository.save(transaction);
+        main.transactionRepository.save(transaction);
     }
 
     @Transactional
     public Share createShareAndOfferIfCompany(String accountName, int cost){
-        var company = traderRepository.findCompanyByName(accountName);
+        var company = main.traderRepository.findCompanyByName(accountName);
         if(company.isPresent()){
            return createShareAndOffer(company.get(), cost);
         }
         else {
-            throw new IllegalCallerException(responseService.getMessage(NOT_COMPANY));
+            throw new IllegalCallerException(main.responseService.getMessage(NOT_COMPANY));
         }
     }
 
@@ -79,19 +81,19 @@ public class ShareService extends MainService {
         var share = new Share(company);
         Money properCost = MoneyFactory.getMoney(cost);
         var offer = new Offer(properCost,share,company);
-        shareRepository.save(share);
-        offerRepository.save(offer);
+        main.shareRepository.save(share);
+        main.offerRepository.save(offer);
         return share;
     }
 
     @Transactional
     public void revokeShare(String accountName, long shareId){
-        var company = traderRepository.findOneByAccountLogin(accountName);
-        var optShare = shareRepository.findOneById(shareId);
+        var company = main.traderRepository.findOneByAccountLogin(accountName);
+        var optShare = main.shareRepository.findOneById(shareId);
         optShare.ifPresent(share -> {
             if (!share.getOwner().equals(company) || !share.getCompany().equals(company)) {
-                throw new IllegalCallerException(responseService.getMessage(NOT_OWNER));
-            } else shareRepository.delete(share);
+                throw new IllegalCallerException(main.responseService.getMessage(NOT_OWNER));
+            } else main.shareRepository.delete(share);
          });
     }
 

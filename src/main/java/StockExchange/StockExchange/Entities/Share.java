@@ -2,6 +2,7 @@ package StockExchange.StockExchange.Entities;
 
 import javax.persistence.*;
 import java.util.Collection;
+import java.util.HashSet;
 
 @Entity
 @Table(name = "share_")
@@ -14,10 +15,11 @@ public class Share extends BasicEntity{
     @JoinColumn(name = "trader_id")
     private Trader owner;
 
-    /*@OneToMany(orphanRemoval = true,
+    @OneToMany(orphanRemoval = true,
     cascade = CascadeType.ALL,
-    mappedBy = "share")
-    private Collection<StockTransaction> transactions;*/
+    mappedBy = "share",
+    fetch = FetchType.LAZY)
+    private Collection<StockTransaction> transactions = new HashSet<>();
 
     @OneToOne(orphanRemoval = true,
             cascade = CascadeType.ALL
@@ -30,7 +32,6 @@ public class Share extends BasicEntity{
     public Share(Company company){
         owner = company;
         this.company = company;
-       // this.test = company.getValue().intValue()*2;
     }
 
     public Share(){}
@@ -41,10 +42,6 @@ public class Share extends BasicEntity{
                // "company=" + company +
                 //"offer=" + offer +
                 '}';
-    }
-
-    public void changeOwner(Trader owner){
-        this.owner = owner;
     }
 
     @PreRemove

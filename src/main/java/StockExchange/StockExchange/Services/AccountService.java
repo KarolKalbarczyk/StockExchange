@@ -9,8 +9,8 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
 @Service
-class AccountService extends MainService {
-
-
+class AccountService  {
+    @Autowired
+    MainService main;
 
 }

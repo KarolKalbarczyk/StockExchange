@@ -10,15 +10,17 @@ import javax.persistence.PersistenceContext;
 import java.util.concurrent.atomic.AtomicInteger;
 
 @Service
-public class MessageService extends MainService {
+public class MessageService{
 
+    @Autowired
+    MainService main;
 
     public void createMessage(long senderId,
                               long receiverId,String text, String title){
-        var sender = accountRepository.getOne(senderId);
-        var receiver = accountRepository.getOne(receiverId);
+        var sender = main.accountRepository.getOne(senderId);
+        var receiver = main.accountRepository.getOne(receiverId);
         var message = new Message(title,text,sender,receiver);
-        messageRepository.save(message);
+        main.messageRepository.save(message);
     }
 
 
