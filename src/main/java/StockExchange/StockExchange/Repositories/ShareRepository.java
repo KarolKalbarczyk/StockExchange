@@ -10,6 +10,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface ShareRepository extends JpaRepository<Share,Long>, JpaSpecificationExecutor {
@@ -17,9 +18,6 @@ public interface ShareRepository extends JpaRepository<Share,Long>, JpaSpecifica
      List<Share> findAllByOwner(Trader owner);
      List<Share> findAllByCompany(Company company);
 
-     //@Query("Select s from Share s join s.trader t where s.id = 1")
-     //Share findAndJoinOwner(long id);
-
     @EntityGraph(attributePaths = {"offer","company","owner"})
-    Share findOneById(long id);
+    Optional<Share> findOneById(long id);
 }

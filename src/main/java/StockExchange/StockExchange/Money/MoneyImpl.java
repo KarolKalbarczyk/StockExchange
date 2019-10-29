@@ -58,6 +58,7 @@ public class MoneyImpl implements Money {
     @Override
     public Money add(Money n) {
         BigDecimal d = (BigDecimal) n.getValue();
+        d = d.divide(HUNDRED).setScale(2,RoundingMode.HALF_UP);
         d = money.add(d);
         return setUpDecimal(d);
     }
@@ -76,6 +77,7 @@ public class MoneyImpl implements Money {
     @Override
     public Money subtract(Money n) {
         BigDecimal d = (BigDecimal) n.getValue();
+        d = d.divide(HUNDRED).setScale(2,RoundingMode.HALF_UP);
         d = money.subtract(d);
         return setUpDecimal(d);
     }
@@ -94,6 +96,7 @@ public class MoneyImpl implements Money {
     @Override
     public Money multiply(Money n) {
         BigDecimal d = (BigDecimal) n.getValue();
+        d = d.divide(HUNDRED).setScale(2,RoundingMode.HALF_UP);
         d = money.multiply(d);
         return setUpDecimal(d);
     }
@@ -112,6 +115,7 @@ public class MoneyImpl implements Money {
     @Override
     public Money div(Money n) {
         BigDecimal d = (BigDecimal) n.getValue();
+        d = d.divide(HUNDRED).setScale(2,RoundingMode.HALF_UP);
         d = money.divide(d);
         return setUpDecimal(d);
     }
@@ -152,6 +156,6 @@ public class MoneyImpl implements Money {
 
     @Override
     public int compareTo(Money money){
-        return this.money.compareTo((BigDecimal) money.getValue());
+        return this.money.multiply(HUNDRED).compareTo((BigDecimal) money.getValue());
     }
 }

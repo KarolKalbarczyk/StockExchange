@@ -163,9 +163,9 @@ public class IntegrationShareServiceTest {
         var shares = shareRepository.findAllByOwner(trader);
         var share = shareRepository.findOneById(idshare);
         Assertions.assertTrue(shares.isEmpty());
-        Assertions.assertNull(share);
+        Assertions.assertTrue(share.isEmpty());
         var offer = offerRepository.findOneById(idoffer);
-        Assertions.assertNull(offer);
+        Assertions.assertTrue(offer.isEmpty());
     }
 
     @Test
@@ -179,13 +179,13 @@ public class IntegrationShareServiceTest {
         var shares2 = shareRepository.findAllByOwner(trader2);
         Assertions.assertTrue(shares1.isEmpty());
         Assertions.assertFalse(shares2.isEmpty());
-        var share =  shareRepository.findOneById(idshare);
+        var share =  shareRepository.findOneById(idshare).get();
         Assertions.assertEquals(share.getOwner(),trader2);
         Assertions.assertEquals(share.getOffer(),null);
         var ofer = offerRepository.findOneByShare(share);
         Assertions.assertTrue(ofer.isEmpty());
         var offer = offerRepository.findOneById(idoffer);
-        Assertions.assertNull(offer);
+        Assertions.assertTrue(offer.isEmpty());
     }
 
     @Test

@@ -16,6 +16,7 @@ import javax.persistence.PersistenceContext;
 import java.math.BigDecimal;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class ShareService extends MainService {
@@ -24,14 +25,17 @@ public class ShareService extends MainService {
     private final String NO_MONEY = "noMoney";
     private final String NOT_OWNER = "notOwner";
     private final String YOURE_OWNER = "youreOwner";
+    private final String NOT_LOGGED = "notLogged";
+    private final String NO_OFFER = "notLogged";
 
     @Transactional
     public void exchangeShare(long offerId, String accountName){
-        var offer = offerRepository.findOneById(offerId);
+        var optOffer = offerRepository.findOneById(offerId);
         var buyer = traderRepository.findOneByAccountLogin(accountName);
-        var share = offer.getShare();
-        exchangeShare(share,offer,buyer);
-        share.setOffer(null);
+        optOffer.ifPresentOrElse(offer -> {
+            var share = offer.getShare();
+            exchangeShare(share, offer, buyer);
+            share.setOffer(null); }, () -> {throw new IllegalCallerException(NOT_LOGGED);});
     }
 
     @Transactional
@@ -83,12 +87,12 @@ public class ShareService extends MainService {
     @Transactional
     public void revokeShare(String accountName, long shareId){
         var company = traderRepository.findOneByAccountLogin(accountName);
-        var share = shareRepository.findOneById(shareId);
-        if(!share.getOwner().equals(company) || !share.getCompany().equals(company)){
-            throw new IllegalCallerException(responseService.getMessage(NOT_OWNER));
-        }else {
-            shareRepository.delete(share);
-        }
+        var optShare = shareRepository.findOneById(shareId);
+        optShare.ifPresent(share -> {
+            if (!share.getOwner().equals(company) || !share.getCompany().equals(company)) {
+                throw new IllegalCallerException(responseService.getMessage(NOT_OWNER));
+            } else shareRepository.delete(share);
+         });
     }
 
 

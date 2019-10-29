@@ -48,17 +48,17 @@ public class DatabaseTest {
     @Sql(scripts = {"/offerNotPresent.sql","/offerPresent.sql"})
     @Sql(scripts = {"/revertOfferPresent.sql","/revertOfferNotPresent.sql"},executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
     public void testRemovingShareRemovesOffer(){
-        var share = shareRepository.findOneById(shareid);
+        var share = shareRepository.findOneById(shareid).get();
         shareRepository.delete(share);
         var offer = offerRepository.findOneById(offerid);
-        Assert.assertNull(offer);
+        Assert.assertTrue(offer.isEmpty());
     }
 
     @org.junit.jupiter.api.Test
     @Sql(scripts = {"/offerNotPresent.sql","/offerPresent.sql"})
     @Sql(scripts = {"/revertOfferPresent.sql","/revertOfferNotPresent.sql"},executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
     public void testRemovingOfferDoesntRemoveShare(){
-        var offer = offerRepository.findOneById(offerid);
+        var offer = offerRepository.findOneById(offerid).get();
         offerRepository.delete(offer);
         var share = shareRepository.findOneById(shareid);
         Assert.assertNotNull(share);

@@ -17,6 +17,7 @@ import java.security.Principal;
 public class OfferController {
     private final String CREATION_SUCCESS = "creationSucces";
     private final String REVOKE_SUCCESS = "creationSucces";
+    private final String MODIFY_SUCCESS = "modifySucces";
     @Autowired
     ResponseService responseService;
     @Autowired
@@ -36,6 +37,15 @@ public class OfferController {
                                               Principal principal){
         offerService.revokeOffer(offerId,principal.getName());
         var message = responseService.getMessage(REVOKE_SUCCESS);
+        return new ResponseEntity(message, HttpStatus.OK);
+    }
+
+    @PatchMapping
+    public ResponseEntity<String> modifyOffer(@RequestParam long offerId,
+                                              @RequestBody int newCost,
+                                              Principal principal) {
+        offerService.modifyOffer(offerId, principal.getName(), newCost);
+        var message = responseService.getMessage(CREATION_SUCCESS);
         return new ResponseEntity(message, HttpStatus.OK);
     }
 }

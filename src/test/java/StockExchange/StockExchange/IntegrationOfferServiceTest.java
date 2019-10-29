@@ -38,8 +38,8 @@ public class IntegrationOfferServiceTest {
     @Sql(scripts = {"/revertOfferCreation.sql","/revertOfferNotPresent.sql" },executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
     public void testCreatingOffer(){
         offerService.createOffer(idshare,"acc1",50);
-        var offer = offerRepository.findOneById(1);
-        var share = shareRepository.findOneById(idshare);
+        var offer = offerRepository.findOneById(1).get();
+        var share = shareRepository.findOneById(idshare).get();
         Money money = MoneyFactory.getMoney(50);
         Assertions.assertNotNull(offer);
         Assertions.assertEquals(offer.getCost(),money);
@@ -53,8 +53,8 @@ public class IntegrationOfferServiceTest {
     public void testRevokingOffer(){
         offerService.revokeOffer(idoffer,"acc2");
         var offer = offerRepository.findOneById(idoffer);
-        Assertions.assertNull(offer);
-        var share = shareRepository.findOneById(idshare);
+        Assertions.assertTrue(offer.isEmpty());
+        var share = shareRepository.findOneById(idshare).get();
         Assertions.assertNull(share.getOffer());
     }
 
@@ -63,7 +63,7 @@ public class IntegrationOfferServiceTest {
     @Sql(scripts = {"/revertOfferPresent.sql","/revertOfferNotPresent.sql"},executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
     public void testModyfyingOffer(){
         offerService.modifyOffer(idoffer,"acc2",40);
-        var offer = offerRepository.findOneById(idoffer);
+        var offer = offerRepository.findOneById(idoffer).get();
         var money = MoneyFactory.getMoney(40);
         Assertions.assertEquals(offer.getCost(),money);
     }
@@ -72,7 +72,7 @@ public class IntegrationOfferServiceTest {
     @Sql(scripts = {"/offerNotPresent.sql","/offerPresent.sql"})
     @Sql(scripts = {"/revertOfferPresent.sql","/revertOfferNotPresent.sql"},executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
     public void testPossesionCheckWhenIsOwner() throws Exception{
-        var offer = offerRepository.findOneById(idoffer);
+        var offer = offerRepository.findOneById(idoffer).get();
         var b = new TestBoolean();
         offerService.possesionCheck(idoffer,"acc2",(offer1) -> {b.a=true;},"error");
         Assertions.assertTrue(b.a);
@@ -82,8 +82,10 @@ public class IntegrationOfferServiceTest {
     @Sql(scripts = {"/offerNotPresent.sql","/offerPresent.sql"})
     @Sql(scripts = {"/revertOfferPresent.sql","/revertOfferNotPresent.sql"},executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
     public void testPossesionCheckWhenIsNotOwner() throws Exception{
+        var b = new TestBoolean();
         Assertions.assertThrows(IllegalCallerException.class,
                 ()->offerService.possesionCheck(idoffer,"acc1",(offer1) -> {},"error"));
+        Assertions.assertFalse(b.a);
     }
 
 }
