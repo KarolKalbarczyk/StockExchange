@@ -1,7 +1,6 @@
 package StockExchange.StockExchange.Services;
 
 import StockExchange.StockExchange.Entities.Offer;
-import StockExchange.StockExchange.Money.MoneyFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

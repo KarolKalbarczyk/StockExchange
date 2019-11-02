@@ -10,6 +10,4 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/offer")
 public class TranscationController {
 
-    @Autowired
-    TranscationController
 }

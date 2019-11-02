@@ -1,12 +1,8 @@
 package StockExchange.StockExchange.Entities;
 
-import StockExchange.StockExchange.Money.Money;
-import StockExchange.StockExchange.Money.MoneyFactory;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 import javax.persistence.*;
-import javax.validation.constraints.Digits;
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Objects;
@@ -17,8 +13,7 @@ import java.util.Objects;
 public abstract class Trader  extends  BasicEntity{
 
     protected String name;
-    @Basic(fetch = FetchType.EAGER)
-    protected String wealth;
+    protected long wealth;
 
     @OneToMany(cascade = CascadeType.ALL,
             fetch = FetchType.LAZY,orphanRemoval = true,
@@ -42,11 +37,11 @@ public abstract class Trader  extends  BasicEntity{
                 '}';
     }
 
-    public void addWealth(Money amount){
-        wealth = MoneyFactory.getMoney(wealth).add(amount).getAsString();
+    public void addWealth(long amount){
+        wealth += amount;
     }
-    public void subtractWealth(Money amount){
-        wealth = MoneyFactory.getMoney(wealth).subtract(amount).getAsString();
+    public void subtractWealth(long amount){
+        wealth -= amount;
     }
 
     public Collection<Share> getOwnedShares() {
@@ -57,12 +52,12 @@ public abstract class Trader  extends  BasicEntity{
         this.ownedShares = ownedShares;
     }
 
-    public Money getWealth() {
-        return MoneyFactory.getMoney(wealth);
+    public long getWealth() {
+        return wealth;
     }
 
-    public void setWealth(Money wealth) {
-        this.wealth = wealth.getAsString();
+    public void setWealth(long wealth) {
+        this.wealth = wealth;
     }
 
     public String getName() {

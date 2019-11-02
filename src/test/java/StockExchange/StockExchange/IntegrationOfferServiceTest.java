@@ -1,17 +1,12 @@
 package StockExchange.StockExchange;
 
-import StockExchange.StockExchange.Entities.Offer;
-import StockExchange.StockExchange.Money.Money;
-import StockExchange.StockExchange.Money.MoneyFactory;
 import StockExchange.StockExchange.Repositories.OfferRepository;
 import StockExchange.StockExchange.Repositories.ShareRepository;
 import StockExchange.StockExchange.Services.OfferService;
-import com.google.common.util.concurrent.UncheckedExecutionException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.security.test.context.support.TestExecutionEvent;
 import org.springframework.test.context.jdbc.Sql;
 
 @SpringBootTest()

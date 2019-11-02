@@ -1,17 +1,12 @@
 package StockExchange.StockExchange.Entities;
 
-import StockExchange.StockExchange.Money.Money;
-import StockExchange.StockExchange.Money.MoneyFactory;
-
 import javax.persistence.*;
-import javax.validation.constraints.Digits;
-import java.math.BigDecimal;
 import java.util.Objects;
 
 @Entity
 public class Offer extends BasicEntity {
 
-    private String cost;
+    private long cost;
     @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "share_id")
     private Share share;
@@ -22,9 +17,9 @@ public class Offer extends BasicEntity {
     public Offer() {
     }
 
-    public Offer(Money cost,
+    public Offer(int cost,
                  Share share, Trader owner) {
-        this.cost = cost.getAsString();
+        this.cost = cost;
         this.share = share;
         share.setOffer(this);
         this.owner = owner;
@@ -38,12 +33,12 @@ public class Offer extends BasicEntity {
         share = null;
     }
 
-    public Money getCost() {
-        return MoneyFactory.getMoney(cost);
+    public long getCost() {
+        return cost;
     }
 
-    public void setCost(Money cost) {
-        this.cost = cost.getAsString();
+    public void setCost(long cost) {
+        this.cost = cost;
     }
 
     public Share getShare() {

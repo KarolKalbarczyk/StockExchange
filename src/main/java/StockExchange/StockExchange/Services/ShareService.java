@@ -1,22 +1,9 @@
 package StockExchange.StockExchange.Services;
 
 import StockExchange.StockExchange.Entities.*;
-import StockExchange.StockExchange.Money.Money;
-import StockExchange.StockExchange.Money.MoneyFactory;
-import StockExchange.StockExchange.Repositories.OfferRepository;
-import StockExchange.StockExchange.Repositories.ShareRepository;
-import StockExchange.StockExchange.Repositories.TraderRepository;
-import StockExchange.StockExchange.Repositories.TransactionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-import java.math.BigDecimal;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Optional;
 
 @Service
 public class ShareService{

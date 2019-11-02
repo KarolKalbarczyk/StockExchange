@@ -1,34 +1,17 @@
 package StockExchange.StockExchange;
 
-import StockExchange.StockExchange.Money.MoneyFactory;
 import StockExchange.StockExchange.Repositories.*;
 import StockExchange.StockExchange.Services.ResponseService;
 import StockExchange.StockExchange.Services.ShareService;
-import org.junit.Assert;
-import org.junit.Before;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
-import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.context.annotation.Profile;
-import org.springframework.core.annotation.Order;
-import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.jdbc.Sql;
-import org.springframework.test.context.jdbc.SqlConfig;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
-
-import javax.persistence.Basic;
-
-import static org.springframework.test.context.jdbc.SqlConfig.TransactionMode.ISOLATED;
 
 @SpringBootTest()
 public class IntegrationShareServiceTest {

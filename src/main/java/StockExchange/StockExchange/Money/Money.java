@@ -1,30 +1,30 @@
 package StockExchange.StockExchange.Money;
 
-import java.io.Serializable;
+import org.springframework.context.i18n.LocaleContextHolder;
+
+import javax.management.relation.RoleUnresolved;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.util.Objects;
 
-public interface Money extends Comparable<Money>{
-    public void setAmount(long n);
-    public void setAmount(BigDecimal n);
-    public void setAmount(Money n);
+public class Money {
 
-    public Money add(long n);
-    public Money add(BigDecimal n);
-    public Money add(Money n);
+    static BigDecimal HUNDRED = new BigDecimal(100);
 
-    public Money subtract(long n);
-    public Money subtract(BigDecimal n);
-    public Money subtract(Money n);
+    public static int getMoneyInPresentCurrency(long amount){
+       var locale = LocaleContextHolder.getLocale();
+       var currency = Currency.valueOf(locale.getCountry());
+       var rate = new BigDecimal(currency.getRate());
+       var money = new BigDecimal(amount);
+       var moneyToDisplay = money.multiply(rate).
+               setScale(0,RoundingMode.HALF_UP);
+       return moneyToDisplay.intValue();
+    }
 
-    public Money multiply(long n);
-    public Money multiply(BigDecimal n);
-    public Money multiply(Money n);
+    public static String getAsString(long amount){
+        var money = new BigDecimal(amount);
+        return money.multiply(HUNDRED).toString();
+    }
 
-    public Money div(long n);
-    public Money div(BigDecimal n);
-    public Money div(Money n);
 
-    public String getMoneyInPresentCurrency();
-    public Number getValue();
-    public String getAsString();
 }

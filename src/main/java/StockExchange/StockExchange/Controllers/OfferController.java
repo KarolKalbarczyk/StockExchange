@@ -1,8 +1,10 @@
 package StockExchange.StockExchange.Controllers;
 
+import StockExchange.StockExchange.Entities.Offer;
 import StockExchange.StockExchange.Repositories.OfferRepository;
 import StockExchange.StockExchange.Services.OfferService;
 import StockExchange.StockExchange.Services.ResponseService;
+import StockExchange.StockExchange.StringCriteria.Criteria;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -10,6 +12,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
+import java.util.List;
 
 @RestController
 @CrossOrigin("*")
@@ -48,4 +51,6 @@ public class OfferController {
         var message = responseService.getMessage(CREATION_SUCCESS);
         return new ResponseEntity(message, HttpStatus.OK);
     }
+
+
 }

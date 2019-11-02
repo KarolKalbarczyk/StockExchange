@@ -1,12 +1,8 @@
 package StockExchange.StockExchange.Entities;
 
 import StockExchange.StockExchange.Money.Money;
-import StockExchange.StockExchange.Money.MoneyFactory;
-import StockExchange.StockExchange.Money.MoneyImpl;
 
 import javax.persistence.*;
-import javax.validation.constraints.Digits;
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collection;
 @Entity
@@ -17,13 +13,13 @@ public class Company extends Trader{
             fetch = FetchType.LAZY,orphanRemoval = true,
             mappedBy = "company")
     private Collection<Share> shares = new ArrayList<>();
-    private String value;
+    private long value;
 
     public Company() {
     }
 
     public Company(long value) {
-        this.value = Long.toString(value);
+        this.value = value;
     }
 
 
@@ -48,11 +44,15 @@ public class Company extends Trader{
         this.shares = shares;
     }
 
-    public String getValue() {
-        return MoneyFactory.getMoney(value).getMoneyInPresentCurrency();
+    public long getValue() {
+        return value;
     }
 
-    public void setValue(Money value) {
-        this.value = value.getAsString();
+    public long getValueInCurrency(){
+        return Money.getMoneyInPresentCurrency(value);
+    }
+
+    public void setValue(long value) {
+        this.value = value;
     }
 }
