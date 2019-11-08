@@ -8,7 +8,6 @@ import StockExchange.StockExchange.Entities.Offer_;
 import StockExchange.StockExchange.Repositories.ResponseRepository;
 import StockExchange.StockExchange.Services.ResponseService;
 import StockExchange.StockExchange.StringCriteria.OfferCriteria;
-import org.hibernate.metamodel.internal.SingularAttributeImpl;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +19,7 @@ import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
+import javax.persistence.EntityManager;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.metamodel.ManagedType;
 import javax.persistence.metamodel.SingularAttribute;
@@ -34,7 +34,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 
 @RunWith(SpringRunner.class)
 public class FilterTest {
-
 
 
 

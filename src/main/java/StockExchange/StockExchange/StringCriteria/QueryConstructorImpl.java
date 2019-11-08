@@ -11,10 +11,10 @@ import java.util.List;
 public class QueryConstructorImpl implements QueryConstructor {
 
     @PersistenceContext
-    EntityManager manager;
+    private EntityManager manager;
 
     @Override
-    public <T> Query createQuery(Class<T> clazz, Criteria<T>... criterias){
+    public <T> String createQuery(Class<T> clazz, Criteria<T>... criterias){
         var classname = clazz.getSimpleName();
         var lowercase = classname.toLowerCase();
         var select = String.format("select %s from %s %s" ,lowercase,classname,lowercase);
@@ -27,7 +27,16 @@ public class QueryConstructorImpl implements QueryConstructor {
         String query = select+join.toString()+where.toString();
         //var query = "select s from Share s join s.company b where b.value = 10";
         //var query = "select share from Share share join Share.company company where share.test between 5.000000 and 15.000000 and value between 5.000000 and 15.000000";
-        return manager.createQuery(query);
+        return query;
+    }
+
+    @Override
+    public <T> List<T> executeQuery(String query, int offset, int limit) {
+        Query query1 = switch (limit){
+            case 0 -> manager.createQuery(query);
+            default -> manager.createQuery(query).setFirstResult(offset).setMaxResults(limit);
+        };
+        return query1.getResultList();
     }
 
     private void analyzeList(List<String> list,StringBuilder join,StringBuilder where){

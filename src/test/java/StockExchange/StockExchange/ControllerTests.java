@@ -29,7 +29,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 
 @RunWith(SpringRunner.class)
-@WebMvcTest(secure = false,controllers = FilterController.class)
+@WebMvcTest(controllers = FilterController.class)
 public class ControllerTests {
     @Autowired
     MockMvc mockMvc;

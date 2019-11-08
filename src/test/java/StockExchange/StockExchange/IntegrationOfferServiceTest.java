@@ -12,7 +12,7 @@ import org.springframework.test.context.jdbc.Sql;
 @SpringBootTest()
 public class IntegrationOfferServiceTest {
 
-    @Autowired
+   /* @Autowired
     OfferService offerService;
 
     @Autowired
@@ -81,7 +81,7 @@ public class IntegrationOfferServiceTest {
         Assertions.assertThrows(IllegalCallerException.class,
                 ()->offerService.possesionCheck(idoffer,"acc1",(offer1) -> {},"error"));
         Assertions.assertFalse(b.a);
-    }
+    }*/
 
 }
 

@@ -22,7 +22,7 @@ public class OfferService{
         var share = main.shareRepository.getOne(shareId);
         var trader = main.traderRepository.findOneByAccountLogin(accountLogin);
         if (share.getOwner().equals(trader)) {
-            var offer = new Offer(MoneyFactory.getMoney(cost), share, trader);
+            var offer = new Offer(cost, share, trader);
             main.offerRepository.save(offer);
         }else throw new IllegalCallerException(NOT_OWNED_SHARE);
     }
@@ -34,7 +34,7 @@ public class OfferService{
 
     @Transactional
     public void modifyOffer(long offerId, String accountLogin, int newCost){
-        possesionCheck(offerId,accountLogin,(offer)-> {offer.setCost(MoneyFactory.getMoney(newCost));
+        possesionCheck(offerId,accountLogin,(offer)-> {offer.setCost(newCost);
         main.offerRepository.save(offer);}, NOT_OWNER);
     }
 

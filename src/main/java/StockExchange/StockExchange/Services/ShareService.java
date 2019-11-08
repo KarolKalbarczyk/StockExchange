@@ -41,8 +41,8 @@ public class ShareService{
         return offer.isPresent();
     }
 
-    public void exchangeMoney(Trader buyer, Trader seller, Money money){
-        if(buyer.getWealth().compareTo(money) < 0)
+    public void exchangeMoney(Trader buyer, Trader seller, long money){
+        if(buyer.getWealth() < money)
             throw new IllegalCallerException(main.responseService.getMessage(NO_MONEY));
         seller.addWealth(money);
         buyer.subtractWealth(money);
@@ -66,8 +66,7 @@ public class ShareService{
 
     private Share createShareAndOffer(Company company,int cost){
         var share = new Share(company);
-        Money properCost = MoneyFactory.getMoney(cost);
-        var offer = new Offer(properCost,share,company);
+        var offer = new Offer(cost,share,company);
         main.shareRepository.save(share);
         main.offerRepository.save(offer);
         return share;

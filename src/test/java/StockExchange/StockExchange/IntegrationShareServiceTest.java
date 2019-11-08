@@ -66,7 +66,7 @@ public class IntegrationShareServiceTest {
         Mockito.when(responseService.getMessage("noMoney")).thenReturn("noMoney");
         var trader1 = traderRepository.findOneById(idperson1);
         var trader2 = traderRepository.findOneById(idperson2);
-        var money = MoneyFactory.getMoney(50);
+        var money = 50;
         Assertions.assertThrows(IllegalCallerException.class,()-> shareService.exchangeMoney(trader2,trader1,money));
     }
 
@@ -79,12 +79,12 @@ public class IntegrationShareServiceTest {
         var trader1 = traderRepository.findOneById(idperson1);
         var trader2 = traderRepository.findOneById(idperson2);
         var moneya = trader1.getWealth();
-        var money = MoneyFactory.getMoney(50);
-        var money2 = MoneyFactory.getMoney(10);
-        var money3 = MoneyFactory.getMoney(90);
+        var money = 50;
+        var money2 = 10;
+        var money3 = 90;
         shareService.exchangeMoney(trader1,trader2,money);
-        Assertions.assertTrue(trader1.getWealth().compareTo(money2) == 0 );
-        Assertions.assertTrue(trader2.getWealth().compareTo(money3) == 0 );
+        Assertions.assertTrue(trader1.getWealth() == money2  );
+        Assertions.assertTrue(trader2.getWealth() == money3  );
     }
 
     @Test
@@ -108,7 +108,7 @@ public class IntegrationShareServiceTest {
         var optionalOffer = offerRepository.findOneByShare(shares.get(0));
         Assertions.assertTrue(optionalOffer.isPresent());
         var offer = optionalOffer.get();
-        var money = MoneyFactory.getMoney(50);
+        var money = 50;
         Assertions.assertEquals(offer.getCost(),money);
     }
 

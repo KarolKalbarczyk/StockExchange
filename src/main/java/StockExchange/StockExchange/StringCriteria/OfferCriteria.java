@@ -2,8 +2,10 @@ package StockExchange.StockExchange.StringCriteria;
 
 import StockExchange.StockExchange.Entities.Offer;
 import StockExchange.StockExchange.Entities.Offer_;
+import StockExchange.StockExchange.Entities.Share;
 
 import javax.persistence.metamodel.Attribute;
+import java.util.Arrays;
 import java.util.List;
 
 public class OfferCriteria extends GenericCriteria {
@@ -21,6 +23,10 @@ public class OfferCriteria extends GenericCriteria {
     @Override
     public <T, K> Criteria<T> chooseJoin(String attribute, List<Criteria<?>> criteria) {
         return null;
+    }
+
+    public Criteria<Offer> joinShare(Criteria<Share>... criteria){
+        return join(Offer_.share,Offer.class, Arrays.asList(criteria),Share.class);
     }
 
 
