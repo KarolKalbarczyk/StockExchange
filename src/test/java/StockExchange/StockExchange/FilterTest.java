@@ -1,38 +1,16 @@
 package StockExchange.StockExchange;
 
 import StockExchange.StockExchange.Controllers.Filter;
-import StockExchange.StockExchange.Controllers.FilterController;
-import StockExchange.StockExchange.Controllers.OfferController;
-import StockExchange.StockExchange.Controllers.StringToOfferFilters;
-import StockExchange.StockExchange.Entities.Offer;
 import StockExchange.StockExchange.Entities.Offer_;
-import StockExchange.StockExchange.Entities.Trader;
 import StockExchange.StockExchange.Entities.Trader_;
-import StockExchange.StockExchange.Repositories.ResponseRepository;
-import StockExchange.StockExchange.Services.ResponseService;
 import StockExchange.StockExchange.StringCriteria.*;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.MockitoAnnotations;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.test.context.junit4.SpringRunner;
-import org.springframework.test.web.servlet.MockMvc;
 
-import javax.persistence.EntityManager;
-import javax.persistence.metamodel.ManagedType;
-import javax.persistence.metamodel.SingularAttribute;
-import javax.persistence.metamodel.Type;
-
-import java.lang.reflect.Member;
-import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
