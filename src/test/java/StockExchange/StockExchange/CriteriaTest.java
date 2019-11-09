@@ -1,12 +1,8 @@
 package StockExchange.StockExchange;
 
-import StockExchange.StockExchange.Entities.Offer;
-import StockExchange.StockExchange.Entities.Offer_;
-import StockExchange.StockExchange.Entities.Share;
-import StockExchange.StockExchange.StringCriteria.OfferCriteria;
-import StockExchange.StockExchange.StringCriteria.QueryConstructor;
-import StockExchange.StockExchange.StringCriteria.QueryConstructorImpl;
-import StockExchange.StockExchange.StringCriteria.ShareCriteria;
+import StockExchange.StockExchange.Controllers.Filter;
+import StockExchange.StockExchange.Entities.*;
+import StockExchange.StockExchange.StringCriteria.*;
 import org.hibernate.query.internal.QueryImpl;
 import org.junit.Assert;
 import org.junit.Before;
@@ -41,6 +37,7 @@ import javax.transaction.Transactional;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 import static org.mockito.AdditionalAnswers.returnsFirstArg;
 import static org.mockito.ArgumentMatchers.anyString;
@@ -66,12 +63,15 @@ public class CriteriaTest {
     public void init(){
         MockitoAnnotations.initMocks(this);
         constructor = new QueryConstructorImpl();
+        Offer_.cost = new MockAttribute<>("cost");
+        Offer_.share = new MockAttribute<>("share");
+        Trader_.wealth = new MockAttribute<>("wealth");
+        Trader_.name = new MockAttribute<>("name");
     }
 
     @Test
     public void testSingleCriteria(){
         OfferCriteria crit = new OfferCriteria();
-        Offer_.cost = new MockAttribute<Offer,Long>("cost");
         String query = constructor.createQuery(Offer.class,crit.costInRange(40,60));
         var list = manager.createQuery(query).getResultList();
         Assert.assertTrue(list.size()==3);
@@ -83,12 +83,27 @@ public class CriteriaTest {
     public void testJoin(){
         OfferCriteria crit = new OfferCriteria();
         ShareCriteria share = new ShareCriteria();
-        Offer_.cost = new MockAttribute<Offer,Long>("cost");
-        Offer_.share = new MockAttribute<Offer, Share>("share");
-        String query = constructor.createQuery(Offer.class,crit.costInRange(40,60),crit.joinShare(share.testcheck(10,7)));
+        String query = constructor.createQuery(Offer.class,crit.costInRange(40,60),crit.joinShare(share.testcheck(7,10)));
         var list = manager.createQuery(query).getResultList();
-        System.out.println(list);
+        Assert.assertTrue(list.size()  == 2);
+        var offerList = getOfferCollection(40,offercost40id,50,offercost50id);
+        Assert.assertTrue(list.containsAll(offerList));
     }
+
+    @Test
+    public void testMultipleJoin(){
+        OfferCriteria crit = new OfferCriteria();
+        ShareCriteria share = new ShareCriteria();
+        TraderCriteria trader = new TraderCriteria();
+        String query = constructor.createQuery(Offer.class,crit.costInRange(40,60),
+                crit.joinShare(share.testcheck(7,10)),crit.joinTrader(trader.wealthInRange(4,10),trader.nameEquals("comp0")));
+        var list = manager.createQuery(query).getResultList();
+        Assert.assertTrue(list.size()  == 1);
+        var offerList = getOfferCollection(40,offercost40id);
+        Assert.assertTrue(list.containsAll(offerList));
+    }
+
+
 
     Collection<Offer> getOfferCollection(int... args){
         var list = new LinkedList<Offer>();
@@ -101,6 +116,5 @@ public class CriteriaTest {
         return list;
     }
 
-   @Test
-    public void a(){}
+
 }

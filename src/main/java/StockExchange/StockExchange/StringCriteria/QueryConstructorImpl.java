@@ -29,7 +29,6 @@ public class QueryConstructorImpl implements QueryConstructor {
         //var query = "select share from Share share join Share.company company where share.test between 5.000000 and 15.000000 and value between 5.000000 and 15.000000";
         return query;
     }
-
     @Override
     public <T> List<T> executeQuery(String query, int offset, int limit) {
         Query query1 = switch (limit){

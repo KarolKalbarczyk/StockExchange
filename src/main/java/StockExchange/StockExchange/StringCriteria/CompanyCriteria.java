@@ -1,11 +1,9 @@
 package StockExchange.StockExchange.StringCriteria;
 
-import StockExchange.StockExchange.Entities.Company;
-import StockExchange.StockExchange.Entities.Company_;
-import StockExchange.StockExchange.Entities.Trader;
-import StockExchange.StockExchange.Entities.Trader_;
+import StockExchange.StockExchange.Entities.*;
 
 import javax.persistence.metamodel.Attribute;
+import java.util.Arrays;
 import java.util.List;
 
 public class CompanyCriteria extends GenericCriteria {
@@ -15,19 +13,30 @@ public class CompanyCriteria extends GenericCriteria {
         return valueInRange(Company.class, Company_.value,min,max);
     }
 
-    @Override
-    public <T> Criteria<T> chooseMethod(String attribute, String name) {
-        return null;
+    public Criteria<Company> joinShares(Criteria<Share>... criteria){
+        return joinCollection(Company_.shares,Company.class, Arrays.asList(criteria),Share.class);
     }
 
     @Override
-    public <T> Criteria<T> chooseMethod(String attribute, double min, double max) {
-        return null;
+    public Criteria<Company> chooseMethod(String attribute, String name) {
+        throw new UnsupportedOperationException(NO_SUCH_METHOD);
     }
 
     @Override
-    public <T, K> Criteria<T> chooseJoin(String attribute, List<Criteria<?>> criteria) {
-        return null;
+    public  Criteria<Company> chooseMethod(String attribute, double min, double max) {
+
+        return switch (attribute.toLowerCase()){
+            case "value" -> valueInBetween(min,max);
+            default -> throw exception;
+        };
+    }
+
+    @Override
+    public Criteria<Company> chooseJoin(String attribute, Criteria... criteria) {
+        return switch (attribute.toLowerCase()){
+            case "shares" -> joinShares(criteria);
+            default -> throw exception;
+        };
     }
 
 }

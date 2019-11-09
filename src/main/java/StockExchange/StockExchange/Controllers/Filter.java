@@ -3,9 +3,8 @@ package StockExchange.StockExchange.Controllers;
 import StockExchange.StockExchange.StringCriteria.*;
 import com.fasterxml.jackson.annotation.JsonCreator;
 
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class Filter {
@@ -14,15 +13,13 @@ public class Filter {
     Map<String,double[]> inRange;
     Map<String,String> equalsString;
     CriteriaBuilder builder;
-    List<String> excluded = new LinkedList<>();
     @JsonCreator
     public Filter(String primary, List<Filter> secondary, Map<String, double[]> inRange, Map<String, String> equalsString) {
         this.primary = primary;
         this.secondary = secondary;
         this.inRange = inRange;
         this.equalsString = equalsString;
-        excluded.add(primary);
-        builder = switch(primary){
+        builder = switch(primary.toLowerCase()){
             case "offer" -> new OfferCriteria();
             case "share" -> new ShareCriteria();
             case "trader" -> new TraderCriteria();
@@ -31,22 +28,23 @@ public class Filter {
         };
     }
 
-    public List<Criteria<?>> buildCriteria(){
-        var list = new LinkedList<Criteria<?>>();
+    private List<Criteria> getCriteria(Set<String> excluded){
+        var list = new LinkedList<Criteria>();
         inRange.forEach((name,range) -> list.add(builder.chooseMethod(name,range[0],range[1])));
         equalsString.forEach((name,value) -> list.add(builder.chooseMethod(name,value)));
-        secondary.stream().filter(Filter::isExcluded).forEach(
-                filter -> {filter.addToExcluded(primary);
-                list.add(builder.chooseJoin(filter.primary,filter.buildCriteria()));});
+        excluded.add(primary);
+        secondary.stream().filter(f->f.isExcluded(excluded)).
+                forEach(filter ->
+                        list.add(builder.chooseJoin(filter.primary,filter.getCriteria(excluded).toArray(new Criteria[0]))));
         return list;
     }
 
-    boolean isExcluded(){
-        return excluded.contains(primary);
+    public List<Criteria> buildCriteria(){
+        return getCriteria(new HashSet<>());
     }
 
-    void addToExcluded(String primary){
-        excluded.add(primary);
+    boolean isExcluded(Set<String> excluded){
+        return !excluded.contains(primary);
     }
 
 

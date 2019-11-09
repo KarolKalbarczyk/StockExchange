@@ -3,15 +3,24 @@ package StockExchange.StockExchange.StringCriteria;
 import StockExchange.StockExchange.Entities.*;
 
 import javax.persistence.metamodel.Attribute;
+import java.util.Arrays;
 import java.util.List;
 
 public class ShareCriteria extends GenericCriteria {
-    public Criteria<Share> joinCompany(List<Criteria<Company>> criteria){
-        return join(Share_.company,Share.class,criteria,Company.class);
+    @SafeVarargs
+    public final Criteria<Share> joinCompany(Criteria<Company>... criteria){
+        return join(Share_.company,Share.class,Arrays.asList(criteria),Company.class);
     }
 
-    public Criteria<Share> joinOwner(List<Criteria<Trader>> criteria){
-        return join(Share_.owner,Share.class,criteria,Trader.class);
+    @SafeVarargs
+    public final Criteria<Share> joinOwner(Criteria<Trader>... criteria){
+        return join(Share_.owner,Share.class,Arrays.asList(criteria),Trader.class);
+    }
+
+    @SafeVarargs
+    public final Criteria<Share> joinOffer(Criteria<Offer>... criteria){
+        return join(Share_.offer,Share.class,Arrays.asList(criteria),Offer.class);
+
     }
 
     public Criteria<Share> testcheck(double min, double max){
@@ -20,18 +29,24 @@ public class ShareCriteria extends GenericCriteria {
     }
 
     @Override
-    public <T> Criteria<T> chooseMethod(String attribute, String name) {
-        return null;
+    public  Criteria<Share> chooseMethod(String attribute, String name) {
+        throw exception;
     }
 
     @Override
-    public <T> Criteria<T> chooseMethod(String attribute, double min, double max) {
-        return null;
+    public  Criteria<Share> chooseMethod(String attribute, double min, double max) {
+        return testcheck(min,max);
     }
 
     @Override
-    public <T, K> Criteria<T> chooseJoin(String attribute, List<Criteria<?>> criteria) {
-        return null;
+    public  Criteria<Share> chooseJoin(String attribute, Criteria... criteria) {
+        return switch (attribute.toLowerCase()){
+            case "offer" -> joinOffer(criteria);
+            case "owner" -> joinOwner(criteria);
+            case "company" -> joinCompany(criteria);
+            default -> throw exception;
+        };
     }
+
 
 }
