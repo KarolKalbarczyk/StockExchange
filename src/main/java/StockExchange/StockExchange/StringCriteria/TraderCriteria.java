@@ -53,4 +53,8 @@ public class TraderCriteria extends GenericCriteria {
             default -> throw exception;
         };
     }
+
+    public Criteria<Trader> joinAccount(Criteria<Account>... criteria){
+        return join(Trader_.account,Trader.class,Arrays.asList(criteria), Account.class);
+    }
 }

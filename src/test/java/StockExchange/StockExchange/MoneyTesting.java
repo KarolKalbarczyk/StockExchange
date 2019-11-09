@@ -25,7 +25,7 @@ public class MoneyTesting {
         currency = Mockito.mock(Currency.class);
         Mockito.when(currency.getRate()).thenReturn(3.845);
         BDDMockito.given(Currency.valueOf(locale.getCountry())).willReturn(currency);
-        Assert.assertEquals(385, Money.getMoneyInPresentCurrency(1));
+        Assert.assertEquals(385, Money.getMoneyInPresentCurrency(100));
     }
 
 }

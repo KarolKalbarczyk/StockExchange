@@ -58,6 +58,10 @@ public class CriteriaTest {
     @PersistenceContext
     EntityManager manager;
     QueryConstructorImpl constructor;
+    OfferCriteria crit = new OfferCriteria();
+    ShareCriteria share = new ShareCriteria();
+    TraderCriteria trader = new TraderCriteria();
+    AccountCriteria account = new AccountCriteria();
 
     @Before
     public void init(){
@@ -67,11 +71,12 @@ public class CriteriaTest {
         Offer_.share = new MockAttribute<>("share");
         Trader_.wealth = new MockAttribute<>("wealth");
         Trader_.name = new MockAttribute<>("name");
+        Trader_.account = new MockAttribute<>("account");
+        Account_.login = new MockAttribute<>("login");
     }
 
     @Test
     public void testSingleCriteria(){
-        OfferCriteria crit = new OfferCriteria();
         String query = constructor.createQuery(Offer.class,crit.costInRange(40,60));
         var list = manager.createQuery(query).getResultList();
         Assert.assertTrue(list.size()==3);
@@ -81,8 +86,6 @@ public class CriteriaTest {
 
     @Test
     public void testJoin(){
-        OfferCriteria crit = new OfferCriteria();
-        ShareCriteria share = new ShareCriteria();
         String query = constructor.createQuery(Offer.class,crit.costInRange(40,60),crit.joinShare(share.testcheck(7,10)));
         var list = manager.createQuery(query).getResultList();
         Assert.assertTrue(list.size()  == 2);
@@ -92,12 +95,20 @@ public class CriteriaTest {
 
     @Test
     public void testMultipleJoin(){
-        OfferCriteria crit = new OfferCriteria();
-        ShareCriteria share = new ShareCriteria();
-        TraderCriteria trader = new TraderCriteria();
         String query = constructor.createQuery(Offer.class,crit.costInRange(40,60),
                 crit.joinShare(share.testcheck(7,10)),crit.joinTrader(trader.wealthInRange(4,10),trader.nameEquals("comp0")));
         var list = manager.createQuery(query).getResultList();
+        Assert.assertTrue(list.size()  == 1);
+        var offerList = getOfferCollection(40,offercost40id);
+        Assert.assertTrue(list.containsAll(offerList));
+    }
+
+    @Test
+    public void testNestedJoins(){
+        String query = constructor.createQuery(Offer.class,crit.costInRange(40,60),
+                crit.joinShare(share.testcheck(7,10)),crit.joinTrader(trader.wealthInRange(4,10),trader.nameEquals("comp0"),trader.joinAccount(account.loginEquals("login0"))));
+        String query1 = "select offer from Offer offer join offer.share share join offer.owner trader join trader.account account where offer.cost between 40.00 and 60.00 and share.test between 7.00 and 10.00 and trader.wealth between 4.00 and 10.00 and trader.name = 'comp0' and account.login = 'login0'";
+        var list = manager.createQuery(query1).getResultList();
         Assert.assertTrue(list.size()  == 1);
         var offerList = getOfferCollection(40,offercost40id);
         Assert.assertTrue(list.containsAll(offerList));

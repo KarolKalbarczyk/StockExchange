@@ -37,9 +37,15 @@ public abstract class GenericCriteria implements CriteriaBuilder {
             String join = String.format(" join %s.%s %s",
                     clazz.getSimpleName().toLowerCase(),attr.getName(),kClass.getSimpleName().toLowerCase());
             List<String> list =  new LinkedList<String>(getConditionsFromCriterias(criteria));
-            list.add(join);
+            appendJoin(list,join);
             return list;
         };
+    }
+
+    private <K> void appendJoin(List<String> criteria,String join){
+        int i = 0;
+        while (criteria.get(i++).charAt(0) == 'j');
+        criteria.add(i,join);
     }
 
     public <T,K> Criteria<T> joinCollection(Attribute<T, Collection<K>> attr, Class<T> clazz, List<Criteria<K>> criteria, Class<K> kClass){
@@ -47,7 +53,7 @@ public abstract class GenericCriteria implements CriteriaBuilder {
             String join = String.format(" join %s.%s %s",
                     clazz.getSimpleName().toLowerCase(),attr.getName(),kClass.getSimpleName().toLowerCase());
             List<String> list =  new LinkedList<>(getConditionsFromCriterias(criteria));
-            list.add(join);
+            appendJoin(list,join);
             return list;
         };
     }
