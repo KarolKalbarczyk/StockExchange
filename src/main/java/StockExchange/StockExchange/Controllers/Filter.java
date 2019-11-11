@@ -1,20 +1,26 @@
 package StockExchange.StockExchange.Controllers;
 
 import StockExchange.StockExchange.StringCriteria.*;
+import StockExchange.StockExchange.Validators.KeysAreArraysOfSize;
 import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class Filter {
-    String primary;
-    List<Filter> secondary;
-    Map<String,double[]> inRange;
-    Map<String,String> equalsString;
-    CriteriaBuilder builder;
+    private final String primary;
+    private final List<Filter> secondary;
+    @KeysAreArraysOfSize
+    private final Map<String,double[]> inRange;
+    private final Map<String,String> equalsString;
+    private final CriteriaBuilder builder;
     @JsonCreator
-    public Filter(String primary, List<Filter> secondary, Map<String, double[]> inRange, Map<String, String> equalsString) {
+    public Filter(@JsonProperty("primary") String primary,
+                  @JsonProperty("secondary") List<Filter> secondary,
+                  @JsonProperty("inRange")Map<String, double[]> inRange,
+                  @JsonProperty("equalsString")Map<String, String> equalsString) {
         this.primary = primary;
         this.secondary = secondary;
         this.inRange = inRange;
@@ -47,5 +53,19 @@ public class Filter {
         return !excluded.contains(primary);
     }
 
+    public String getPrimary() {
+        return primary;
+    }
 
+    public List<Filter> getSecondary() {
+        return secondary;
+    }
+
+    public Map<String, double[]> getInRange() {
+        return inRange;
+    }
+
+    public Map<String, String> getEqualsString() {
+        return equalsString;
+    }
 }

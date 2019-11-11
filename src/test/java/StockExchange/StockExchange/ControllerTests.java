@@ -28,6 +28,6 @@ public class ControllerTests {
     @Test
     public void a() throws  Exception{
         Offer_.cost = new MockAttribute<>("cost");
-        mockMvc.perform(get("/filter?offer=100,200")).andExpect(content().string("test"));
+        mockMvc.perform(get("/filter")).andExpect(content().string("test"));
     }
 }
