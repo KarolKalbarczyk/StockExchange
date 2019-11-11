@@ -26,7 +26,7 @@ public class OfferController {
     @Autowired
     OfferService offerService;
 
-    @PostMapping
+    @PostMapping()
     public ResponseEntity<String> createOffer(@RequestParam long shareId,
                                               @RequestBody int cost,
                                               Principal principal){

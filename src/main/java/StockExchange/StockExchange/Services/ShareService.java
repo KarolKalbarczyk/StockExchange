@@ -1,5 +1,6 @@
 package StockExchange.StockExchange.Services;
 
+import StockExchange.StockExchange.Controllers.ErrorCodes;
 import StockExchange.StockExchange.Entities.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -10,13 +11,6 @@ public class ShareService{
     @Autowired
     MainService main;
 
-    private final String NOT_COMPANY = "notCompany";
-    private final String NO_MONEY = "noMoney";
-    private final String NOT_OWNER = "notOwner";
-    private final String YOURE_OWNER = "youreOwner";
-    private final String NOT_LOGGED = "notLogged";
-    private final String NO_OFFER = "notLogged";
-
     @Transactional
     public void exchangeShare(long offerId, String accountName){
         var optOffer = main.offerRepository.findOneById(offerId);
@@ -24,12 +18,12 @@ public class ShareService{
         optOffer.ifPresentOrElse(offer -> {
             var share = offer.getShare();
             exchangeShare(share, offer, buyer);
-            share.setOffer(null); }, () -> {throw new IllegalCallerException(NOT_LOGGED);});
+            share.setOffer(null); }, () -> {throw new IllegalCallerException(ErrorCodes.NotLogged.name());});
     }
 
     @Transactional
     private void exchangeShare(Share share,Offer offer,Trader buyer){
-        if (offer.getOwner().equals(buyer)) throw new IllegalCallerException(YOURE_OWNER);
+        if (offer.getOwner().equals(buyer)) throw new IllegalCallerException(ErrorCodes.YoureOwner.name());
         exchangeMoney(buyer,offer.getOwner(),offer.getCost());
         createTransaction(share,offer,buyer);
         share.setOwner(buyer);
@@ -43,7 +37,7 @@ public class ShareService{
 
     public void exchangeMoney(Trader buyer, Trader seller, long money){
         if(buyer.getWealth() < money)
-            throw new IllegalCallerException(main.responseService.getMessage(NO_MONEY));
+            throw new IllegalCallerException(ErrorCodes.NoMoney.name());
         seller.addWealth(money);
         buyer.subtractWealth(money);
     }
@@ -60,7 +54,7 @@ public class ShareService{
            return createShareAndOffer(company.get(), cost);
         }
         else {
-            throw new IllegalCallerException(main.responseService.getMessage(NOT_COMPANY));
+            throw new IllegalCallerException(ErrorCodes.NotCompany.name());
         }
     }
 
@@ -78,7 +72,7 @@ public class ShareService{
         var optShare = main.shareRepository.findOneById(shareId);
         optShare.ifPresent(share -> {
             if (!share.getOwner().equals(company) || !share.getCompany().equals(company)) {
-                throw new IllegalCallerException(main.responseService.getMessage(NOT_OWNER));
+                throw new IllegalCallerException(ErrorCodes.NotOwner.name());
             } else main.shareRepository.delete(share);
          });
     }

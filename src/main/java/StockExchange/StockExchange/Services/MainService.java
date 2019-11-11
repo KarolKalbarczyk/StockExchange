@@ -23,8 +23,6 @@ class MainService {
     protected MessageRepository messageRepository;
     @Autowired
     protected AccountRepository accountRepository;
-    @Autowired
-    protected ResponseService responseService;
     @PersistenceContext
     protected EntityManager manager;
 }

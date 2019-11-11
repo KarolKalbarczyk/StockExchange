@@ -1,5 +1,6 @@
 package StockExchange.StockExchange.Services;
 
+import StockExchange.StockExchange.Controllers.ErrorCodes;
 import StockExchange.StockExchange.Entities.Offer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -9,10 +10,6 @@ import java.util.function.Consumer;
 
 @Service
 public class OfferService{
-
-    private final String NOT_OWNER = "NOT_OWNER";
-    private final String NOT_OWNED_SHARE = "NOT_OWNED_SHARE";
-    private final String NOT_LOGGED = "notLogged";
 
     @Autowired
     MainService main;
@@ -24,18 +21,18 @@ public class OfferService{
         if (share.getOwner().equals(trader)) {
             var offer = new Offer(cost, share, trader);
             main.offerRepository.save(offer);
-        }else throw new IllegalCallerException(NOT_OWNED_SHARE);
+        }else throw new IllegalCallerException(ErrorCodes.NotOwnedShare.name());
     }
 
     @Transactional
     public void revokeOffer(long offerId, String accountLogin){
-        possesionCheck(offerId,accountLogin,(offer)-> main.offerRepository.delete(offer), NOT_OWNER);
+        possesionCheck(offerId,accountLogin,(offer)-> main.offerRepository.delete(offer), ErrorCodes.NotOwner.name());
     }
 
     @Transactional
     public void modifyOffer(long offerId, String accountLogin, int newCost){
         possesionCheck(offerId,accountLogin,(offer)-> {offer.setCost(newCost);
-        main.offerRepository.save(offer);}, NOT_OWNER);
+        main.offerRepository.save(offer);}, ErrorCodes.NotOwner.name());
     }
 
     @Transactional
@@ -46,7 +43,7 @@ public class OfferService{
         optOffer.ifPresent((offer) -> {
         { if (offer.getOwner().equals(trader)) {
                 run.accept(offer);
-            } else throw new IllegalCallerException(NOT_OWNER); }
+            } else throw new IllegalCallerException(errorMessage); }
     });
     }
 }

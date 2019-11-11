@@ -24,8 +24,8 @@ public class FilterController {
     @Autowired
     QueryConstructor constructor;
 
-    @PostMapping(consumes = "application/json",produces = "application/json")
-    public ResponseEntity<?> filter(@RequestBody @Valid Filter filter,
+    @PostMapping()
+    public ResponseEntity<?> filter(@RequestBody Filter filter,
                                     @RequestParam @Min(0) int offset,
                                     @RequestParam @Min(0) int limit){
         var criteria = filter.buildCriteria();
