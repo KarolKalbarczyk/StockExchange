@@ -1,6 +1,8 @@
 package StockExchange.StockExchange;
 
 import StockExchange.StockExchange.Controllers.Filter;
+import StockExchange.StockExchange.Entities.Attributes;
+import StockExchange.StockExchange.Entities.Entities;
 import StockExchange.StockExchange.Entities.Offer_;
 import StockExchange.StockExchange.Entities.Trader_;
 import StockExchange.StockExchange.StringCriteria.*;
@@ -36,9 +38,9 @@ public class FilterTest {
         Trader_.wealth = new MockAttribute<>("wealth");
         Trader_.name = new MockAttribute<>("name");
         Trader_.offers = new MockCollectionAttribute("offers");
-        filter1 = new Filter("Trader", List.of(), Map.of("wealth", new double[]{5, 10}),Map.of("name",name));
-        filter2 = new Filter("Offer",List.of(filter1),Map.of("cost",new double[]{4,8}),Map.of());
-        filter3 = new Filter("Trader", List.of(filter2), Map.of("wealth", new double[]{5, 10}),Map.of("name",name));
+        filter1 = new Filter(Entities.Trader, List.of(), Map.of(Attributes.Wealth, new double[]{5, 10}),Map.of(Attributes.Name,name));
+        filter2 = new Filter(Entities.Offer,List.of(filter1),Map.of(Attributes.Cost,new double[]{4,8}),Map.of());
+        filter3 = new Filter(Entities.Trader, List.of(filter2), Map.of(Attributes.Wealth, new double[]{5, 10}),Map.of(Attributes.Name,name));
     }
     @Test
     public void testSingleFilterAndCriteriaEquivalence(){

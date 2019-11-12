@@ -1,13 +1,8 @@
 package StockExchange.StockExchange.StringCriteria;
 
-import StockExchange.StockExchange.Entities.Offer;
-import StockExchange.StockExchange.Entities.Offer_;
-import StockExchange.StockExchange.Entities.Share;
-import StockExchange.StockExchange.Entities.Trader;
+import StockExchange.StockExchange.Entities.*;
 
-import javax.persistence.metamodel.Attribute;
 import java.util.Arrays;
-import java.util.List;
 
 public class OfferCriteria extends GenericCriteria {
 
@@ -17,15 +12,15 @@ public class OfferCriteria extends GenericCriteria {
     }
 
     @Override
-    public <T> Criteria<T> chooseMethod(String attribute, String name) {
+    public <T> Criteria<T> chooseMethod(Attributes attribute, String name) {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public  Criteria<Offer> chooseJoin(String attribute, Criteria... criteria) {
-        return switch(attribute.toLowerCase()){
-            case "share" -> joinShare(criteria);
-            case "trader" -> joinTrader(criteria);
+    public  Criteria<Offer> chooseJoin(Entities entity, Criteria... criteria) {
+        return switch(entity){
+            case Share -> joinShare(criteria);
+            case Trader -> joinTrader(criteria);
             default -> throw exception;
         };
     }
@@ -39,9 +34,9 @@ public class OfferCriteria extends GenericCriteria {
     }
 
     @Override
-    public  Criteria<Offer> chooseMethod(String attribute, double min, double max) {
-        return switch (attribute.toLowerCase()){
-            case "cost" -> costInRange(min,max);
+    public  Criteria<Offer> chooseMethod(Attributes attribute, double min, double max) {
+        return switch (attribute){
+            case Cost -> costInRange(min,max);
             default -> throw exception;
         };
     }

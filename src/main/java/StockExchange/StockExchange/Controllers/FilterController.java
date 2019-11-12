@@ -25,11 +25,11 @@ public class FilterController {
     QueryConstructor constructor;
 
     @PostMapping()
-    public ResponseEntity<?> filter(@RequestBody Filter filter,
+    public ResponseEntity<?> filter(@RequestBody @Valid Filter filter,
                                     @RequestParam @Min(0) int offset,
                                     @RequestParam @Min(0) int limit){
         var criteria = filter.buildCriteria();
-        Class<?> clazz =Entities.valueOf(filter.getPrimary()).getClazz();
+        Class<?> clazz =filter.getPrimary().getClazz();
         var query = constructor.createQuery(clazz,criteria.toArray(new Criteria[0]));
         var result = constructor.executeQuery(query,offset,limit);
         return ResponseEntity.ok(result);

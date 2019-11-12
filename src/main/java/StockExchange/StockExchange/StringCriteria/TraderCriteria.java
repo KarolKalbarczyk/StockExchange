@@ -19,7 +19,7 @@ public class TraderCriteria extends GenericCriteria {
     }
 
 
-    public Criteria<Trader> joinShare(Criteria<Share>... criteria){
+    public Criteria<Trader> joinShares(Criteria<Share>... criteria){
         return joinCollection(Trader_.ownedShares,Trader.class,Arrays.asList(criteria), Share.class);
     }
 
@@ -28,28 +28,28 @@ public class TraderCriteria extends GenericCriteria {
     }
 
     @Override
-    public Criteria<? extends Trader> chooseMethod(String attribute, String name) {
-        return switch (attribute.toLowerCase()){
-            case "name" -> nameEquals(name);
+    public Criteria<? extends Trader> chooseMethod(Attributes attribute, String name) {
+        return switch (attribute){
+            case Name -> nameEquals(name);
             default -> throw exception;
         };
     }
 
     @Override
-    public  Criteria<? extends Trader> chooseMethod(String attribute, double min, double max) {
-        return switch (attribute.toLowerCase()){
-            case "wealth" -> wealthInRange(min,max);
-            case "value" -> comp.valueInBetween(min,max);
+    public  Criteria<? extends Trader> chooseMethod(Attributes attribute, double min, double max) {
+        return switch (attribute){
+            case Wealth -> wealthInRange(min,max);
+            case Value -> comp.valueInBetween(min,max);
             default -> throw exception;
         };
     }
 
     @Override
-    public Criteria<? extends Trader> chooseJoin(String attribute, Criteria... criteria) {
-        return switch (attribute.toLowerCase()){
-            case "ownedShares" -> joinShare(criteria);
-            case "offer" -> joinOffer(criteria);
-            case "shares" -> comp.joinShares(criteria);
+    public Criteria<? extends Trader> chooseJoin(Entities entity, Criteria... criteria) {
+        return switch (entity){
+            case OwnedShares -> joinShares(criteria);
+            case Offer -> joinOffer(criteria);
+            case Share -> comp.joinShares(criteria);
             default -> throw exception;
         };
     }

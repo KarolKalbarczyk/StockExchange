@@ -29,21 +29,21 @@ public class ShareCriteria extends GenericCriteria {
     }
 
     @Override
-    public  Criteria<Share> chooseMethod(String attribute, String name) {
+    public  Criteria<Share> chooseMethod(Attributes attribute, String name) {
         throw exception;
     }
 
     @Override
-    public  Criteria<Share> chooseMethod(String attribute, double min, double max) {
+    public  Criteria<Share> chooseMethod(Attributes attribute, double min, double max) {
         return testcheck(min,max);
     }
 
     @Override
-    public  Criteria<Share> chooseJoin(String attribute, Criteria... criteria) {
-        return switch (attribute.toLowerCase()){
-            case "offer" -> joinOffer(criteria);
-            case "owner" -> joinOwner(criteria);
-            case "company" -> joinCompany(criteria);
+    public  Criteria<Share> chooseJoin(Entities entity, Criteria... criteria) {
+        return switch (entity){
+            case Offer -> joinOffer(criteria);
+            case Trader -> joinOwner(criteria);
+            case Company -> joinCompany(criteria);
             default -> throw exception;
         };
     }

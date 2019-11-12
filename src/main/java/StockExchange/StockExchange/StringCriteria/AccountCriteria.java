@@ -2,6 +2,8 @@ package StockExchange.StockExchange.StringCriteria;
 
 import StockExchange.StockExchange.Entities.Account;
 import StockExchange.StockExchange.Entities.Account_;
+import StockExchange.StockExchange.Entities.Attributes;
+import StockExchange.StockExchange.Entities.Entities;
 
 public class AccountCriteria extends GenericCriteria {
 
@@ -10,17 +12,17 @@ public class AccountCriteria extends GenericCriteria {
     }
 
     @Override
-    public <T> Criteria<T> chooseMethod(String attribute, String name) {
+    public <T> Criteria<T> chooseMethod(Attributes attribute, String name) {
         return null;
     }
 
     @Override
-    public <T> Criteria<T> chooseMethod(String attribute, double min, double max) {
+    public <T> Criteria<T> chooseMethod(Attributes attribute, double min, double max) {
         return null;
     }
 
     @Override
-    public <T> Criteria<T> chooseJoin(String attribute, Criteria... criteria) {
+    public <T> Criteria<T> chooseJoin(Entities entitiy, Criteria... criteria) {
         return null;
     }
 }

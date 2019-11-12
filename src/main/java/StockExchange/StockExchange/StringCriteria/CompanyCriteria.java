@@ -18,23 +18,23 @@ public class CompanyCriteria extends GenericCriteria {
     }
 
     @Override
-    public Criteria<Company> chooseMethod(String attribute, String name) {
+    public Criteria<Company> chooseMethod(Attributes attribute, String name) {
         throw new UnsupportedOperationException(NO_SUCH_METHOD);
     }
 
     @Override
-    public  Criteria<Company> chooseMethod(String attribute, double min, double max) {
+    public  Criteria<Company> chooseMethod(Attributes attribute, double min, double max) {
 
-        return switch (attribute.toLowerCase()){
-            case "value" -> valueInBetween(min,max);
+        return switch (attribute){
+            case Value -> valueInBetween(min,max);
             default -> throw exception;
         };
     }
 
     @Override
-    public Criteria<Company> chooseJoin(String attribute, Criteria... criteria) {
-        return switch (attribute.toLowerCase()){
-            case "shares" -> joinShares(criteria);
+    public Criteria<Company> chooseJoin(Entities entity, Criteria... criteria) {
+        return switch (entity){
+            case Share -> joinShares(criteria);
             default -> throw exception;
         };
     }

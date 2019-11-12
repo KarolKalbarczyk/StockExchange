@@ -2,7 +2,10 @@ package StockExchange.StockExchange;
 
 import StockExchange.StockExchange.Controllers.Filter;
 import StockExchange.StockExchange.Controllers.FilterController;
+import StockExchange.StockExchange.Entities.Attributes;
+import StockExchange.StockExchange.Entities.Entities;
 import StockExchange.StockExchange.Entities.Trader;
+import StockExchange.StockExchange.Services.ResponseService;
 import StockExchange.StockExchange.StringCriteria.Criteria;
 import StockExchange.StockExchange.StringCriteria.GenericCriteria;
 import StockExchange.StockExchange.StringCriteria.QueryConstructor;
@@ -37,6 +40,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class FilterControllerTest {
 
     @MockBean
+    ResponseService service;
+    @MockBean
     QueryConstructor constructor;
     @Autowired
     @InjectMocks
@@ -56,9 +61,9 @@ public class FilterControllerTest {
         MockitoAnnotations.initMocks(this);
         this.mockMvc = MockMvcBuilders.standaloneSetup(controller).build();
         ObjectMapper mapper = new ObjectMapper();
-        filter1 = new Filter("Trader", List.of(), Map.of("wealth", new double[]{5, 10}),Map.of("name","name1"));
-        filter2 = new Filter("Offer",List.of(filter1),Map.of("cost",new double[]{4,8,3}),Map.of());
-        filter3 = new Filter("Trader", List.of(filter2), Map.of("wealth", new double[]{5, 10}),Map.of("name","name2"));
+        filter1 = new Filter(Entities.Trader, List.of(), Map.of(Attributes.Wealth, new double[]{5, 10}),Map.of(Attributes.Name,"name1"));
+        filter2 = new Filter(Entities.Offer,List.of(filter1),Map.of(Attributes.Cost,new double[]{4,8,3}),Map.of());
+        filter3 = new Filter(Entities.Trader, List.of(filter2), Map.of(Attributes.Wealth, new double[]{5, 10}),Map.of(Attributes.Name,"name2"));
         json1 =mapper.writeValueAsString(filter1);
         json2 = mapper.writeValueAsString(filter2);
         json3 = mapper.writeValueAsString(filter3);
