@@ -13,6 +13,7 @@ import org.junit.runner.RunWith;
 import org.mockito.MockitoAnnotations;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -38,9 +39,9 @@ public class FilterTest {
         Trader_.wealth = new MockAttribute<>("wealth");
         Trader_.name = new MockAttribute<>("name");
         Trader_.offers = new MockCollectionAttribute("offers");
-        filter1 = new Filter(Entities.Trader, List.of(), Map.of(Attributes.Wealth, new double[]{5, 10}),Map.of(Attributes.Name,name));
-        filter2 = new Filter(Entities.Offer,List.of(filter1),Map.of(Attributes.Cost,new double[]{4,8}),Map.of());
-        filter3 = new Filter(Entities.Trader, List.of(filter2), Map.of(Attributes.Wealth, new double[]{5, 10}),Map.of(Attributes.Name,name));
+        filter1 = new Filter(Entities.Trader, List.of(), new EnumMap<>(Map.of(Attributes.Wealth, new double[]{5, 10})),new EnumMap<>(Map.of(Attributes.Name,name)));
+        filter2 = new Filter(Entities.Offer,List.of(filter1),new EnumMap<>(Map.of(Attributes.Cost,new double[]{4,8})),new EnumMap<>(Attributes.class));
+        filter3 = new Filter(Entities.Trader, List.of(filter2), new EnumMap<>(Map.of(Attributes.Wealth, new double[]{5, 10})),new EnumMap<>(Map.of(Attributes.Name,name)));
     }
     @Test
     public void testSingleFilterAndCriteriaEquivalence(){

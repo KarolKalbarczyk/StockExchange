@@ -14,14 +14,14 @@ public class Filter {
     private final Entities primary;
     private final List<Filter> secondary;
     @KeysAreArraysOfSize
-    private final Map<Attributes,double[]> inRange;
-    private final Map<Attributes,String> equalsString;
+    private final EnumMap<Attributes,double[]> inRange;
+    private final EnumMap<Attributes,String> equalsString;
     private final CriteriaBuilder builder;
     @JsonCreator
     public Filter(@JsonProperty("primary") Entities primary,
                   @JsonProperty("secondary") List<Filter> secondary,
-                  @JsonProperty("inRange")Map<Attributes, double[]> inRange,
-                  @JsonProperty("equalsString")Map<Attributes, String> equalsString) {
+                  @JsonProperty("inRange") EnumMap<Attributes, double[]> inRange,
+                  @JsonProperty("equalsString") EnumMap<Attributes, String> equalsString) {
         this.primary = primary;
         this.secondary = secondary;
         this.inRange = inRange;
