@@ -20,15 +20,17 @@ import java.io.Reader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.charset.Charset;
+import java.util.Arrays;
 import java.util.Map;
 import java.util.Properties;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @SpringBootApplication(exclude = SecurityAutoConfiguration.class)
 public class StockExchangeApplication {
 
-	public static void main(String[] args) {
 
-        DispatcherServlet a = new DispatcherServlet();
+	public static void main(String[] args) {
 	    SpringApplication.run(StockExchangeApplication.class, args);
 	}
 }

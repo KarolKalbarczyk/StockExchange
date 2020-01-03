@@ -23,6 +23,4 @@ class MainService {
     protected MessageRepository messageRepository;
     @Autowired
     protected AccountRepository accountRepository;
-    @PersistenceContext
-    protected EntityManager manager;
 }

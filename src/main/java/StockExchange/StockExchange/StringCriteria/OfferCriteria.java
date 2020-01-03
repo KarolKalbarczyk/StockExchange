@@ -1,6 +1,7 @@
 package StockExchange.StockExchange.StringCriteria;
 
 import StockExchange.StockExchange.Entities.*;
+import org.hibernate.metamodel.model.domain.internal.SingularAttributeImpl;
 
 import java.util.Arrays;
 
@@ -19,7 +20,7 @@ public class OfferCriteria extends GenericCriteria {
     @Override
     public  Criteria<Offer> chooseJoin(Entities entity, Criteria... criteria) {
         return switch(entity){
-            case Share -> joinShare(criteria);
+            case Share ->null;
             case Trader -> joinTrader(criteria);
             default -> throw exception;
         };

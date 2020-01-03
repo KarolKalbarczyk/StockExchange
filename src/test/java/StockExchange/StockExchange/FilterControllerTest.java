@@ -2,6 +2,7 @@ package StockExchange.StockExchange;
 
 import StockExchange.StockExchange.Controllers.Filter;
 import StockExchange.StockExchange.Controllers.FilterController;
+import StockExchange.StockExchange.Controllers.GlobalExceptionHandler;
 import StockExchange.StockExchange.Entities.Attributes;
 import StockExchange.StockExchange.Entities.Entities;
 import StockExchange.StockExchange.Entities.Trader;
@@ -20,7 +21,9 @@ import org.mockito.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
@@ -32,6 +35,7 @@ import java.util.List;
 import java.util.Map;
 
 import static org.mockito.ArgumentMatchers.*;
+import static org.mockito.Mockito.times;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -47,6 +51,8 @@ public class FilterControllerTest {
     @Autowired
     @InjectMocks
     FilterController controller;
+    @Mock
+    GlobalExceptionHandler handler;
     MockMvc mockMvc;
     Filter filter1;
     Filter filter2;
@@ -60,7 +66,7 @@ public class FilterControllerTest {
     @Before
     public void init() throws JsonProcessingException {
         MockitoAnnotations.initMocks(this);
-        this.mockMvc = MockMvcBuilders.standaloneSetup(controller).build();
+        this.mockMvc = MockMvcBuilders.standaloneSetup(controller).setControllerAdvice(handler).build();
         ObjectMapper mapper = new ObjectMapper();
         filter1 = new Filter(Entities.Trader, List.of(), new EnumMap<>(Map.of(Attributes.Wealth, new double[]{5, 10})),new EnumMap<>(Map.of(Attributes.Name,"name1")));
         filter2 = new Filter(Entities.Offer,List.of(filter1),new EnumMap<>(Map.of(Attributes.Cost,new double[]{4,8,3})),new EnumMap<>(Attributes.class));
@@ -76,6 +82,16 @@ public class FilterControllerTest {
                 param("offset","1").param("limit","1").
                 content(json2).contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON)).
                 andExpect(status().is4xxClientError());
+    }
+
+    @Test
+    public void testConversionError() throws Exception{
+        Mockito.when(handler.handleJSONError(any(),any())).thenReturn(new ResponseEntity<>(HttpStatus.BAD_REQUEST));
+        mockMvc.perform(post("/filter").
+                param("offset","1").param("limit","1").
+                content("AAAAAAAA").contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON)).
+                andExpect(status().is4xxClientError());
+        Mockito.verify(handler,times(1)).handleJSONError(any(),any());
     }
 
     @Test

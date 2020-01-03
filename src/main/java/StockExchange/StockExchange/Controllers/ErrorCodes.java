@@ -8,5 +8,9 @@ public enum ErrorCodes {
     NotLogged,
     NoOffer,
     NotOwnedShare,
-
+    NoSuchValue,
+    NoSuchEntity,
+    ConversionError,
+    JSONError
 }
+

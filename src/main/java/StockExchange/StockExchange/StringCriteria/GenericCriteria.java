@@ -1,7 +1,7 @@
 package StockExchange.StockExchange.StringCriteria;
 
 import StockExchange.StockExchange.Entities.Trader;
-import StockExchange.StockExchange.Entities.Trader_;
+//import StockExchange.StockExchange.StockExchange.StockExchange.StockExchange.Entities.Entities.Trader_;
 
 import javax.persistence.metamodel.Attribute;
 import java.math.BigDecimal;

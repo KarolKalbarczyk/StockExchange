@@ -10,6 +10,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.*;
 import java.util.stream.Collectors;
 
+
 public class Filter {
     private final Entities primary;
     private final List<Filter> secondary;
@@ -26,7 +27,12 @@ public class Filter {
         this.secondary = secondary;
         this.inRange = inRange;
         this.equalsString = equalsString;
-        builder = switch(primary){
+        builder = chooseBuilder();
+    }
+
+    private CriteriaBuilder chooseBuilder(){
+
+        return switch(primary){
             case Offer -> new OfferCriteria();
             case Share -> new ShareCriteria();
             case Trader -> new TraderCriteria();
@@ -35,12 +41,12 @@ public class Filter {
         };
     }
 
-    private List<Criteria> getCriteria(EnumSet<Entities> excluded){
+    private List<Criteria> getCriteria(EnumSet<Entities> excluded)
+    {
         var list = new LinkedList<Criteria>();
+        excluded.add(primary);
         inRange.forEach((name,range) -> list.add(builder.chooseMethod(name,range[0],range[1])));
         equalsString.forEach((name,value) -> list.add(builder.chooseMethod(name,value)));
-        excluded.add(primary);
-        var list2 = secondary.stream().filter(f->!excluded.contains(f.primary)).collect(Collectors.toList());
         secondary.stream().filter(f->!excluded.contains(f.primary)).
                 forEach(filter ->
                         list.add(builder.chooseJoin(filter.primary,filter.getCriteria(excluded).toArray(new Criteria[0]))));

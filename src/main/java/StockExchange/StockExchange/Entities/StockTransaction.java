@@ -26,10 +26,50 @@ public class StockTransaction extends BasicEntity {
     public StockTransaction() {
     }
 
-    public StockTransaction(Share share,Offer offer, Trader buyer) {
-        this.share = share;
+    public StockTransaction(Offer offer, Trader buyer) {
+        this.share = offer.getShare();
         this.finalCost = offer.getCost();
         this.seller = offer.getOwner();
         this.buyer = buyer;
+    }
+
+    public Share getShare() {
+        return share;
+    }
+
+    public void setShare(Share share) {
+        this.share = share;
+    }
+
+    public Calendar getDate() {
+        return date;
+    }
+
+    public void setDate(Calendar date) {
+        this.date = date;
+    }
+
+    public Trader getSeller() {
+        return seller;
+    }
+
+    public void setSeller(Trader seller) {
+        this.seller = seller;
+    }
+
+    public Trader getBuyer() {
+        return buyer;
+    }
+
+    public void setBuyer(Trader buyer) {
+        this.buyer = buyer;
+    }
+
+    public long getFinalCost() {
+        return finalCost;
+    }
+
+    public void setFinalCost(long finalCost) {
+        this.finalCost = finalCost;
     }
 }

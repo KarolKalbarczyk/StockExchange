@@ -12,7 +12,7 @@ import org.springframework.test.context.jdbc.Sql;
 @SpringBootTest()
 public class IntegrationOfferServiceTest {
 
-   /* @Autowired
+    @Autowired
     OfferService offerService;
 
     @Autowired
@@ -35,7 +35,7 @@ public class IntegrationOfferServiceTest {
         offerService.createOffer(idshare,"acc1",50);
         var offer = offerRepository.findOneById(1).get();
         var share = shareRepository.findOneById(idshare).get();
-        Money money = MoneyFactory.getMoney(50);
+        var money = 50;
         Assertions.assertNotNull(offer);
         Assertions.assertEquals(offer.getCost(),money);
         Assertions.assertNotNull(share.getOffer());
@@ -59,7 +59,7 @@ public class IntegrationOfferServiceTest {
     public void testModyfyingOffer(){
         offerService.modifyOffer(idoffer,"acc2",40);
         var offer = offerRepository.findOneById(idoffer).get();
-        var money = MoneyFactory.getMoney(40);
+        var money = 40;
         Assertions.assertEquals(offer.getCost(),money);
     }
 
@@ -81,7 +81,7 @@ public class IntegrationOfferServiceTest {
         Assertions.assertThrows(IllegalCallerException.class,
                 ()->offerService.possesionCheck(idoffer,"acc1",(offer1) -> {},"error"));
         Assertions.assertFalse(b.a);
-    }*/
+    }
 
 }
 

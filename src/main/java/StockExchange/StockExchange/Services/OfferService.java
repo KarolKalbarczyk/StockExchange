@@ -16,12 +16,11 @@ public class OfferService{
 
     @Transactional
     public void createOffer(long shareId, String accountLogin, int cost){
-        var share = main.shareRepository.getOne(shareId);
+        var optShare = main.shareRepository.findOneById(shareId);
         var trader = main.traderRepository.findOneByAccountLogin(accountLogin);
-        if (share.getOwner().equals(trader)) {
-            var offer = new Offer(cost, share, trader);
-            main.offerRepository.save(offer);
-        }else throw new IllegalCallerException(ErrorCodes.NotOwnedShare.name());
+        optShare.filter(share -> share.isOwner(trader)).ifPresentOrElse(
+                (share) -> main.offerRepository.save(new Offer(cost,share,trader)),
+                () -> {throw new IllegalCallerException(ErrorCodes.NotOwnedShare.name());});
     }
 
     @Transactional
@@ -31,8 +30,7 @@ public class OfferService{
 
     @Transactional
     public void modifyOffer(long offerId, String accountLogin, int newCost){
-        possesionCheck(offerId,accountLogin,(offer)-> {offer.setCost(newCost);
-        main.offerRepository.save(offer);}, ErrorCodes.NotOwner.name());
+        possesionCheck(offerId,accountLogin,(offer)-> offer.setCost(newCost), ErrorCodes.NotOwner.name());
     }
 
     @Transactional
@@ -40,10 +38,7 @@ public class OfferService{
             , Consumer<Offer> run, String errorMessage){
         var trader = main.traderRepository.findOneByAccountLogin(accountLogin);
         var optOffer = main.offerRepository.findOneById(offerId);
-        optOffer.ifPresent((offer) -> {
-        { if (offer.getOwner().equals(trader)) {
-                run.accept(offer);
-            } else throw new IllegalCallerException(errorMessage); }
-    });
+        optOffer.filter(offer -> offer.isOwner(trader)).
+                ifPresentOrElse(run, () -> {throw new IllegalCallerException(errorMessage);});
     }
 }

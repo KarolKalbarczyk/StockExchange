@@ -17,5 +17,6 @@ public interface OfferRepository  extends JpaRepository<Offer,Long>, JpaSpecific
     List<Offer> findAllByShare(Share share);
     List<Offer> findAllByCost(long money);
     Optional<Offer> findOneById(long id);
+    boolean existsByShareId(long id);
 }
 

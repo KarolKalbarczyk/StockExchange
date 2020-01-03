@@ -32,4 +32,44 @@ public class Message extends BasicEntity {
         this.sender = sender;
         this.receiver = receiver;
     }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public String getText() {
+        return text;
+    }
+
+    public void setText(String text) {
+        this.text = text;
+    }
+
+    public Account getSender() {
+        return sender;
+    }
+
+    public void setSender(Account sender) {
+        this.sender = sender;
+    }
+
+    public Account getReceiver() {
+        return receiver;
+    }
+
+    public void setReceiver(Account receiver) {
+        this.receiver = receiver;
+    }
+
+    public Calendar getCreationTime() {
+        return creationTime;
+    }
+
+    public void setCreationTime(Calendar creationTime) {
+        this.creationTime = creationTime;
+    }
 }

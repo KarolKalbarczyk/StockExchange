@@ -16,8 +16,8 @@ public class Share extends BasicEntity{
     private Trader owner;
 
     @OneToMany(orphanRemoval = true,
-    cascade = CascadeType.ALL,
-    mappedBy = "share",
+              cascade = CascadeType.ALL,
+              mappedBy = "share",
     fetch = FetchType.LAZY)
     private Collection<StockTransaction> transactions = new HashSet<>();
 
@@ -42,6 +42,26 @@ public class Share extends BasicEntity{
                // "company=" + company +
                 //"offer=" + offer +
                 '}';
+    }
+
+    public boolean isOwner(Trader trader){
+        return owner.equals(trader);
+    }
+
+    public Collection<StockTransaction> getTransactions() {
+        return transactions;
+    }
+
+    public void setTransactions(Collection<StockTransaction> transactions) {
+        this.transactions = transactions;
+    }
+
+    public int getTest() {
+        return test;
+    }
+
+    public void setTest(int test) {
+        this.test = test;
     }
 
     @PreRemove

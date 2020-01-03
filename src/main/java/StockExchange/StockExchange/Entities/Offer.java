@@ -33,6 +33,10 @@ public class Offer extends BasicEntity {
         share = null;
     }
 
+    public boolean isOwner(Trader trader){
+        return owner.equals(trader);
+    }
+
     public long getCost() {
         return cost;
     }

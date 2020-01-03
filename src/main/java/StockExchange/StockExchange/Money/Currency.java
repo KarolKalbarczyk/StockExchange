@@ -46,7 +46,7 @@ public enum Currency {
                 return ((JSONObject)rates).getDouble(name);
             }
         }
-        catch (IOException e){}
+        catch (IOException ignored){}
         return 0;
 
     }

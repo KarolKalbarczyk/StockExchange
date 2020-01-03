@@ -63,4 +63,11 @@ public class Account extends BasicEntity {
         return receivedMessages;
     }
 
+    public void setSentMessages(List<Message> sentMessages) {
+        this.sentMessages = sentMessages;
+    }
+
+    public void setReceivedMessages(List<Message> receivedMessages) {
+        this.receivedMessages = receivedMessages;
+    }
 }
