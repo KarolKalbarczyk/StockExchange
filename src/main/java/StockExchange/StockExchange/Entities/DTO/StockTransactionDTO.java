@@ -16,7 +16,7 @@ public class StockTransactionDTO {
 
     private Trader buyer;
 
-    StockTransactionDTO(StockTransaction StockTransaction) {
+    public StockTransactionDTO(StockTransaction StockTransaction) {
         this.date = StockTransaction.getDate();
         this.seller = StockTransaction.getSeller();
         this.finalCost = StockTransaction.getFinalCost();
@@ -64,7 +64,7 @@ public class StockTransactionDTO {
         return buyer;
     }
 
-    StockTransaction getEntity() {
+    public StockTransaction getEntity() {
         var StockTransaction = new StockTransaction();
         StockTransaction.setDate(date);
         StockTransaction.setSeller(seller);

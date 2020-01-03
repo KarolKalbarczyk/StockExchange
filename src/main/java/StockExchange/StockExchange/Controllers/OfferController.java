@@ -22,8 +22,10 @@ public class OfferController {
     private final String REVOKE_SUCCESS = "creationSucces";
     private final String MODIFY_SUCCESS = "modifySucces";
     @Autowired
+    private
     ResponseService responseService;
     @Autowired
+    private
     OfferService offerService;
 
     @PostMapping()

@@ -16,7 +16,7 @@ public class MessageDTO {
 
     private String title;
 
-    MessageDTO(Message Message) {
+    public MessageDTO(Message Message) {
         this.receiver = Message.getReceiver();
         this.creationTime = Message.getCreationTime();
         this.sender = Message.getSender();
@@ -64,7 +64,7 @@ public class MessageDTO {
         return title;
     }
 
-    Message getEntity() {
+    public Message getEntity() {
         var Message = new Message();
         Message.setReceiver(receiver);
         Message.setCreationTime(creationTime);

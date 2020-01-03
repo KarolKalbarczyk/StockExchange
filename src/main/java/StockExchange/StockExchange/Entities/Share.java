@@ -18,7 +18,7 @@ public class Share extends BasicEntity{
     @OneToMany(orphanRemoval = true,
               cascade = CascadeType.ALL,
               mappedBy = "share",
-    fetch = FetchType.LAZY)
+              fetch = FetchType.LAZY)
     private Collection<StockTransaction> transactions = new HashSet<>();
 
     @OneToOne(orphanRemoval = true,
@@ -79,6 +79,10 @@ public class Share extends BasicEntity{
 
     public Trader getOwner() {
         return owner;
+    }
+
+    public void addTranscation(StockTransaction transaction){
+        transactions.add(transaction);
     }
 
     public void setOwner(Trader owner) {

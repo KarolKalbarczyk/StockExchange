@@ -11,7 +11,7 @@ public class OfferDTO {
 
     private Share share;
 
-    OfferDTO(Offer Offer) {
+    public OfferDTO(Offer Offer) {
         this.owner = Offer.getOwner();
         this.cost = Offer.getCost();
         this.share = Offer.getShare();
@@ -41,7 +41,7 @@ public class OfferDTO {
         return share;
     }
 
-    Offer getEntity() {
+    public Offer getEntity() {
         var Offer = new Offer();
         Offer.setOwner(owner);
         Offer.setCost(cost);

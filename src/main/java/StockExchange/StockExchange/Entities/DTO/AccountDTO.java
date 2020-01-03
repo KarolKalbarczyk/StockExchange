@@ -17,7 +17,7 @@ public class AccountDTO {
 
     private Trader account;
 
-    AccountDTO(Account Account) {
+    public AccountDTO(Account Account) {
         this.password = Account.getPassword();
         this.receivedMessages = Account.getReceivedMessages();
         this.login = Account.getLogin();
@@ -65,7 +65,7 @@ public class AccountDTO {
         return account;
     }
 
-    Account getEntity() {
+    public Account getEntity() {
         var Account = new Account();
         Account.setPassword(password);
         Account.setReceivedMessages(receivedMessages);

@@ -9,7 +9,7 @@ public class CompanyDTO {
 
     private long value;
 
-    CompanyDTO(Company Company) {
+    public CompanyDTO(Company Company) {
         this.shares = Company.getShares();
         this.value = Company.getValue();
     }
@@ -30,7 +30,7 @@ public class CompanyDTO {
         return value;
     }
 
-    Company getEntity() {
+    public Company getEntity() {
         var Company = new Company();
         Company.setShares(shares);
         Company.setValue(value);

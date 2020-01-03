@@ -18,7 +18,7 @@ public class ShareDTO {
 
     private Collection<StockTransaction> transactions;
 
-    ShareDTO(Share Share) {
+    public ShareDTO(Share Share) {
         this.owner = Share.getOwner();
         this.offer = Share.getOffer();
         this.test = Share.getTest();
@@ -66,7 +66,7 @@ public class ShareDTO {
         return transactions;
     }
 
-    Share getEntity() {
+    public Share getEntity() {
         var Share = new Share();
         Share.setOwner(owner);
         Share.setOffer(offer);

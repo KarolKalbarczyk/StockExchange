@@ -11,7 +11,7 @@ public class ResponseDTO {
 
     private Locale locale;
 
-    ResponseDTO(Response Response) {
+    public ResponseDTO(Response Response) {
         this.name = Response.getName();
         this.text = Response.getText();
         this.locale = Response.getLocale();
@@ -41,7 +41,7 @@ public class ResponseDTO {
         return locale;
     }
 
-    Response getEntity() {
+    public Response getEntity() {
         var Response = new Response();
         Response.setName(name);
         Response.setText(text);

@@ -22,6 +22,9 @@ public class Company extends Trader{
         this.value = value;
     }
 
+    public Company(Account account){
+        super(account);
+    }
 
     @Override
     public String toString() {

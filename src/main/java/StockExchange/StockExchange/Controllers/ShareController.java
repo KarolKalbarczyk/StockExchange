@@ -15,9 +15,9 @@ public class ShareController {
     private final String SUCCESS = "succes";
 
     @Autowired
-    ShareService shareService;
+    private ShareService shareService;
     @Autowired
-    ResponseService responseService;
+    private ResponseService responseService;
 
     @PostMapping("/buy")
     public ResponseEntity<String> buyShare(
@@ -35,7 +35,7 @@ public class ShareController {
     }
 
     @DeleteMapping()
-    public ResponseEntity<String> revokeShare(@RequestBody long id,Principal principal ) throws IllegalAccessException{
+    public ResponseEntity<String> revokeShare(@RequestBody long id,Principal principal ){
         shareService.revokeShare(principal.getName(),id);
         var message = responseService.getMessage(SUCCESS);
         return new ResponseEntity(message,HttpStatus.OK);

@@ -29,6 +29,11 @@ public class Account extends BasicEntity {
         this.login = login;
     }
 
+    public Account(String login, Trader account) {
+        this.login = login;
+        this.account = account;
+    }
+
     public Account(){}
 
     public String getLogin() {

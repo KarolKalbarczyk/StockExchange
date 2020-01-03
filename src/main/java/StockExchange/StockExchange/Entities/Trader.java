@@ -15,6 +15,14 @@ public abstract class Trader  extends  BasicEntity{
     protected String name;
     protected long wealth;
 
+    @OneToMany(fetch = FetchType.LAZY,
+               mappedBy = "buyer")
+    protected Collection<StockTransaction> transcationsBought = new ArrayList<>();
+
+    @OneToMany(fetch = FetchType.LAZY,
+            mappedBy = "seller")
+    protected Collection<StockTransaction> transcationsSold = new ArrayList<>();
+
     @OneToMany(cascade = CascadeType.ALL,
             fetch = FetchType.LAZY,orphanRemoval = true,
             mappedBy = "owner")
@@ -28,6 +36,12 @@ public abstract class Trader  extends  BasicEntity{
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "account_id")
     private Account account;
+
+    public Trader(){}
+
+    public Trader(Account account){
+        this.account = account;
+    }
 
     @Override
     public String toString() {
@@ -89,7 +103,9 @@ public abstract class Trader  extends  BasicEntity{
         if (this == o) return true;
         if (!(o instanceof Trader)) return false;
         Trader trader = (Trader) o;
-        return Objects.equals(name, trader.name);
+        return Objects.equals(id,trader.getId()) &&
+                Objects.equals(name, trader.name) &&
+                Objects.equals(wealth,trader.getWealth());
     }
 
     @Override

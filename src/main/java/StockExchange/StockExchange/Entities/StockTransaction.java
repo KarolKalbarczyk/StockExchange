@@ -9,7 +9,8 @@ import java.util.Calendar;
 @Entity
 @Immutable
 public class StockTransaction extends BasicEntity {
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY,
+            cascade = CascadeType.ALL)
     @JoinColumn(name = "share_id")
     private Share share;
     @Temporal(TemporalType.TIMESTAMP)

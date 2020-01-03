@@ -2,6 +2,7 @@ package StockExchange.StockExchange.Services;
 
 import StockExchange.StockExchange.Controllers.ErrorCodes;
 import StockExchange.StockExchange.Entities.*;
+import StockExchange.StockExchange.Entities.DTO.ShareDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -10,8 +11,10 @@ import org.springframework.transaction.annotation.Transactional;
 public class ShareService{
     @Autowired
     MainService main;
+    @Autowired
+    TranscationService transcationService;
 
-    @Transactional
+    @Transactional()
     public void exchangeShare(long offerId, String accountName){
         var optOffer = main.offerRepository.findOneById(offerId);
         var buyer = main.traderRepository.findOneByAccountLogin(accountName);
@@ -25,7 +28,7 @@ public class ShareService{
         if (offer.getOwner().equals(buyer)) throw new IllegalCallerException(ErrorCodes.YoureOwner.name());
         var share = offer.getShare();
         exchangeMoney(buyer,offer.getOwner(),offer.getCost());
-        createTransaction(offer,buyer);
+        transcationService.createTransaction(offer,buyer);
         share.setOwner(buyer);
         share.setOffer(null);
     }
@@ -34,23 +37,19 @@ public class ShareService{
         return main.offerRepository.existsByShareId(shareId);
     }
 
-    public void exchangeMoney(Trader buyer, Trader seller, long money){
+    void exchangeMoney(Trader buyer, Trader seller, long money){
         if(buyer.getWealth() < money)
             throw new IllegalCallerException(ErrorCodes.NoMoney.name());
         seller.addWealth(money);
         buyer.subtractWealth(money);
     }
 
-    private void createTransaction(Offer offer, Trader buyer){
-        var transaction = new StockTransaction(offer,buyer);
-        main.transactionRepository.save(transaction);
-    }
-
     @Transactional
-    public Share createShareAndOfferIfCompany(String accountName, int cost){
+    public ShareDTO createShareAndOfferIfCompany(String accountName, int cost){
         var company = main.traderRepository.findCompanyByName(accountName);
-        return company.map(comp -> createShareAndOffer(comp,cost)).
+        var share = company.map(comp -> createShareAndOffer(comp,cost)).
                 orElseThrow(() -> new IllegalCallerException(ErrorCodes.NotCompany.name()));
+        return new ShareDTO(share);
     }
 
     private Share createShareAndOffer(Company company,int cost){

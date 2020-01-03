@@ -11,5 +11,9 @@ public class Person extends Trader{
     public Person() {
     }
 
+    public Person(Account account){
+        super(account);
+    }
+
 
 }
