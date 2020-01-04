@@ -7,10 +7,8 @@ import StockExchange.StockExchange.Entities.Trader_;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.mockito.MockitoAnnotations;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.util.EnumMap;
 import java.util.List;
@@ -46,9 +44,8 @@ public class FilterTest {
     public void testSingleFilterAndCriteriaEquivalence(){
         TraderCriteria builder = new TraderCriteria();
         var list = List.of(builder.wealthInRange(5,10),builder.nameEquals(name));
-        var list2 = list.stream().map(Criteria::where).collect(Collectors.toList());
-        var filterList = filter1.buildCriteria().stream().map(Criteria::where).collect(Collectors.toList());
-        Assert.assertEquals(list2,filterList);
+        var filterList = filter1.buildCriteria();
+        Assert.assertEquals(list,filterList);
     }
 
     @Test
@@ -56,25 +53,22 @@ public class FilterTest {
         TraderCriteria builder = new TraderCriteria();
         OfferCriteria offer = new OfferCriteria();
         var list = List.of(offer.costInRange(4,8),offer.joinTrader(builder.wealthInRange(5,10),builder.nameEquals(name)));
-        var list2 = list.stream().map(Criteria::where).collect(Collectors.toList());
-        var filterList = filter2.buildCriteria().stream().map(Criteria::where).collect(Collectors.toList());
-        Assert.assertEquals(list2,filterList);
+        var filterList = filter2.buildCriteria();
+        Assert.assertEquals(list,filterList);
     }
 
     @Test
     public void testExclusionOfRepeatedNestedFilters(){
         TraderCriteria builder = new TraderCriteria();
         OfferCriteria offer = new OfferCriteria();
+        var a =builder.wealthInRange(5,10);
+        var b = builder.nameEquals(name);
+        var c = builder.joinOffer(offer.costInRange(4,8));
         var list = List.of(builder.wealthInRange(5,10),builder.nameEquals(name),builder.joinOffer(offer.costInRange(4,8)));
-        var list2 = list.stream().map(Criteria::where).collect(Collectors.toList());
-        var filterList = filter3.buildCriteria().stream().map(Criteria::where).collect(Collectors.toList());
-        Assert.assertEquals(list2,filterList);
+        var filterList = filter3.buildCriteria();
+        Assert.assertEquals(list,filterList);
     }
 
-    @Test
-    public void test(){
-
-    }
 
 
 

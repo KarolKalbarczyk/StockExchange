@@ -10,6 +10,8 @@ import java.util.List;
 @Component
 public class QueryConstructorImpl implements QueryConstructor {
 
+    private final String AND = " and ";
+
     @PersistenceContext
     private EntityManager manager;
 
@@ -35,22 +37,21 @@ public class QueryConstructorImpl implements QueryConstructor {
 
     private void analyzeCriteria(Criteria[] criterias,StringBuilder join,StringBuilder where){
         for(var criteria:criterias){
-            analyzeList(criteria.where(),join,where);
+            analyzeList(criteria.getJoin(),join,"");
+            analyzeList(criteria.getWhere(),where,AND);
         }
         cutTheLastAnd(where);
     }
 
-    private void analyzeList(List<String> list,StringBuilder join,StringBuilder where){
+    private void analyzeList(List<String> list,StringBuilder builder,String interspace){
         for(var str: list){
-            if(str.charAt(1) == 'j') join.append(str);
-            else {
-                where.append(str).append(" and");
-            }
+            builder.append(str);
+            builder.append(interspace);
         }
     }
 
     private void cutTheLastAnd(StringBuilder where){
-        final var LENGTH_OF_AND = 3;
+        final var LENGTH_OF_AND = 4;
         where.setLength(where.length()-LENGTH_OF_AND);
     }
 }
