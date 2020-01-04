@@ -3,29 +3,30 @@ package StockExchange.StockExchange.Money;
 import StockExchange.StockExchange.Money.Currency;
 import StockExchange.StockExchange.Money.Money;
 import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.engine.config.JupiterConfiguration;
 import org.junit.runner.RunWith;
 import org.mockito.BDDMockito;
 import org.mockito.Mockito;
-import org.powermock.api.mockito.PowerMockito;
-import org.powermock.core.classloader.annotations.PrepareForTest;
+import org.mockito.junit.MockitoJUnitRunner;
 import org.powermock.modules.junit4.PowerMockRunner;
 import org.springframework.context.i18n.LocaleContextHolder;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-@RunWith(PowerMockRunner.class)
-@PrepareForTest(Currency.class)
+import java.math.BigDecimal;
+
+@RunWith(MockitoJUnitRunner.class)
 public class MoneyTesting {
-
-    Currency currency;
 
     @Test
     public void testShowingInDifferentCurrencies(){
-        PowerMockito.mockStatic(Currency.class);
-        var locale = LocaleContextHolder.getLocale();
-        currency = Mockito.mock(Currency.class);
-        Mockito.when(currency.getRate()).thenReturn(3.845);
-        BDDMockito.given(Currency.valueOf(locale.getCountry())).willReturn(currency);
-        Assert.assertEquals(385, Money.getMoneyInPresentCurrency(100));
+        var amount = Money.multiply(100,new BigDecimal(3.845));
+        Assert.assertEquals(385, amount);
     }
 
+    @Test
+    public void testConnectionToRateSide(){
+        var rate = Money.getRate();
+        Assert.assertNotEquals(0,rate);
+    }
 }

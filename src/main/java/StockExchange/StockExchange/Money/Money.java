@@ -12,13 +12,21 @@ public class Money {
     static BigDecimal HUNDRED = new BigDecimal(100);
 
     public static int getMoneyInPresentCurrency(long amount){
-       var locale = LocaleContextHolder.getLocale();
-       var currency = Currency.valueOf(locale.getCountry());
-       var rate = new BigDecimal(currency.getRate());
-       var money = new BigDecimal(amount);
-       var moneyToDisplay = money.multiply(rate).
-               setScale(0,RoundingMode.HALF_UP);
-       return moneyToDisplay.intValue();
+       var rate = getRate();
+       return multiply(amount,rate);
+    }
+
+    static BigDecimal getRate(){
+        var locale = LocaleContextHolder.getLocale();
+        var currency = Currency.valueOf(locale.getCountry());
+        return new BigDecimal(currency.getRate());
+    }
+
+    static int  multiply(long amount, BigDecimal rate){
+        var money = new BigDecimal(amount);
+        var moneyToDisplay = money.multiply(rate).
+                setScale(0,RoundingMode.HALF_UP);
+        return moneyToDisplay.intValue();
     }
 
     public static String getAsString(long amount){
