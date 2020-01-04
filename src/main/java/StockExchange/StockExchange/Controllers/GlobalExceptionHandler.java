@@ -17,8 +17,12 @@ import javax.persistence.Access;
 @ControllerAdvice
 public class GlobalExceptionHandler {
 
+    private final ResponseService service;
+
     @Autowired
-    ResponseService service;
+    public GlobalExceptionHandler(ResponseService service) {
+        this.service = service;
+    }
 
     @ExceptionHandler(IllegalCallerException.class)
     public ResponseEntity<String> handleIllegalCaller(Exception ex, WebRequest request){

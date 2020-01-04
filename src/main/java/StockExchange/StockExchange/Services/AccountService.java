@@ -10,7 +10,5 @@ import javax.persistence.PersistenceContext;
 
 @Service
 class AccountService  {
-    @Autowired
-    MainService main;
 
 }

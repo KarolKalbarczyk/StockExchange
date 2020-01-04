@@ -14,10 +14,14 @@ import java.security.Principal;
 public class ShareController {
     private final String SUCCESS = "succes";
 
+    private final ShareService shareService;
+    private final ResponseService responseService;
+
     @Autowired
-    private ShareService shareService;
-    @Autowired
-    private ResponseService responseService;
+    public ShareController(ShareService shareService, ResponseService responseService) {
+        this.shareService = shareService;
+        this.responseService = responseService;
+    }
 
     @PostMapping("/buy")
     public ResponseEntity<String> buyShare(

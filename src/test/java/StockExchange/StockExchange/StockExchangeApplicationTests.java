@@ -2,6 +2,7 @@ package StockExchange.StockExchange;
 
 import StockExchange.StockExchange.Controllers.GlobalExceptionHandler;
 import StockExchange.StockExchange.Controllers.ShareController;
+import StockExchange.StockExchange.Services.ResponseService;
 import StockExchange.StockExchange.Services.ShareService;
 import org.junit.Assert;
 import org.junit.Before;
@@ -14,6 +15,7 @@ import org.mockito.MockitoAnnotations;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
+import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
@@ -26,6 +28,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
+@TestPropertySource(locations = "classpath:application-test.properties")
 public class StockExchangeApplicationTests {
 
     @Mock
@@ -37,6 +40,9 @@ public class StockExchangeApplicationTests {
     @Mock
     Principal principal;
 
+    @Mock
+    ResponseService responseService;
+
     MockMvc mockMvc;
 
     @Test
@@ -46,7 +52,7 @@ public class StockExchangeApplicationTests {
     @Before
     public void init(){
         MockitoAnnotations.initMocks(this);
-        mockMvc = MockMvcBuilders.standaloneSetup(controller).setControllerAdvice(new GlobalExceptionHandler())
+        mockMvc = MockMvcBuilders.standaloneSetup(controller).setControllerAdvice(new GlobalExceptionHandler(responseService))
                 .build();
     }
 

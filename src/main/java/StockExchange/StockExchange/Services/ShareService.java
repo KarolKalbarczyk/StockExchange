@@ -3,21 +3,32 @@ package StockExchange.StockExchange.Services;
 import StockExchange.StockExchange.Controllers.ErrorCodes;
 import StockExchange.StockExchange.Entities.*;
 import StockExchange.StockExchange.Entities.DTO.ShareDTO;
+import StockExchange.StockExchange.Repositories.OfferRepository;
+import StockExchange.StockExchange.Repositories.ShareRepository;
+import StockExchange.StockExchange.Repositories.TraderRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class ShareService{
-    @Autowired
-    MainService main;
-    @Autowired
-    TranscationService transcationService;
+
+    private final TranscationService transcationService;
+    private final OfferRepository offerRepository;
+    private final ShareRepository shareRepository;
+    private final TraderRepository traderRepository;
+
+    public ShareService(TranscationService transcationService, OfferRepository offerRepository, ShareRepository shareRepository, TraderRepository traderRepository) {
+        this.transcationService = transcationService;
+        this.offerRepository = offerRepository;
+        this.shareRepository = shareRepository;
+        this.traderRepository = traderRepository;
+    }
 
     @Transactional()
     public void exchangeShare(long offerId, String accountName){
-        var optOffer = main.offerRepository.findOneById(offerId);
-        var buyer = main.traderRepository.findOneByAccountLogin(accountName);
+        var optOffer = offerRepository.findOneById(offerId);
+        var buyer = traderRepository.findOneByAccountLogin(accountName);
         optOffer.ifPresentOrElse(
                 offer -> exchangeShare(offer, buyer)
                 , () -> {throw new IllegalCallerException(ErrorCodes.NotLogged.name());});
@@ -34,7 +45,7 @@ public class ShareService{
     }
 
     public boolean hasOffer(long shareId){
-        return main.offerRepository.existsByShareId(shareId);
+        return offerRepository.existsByShareId(shareId);
     }
 
     void exchangeMoney(Trader buyer, Trader seller, long money){
@@ -46,7 +57,7 @@ public class ShareService{
 
     @Transactional
     public ShareDTO createShareAndOfferIfCompany(String accountName, int cost){
-        var company = main.traderRepository.findCompanyByName(accountName);
+        var company = traderRepository.findCompanyByName(accountName);
         var share = company.map(comp -> createShareAndOffer(comp,cost)).
                 orElseThrow(() -> new IllegalCallerException(ErrorCodes.NotCompany.name()));
         return new ShareDTO(share);
@@ -55,18 +66,18 @@ public class ShareService{
     private Share createShareAndOffer(Company company,int cost){
         var share = new Share(company);
         var offer = new Offer(cost,share,company);
-        main.shareRepository.save(share);
-        main.offerRepository.save(offer);
+        shareRepository.save(share);
+        offerRepository.save(offer);
         return share;
     }
 
     @Transactional
     public void revokeShare(String accountName, long shareId){
-        var company = main.traderRepository.findOneByAccountLogin(accountName);
-        var optShare = main.shareRepository.findOneById(shareId);
+        var company = traderRepository.findOneByAccountLogin(accountName);
+        var optShare = shareRepository.findOneById(shareId);
         optShare.filter(share-> isSharesOwnerAndCreator(share,company)).
                 ifPresentOrElse(
-                        share -> main.shareRepository.delete(share),
+                        share -> shareRepository.delete(share),
                         () -> {throw new IllegalCallerException(ErrorCodes.NotOwner.name());});
     }
 

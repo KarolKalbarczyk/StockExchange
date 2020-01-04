@@ -12,15 +12,22 @@ import java.util.concurrent.atomic.AtomicInteger;
 @Service
 public class MessageService{
 
+    private final AccountRepository accountRepository;
+    private final MessageRepository messageRepository;
+
     @Autowired
-    MainService main;
+    public MessageService(AccountRepository accountRepository,
+                          MessageRepository messageRepository) {
+        this.accountRepository = accountRepository;
+        this.messageRepository = messageRepository;
+    }
 
     public void createMessage(long senderId,
-                              long receiverId,String text, String title){
-        var sender = main.accountRepository.getOne(senderId);
-        var receiver = main.accountRepository.getOne(receiverId);
+                              long receiverId, String text, String title){
+        var sender = accountRepository.getOne(senderId);
+        var receiver = accountRepository.getOne(receiverId);
         var message = new Message(title,text,sender,receiver);
-        main.messageRepository.save(message);
+        messageRepository.save(message);
     }
 
 

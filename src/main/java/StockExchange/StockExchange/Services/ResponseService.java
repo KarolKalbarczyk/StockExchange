@@ -13,8 +13,13 @@ import java.util.Optional;
 public class ResponseService {
 
     private final String DEFAULT_MESSAGE = "default";
+    private final ResponseRepository repository;
+
     @Autowired
-    ResponseRepository repository;
+    public ResponseService(ResponseRepository repository) {
+        this.repository = repository;
+    }
+
     public String getMessage(String name) {
         var locale = LocaleContextHolder.getLocale();
         var response = repository.findOneByNameAndLocale(name,locale);

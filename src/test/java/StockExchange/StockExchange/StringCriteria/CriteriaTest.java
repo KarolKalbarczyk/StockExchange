@@ -1,31 +1,15 @@
 package StockExchange.StockExchange.StringCriteria;
 
 import StockExchange.StockExchange.Entities.*;
-import StockExchange.StockExchange.PersistenConfiguration;
-import StockExchange.StockExchange.Repositories.AccountRepository;
-import StockExchange.StockExchange.Repositories.OfferRepository;
-import StockExchange.StockExchange.Repositories.ShareRepository;
-import StockExchange.StockExchange.Repositories.TraderRepository;
 import org.junit.Assert;
-import org.junit.Before;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.junit.runner.RunWith;
-import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.test.context.support.AnnotationConfigContextLoader;
-
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-import javax.transaction.Transactional;
 
 import java.util.Collection;
 import java.util.LinkedList;
@@ -34,6 +18,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 @ExtendWith(SpringExtension.class)
 @SpringBootTest()
+@TestPropertySource(locations = "classpath:application-test.properties")
 public class CriteriaTest {
 
     int offercost60id = 2;
@@ -41,6 +26,7 @@ public class CriteriaTest {
     int offercost50id = 1;
     int offercost40id = 0;
 
+    @Autowired
     QueryConstructor constructor;
     OfferCriteria crit = new OfferCriteria();
     ShareCriteria share = new ShareCriteria();

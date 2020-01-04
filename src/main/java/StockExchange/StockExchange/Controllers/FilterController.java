@@ -17,8 +17,12 @@ import javax.validation.constraints.Min;
 @Validated
 public class FilterController {
 
+    private final QueryConstructor constructor;
+
     @Autowired
-    QueryConstructor constructor;
+    public FilterController(QueryConstructor constructor) {
+        this.constructor = constructor;
+    }
 
     @PostMapping()
     public ResponseEntity<?> filter(@RequestBody @Valid Filter filter,

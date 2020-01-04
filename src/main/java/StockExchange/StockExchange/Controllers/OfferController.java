@@ -21,12 +21,14 @@ public class OfferController {
     private final String CREATION_SUCCESS = "creationSucces";
     private final String REVOKE_SUCCESS = "creationSucces";
     private final String MODIFY_SUCCESS = "modifySucces";
+    private final ResponseService responseService;
+    private final OfferService offerService;
+
     @Autowired
-    private
-    ResponseService responseService;
-    @Autowired
-    private
-    OfferService offerService;
+    public OfferController(ResponseService responseService, OfferService offerService) {
+        this.responseService = responseService;
+        this.offerService = offerService;
+    }
 
     @PostMapping()
     public ResponseEntity<String> createOffer(@RequestParam long shareId,

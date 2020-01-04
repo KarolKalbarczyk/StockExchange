@@ -3,13 +3,17 @@ package StockExchange.StockExchange.Services;
 import StockExchange.StockExchange.Repositories.OfferRepository;
 import StockExchange.StockExchange.Repositories.ShareRepository;
 import StockExchange.StockExchange.StringCriteria.QueryConstructor;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.jdbc.Sql;
 
 @SpringBootTest()
+@TestPropertySource(locations = "classpath:application-test.properties")
 public class IntegrationOfferServiceTest {
 
     @Autowired
@@ -30,19 +34,25 @@ public class IntegrationOfferServiceTest {
     long idperson1 = 2;
     long idperson2 = 5;
 
+    @AfterEach
+    public void a(){
+        offerRepository.deleteAll();
+        shareRepository.deleteAll();
+    }
+
 
     @Test
     @Sql("/offerNotPresent.sql")
     @Sql(scripts = {"/revertOfferCreation.sql","/revertOfferNotPresent.sql" },executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
     public void testCreatingOffer(){
         offerService.createOffer(idshare,"acc1",50);
-        var offer = offerRepository.findOneById(1).get();
+        var offer = offerRepository.findAllByCost(50);
         var share = shareRepository.findOneById(idshare).get();
         var money = 50;
-        Assertions.assertNotNull(offer);
-        Assertions.assertEquals(offer.getCost(),money);
+        Assertions.assertEquals(offer.size(),1);
+        Assertions.assertEquals(offer.get(0).getCost(),money);
         Assertions.assertNotNull(share.getOffer());
-        Assertions.assertEquals(share.getOffer(),offer);
+        Assertions.assertEquals(share.getOffer(),offer.get(0));
     }
 
     @Test
@@ -89,6 +99,3 @@ public class IntegrationOfferServiceTest {
 }
 
 
-class TestBoolean{
-    boolean a = false;
-}

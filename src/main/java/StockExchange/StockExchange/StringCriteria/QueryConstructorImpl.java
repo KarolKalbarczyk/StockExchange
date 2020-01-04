@@ -20,13 +20,8 @@ public class QueryConstructorImpl implements QueryConstructor {
         var select = String.format("select %s from %s %s" ,lowercase,classname,lowercase);
         var join = new StringBuilder();
         var where = new StringBuilder(" where");
-        for(var criteria:criterias){
-            analyzeList(criteria.where(),join,where);
-        }
-        where.setLength(where.length()-3);
+        analyzeCriteria(criterias,join,where);
         String query = select+join.toString()+where.toString();
-        //var query = "select s from Share s join s.company b where b.value = 10";
-        //var query = "select share from Share share join Share.company company where share.test between 5.000000 and 15.000000 and value between 5.000000 and 15.000000";
         return query;
     }
     @Override
@@ -38,6 +33,13 @@ public class QueryConstructorImpl implements QueryConstructor {
         return query1.getResultList();
     }
 
+    private void analyzeCriteria(Criteria[] criterias,StringBuilder join,StringBuilder where){
+        for(var criteria:criterias){
+            analyzeList(criteria.where(),join,where);
+        }
+        cutTheLastAnd(where);
+    }
+
     private void analyzeList(List<String> list,StringBuilder join,StringBuilder where){
         for(var str: list){
             if(str.charAt(1) == 'j') join.append(str);
@@ -45,5 +47,10 @@ public class QueryConstructorImpl implements QueryConstructor {
                 where.append(str).append(" and");
             }
         }
+    }
+
+    private void cutTheLastAnd(StringBuilder where){
+        final var LENGTH_OF_AND = 3;
+        where.setLength(where.length()-LENGTH_OF_AND);
     }
 }
