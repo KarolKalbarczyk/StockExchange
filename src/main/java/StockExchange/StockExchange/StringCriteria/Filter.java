@@ -30,10 +30,10 @@ public class Filter {
 
     private CriteriaBuilder chooseBuilder(){
         return switch(primary){
-            case Offer -> new OfferCriteria();
-            case Share -> new ShareCriteria();
-            case Trader -> new TraderCriteria();
-            case Company -> new CompanyCriteria();
+            case Offer -> new OfferCriteriaBuilder();
+            case Share -> new ShareCriteriaBuilder();
+            case Trader -> new TraderCriteriaBuilder();
+            case Company -> new CompanyCriteriaBuilder();
             default -> throw new IllegalArgumentException();
         };
     }

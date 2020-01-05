@@ -28,10 +28,10 @@ public class CriteriaTest {
 
     @Autowired
     QueryConstructor constructor;
-    OfferCriteria crit = new OfferCriteria();
-    ShareCriteria share = new ShareCriteria();
-    TraderCriteria trader = new TraderCriteria();
-    AccountCriteria account = new AccountCriteria();
+    OfferCriteriaBuilder crit = new OfferCriteriaBuilder();
+    ShareCriteriaBuilder share = new ShareCriteriaBuilder();
+    TraderCriteriaBuilder trader = new TraderCriteriaBuilder();
+    AccountCriteriaBuilder account = new AccountCriteriaBuilder();
 
     @BeforeAll
     public static void init(){

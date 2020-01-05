@@ -13,7 +13,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -42,7 +41,7 @@ public class FilterTest {
     }
     @Test
     public void testSingleFilterAndCriteriaEquivalence(){
-        TraderCriteria builder = new TraderCriteria();
+        TraderCriteriaBuilder builder = new TraderCriteriaBuilder();
         var list = List.of(builder.wealthInRange(5,10),builder.nameEquals(name));
         var filterList = filter1.buildCriteria();
         Assert.assertEquals(list,filterList);
@@ -50,8 +49,8 @@ public class FilterTest {
 
     @Test
     public void testMultipleFilterAndCriteriaEquivalence(){
-        TraderCriteria builder = new TraderCriteria();
-        OfferCriteria offer = new OfferCriteria();
+        TraderCriteriaBuilder builder = new TraderCriteriaBuilder();
+        OfferCriteriaBuilder offer = new OfferCriteriaBuilder();
         var list = List.of(offer.costInRange(4,8),offer.joinTrader(builder.wealthInRange(5,10),builder.nameEquals(name)));
         var filterList = filter2.buildCriteria();
         Assert.assertEquals(list,filterList);
@@ -59,8 +58,8 @@ public class FilterTest {
 
     @Test
     public void testExclusionOfRepeatedNestedFilters(){
-        TraderCriteria builder = new TraderCriteria();
-        OfferCriteria offer = new OfferCriteria();
+        TraderCriteriaBuilder builder = new TraderCriteriaBuilder();
+        OfferCriteriaBuilder offer = new OfferCriteriaBuilder();
         var a =builder.wealthInRange(5,10);
         var b = builder.nameEquals(name);
         var c = builder.joinOffer(offer.costInRange(4,8));
