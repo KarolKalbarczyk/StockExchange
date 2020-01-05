@@ -11,6 +11,8 @@ public class Response extends BasicEntity {
     private Locale locale;
     private String text;
 
+
+
     public String getText() {
         return text;
     }

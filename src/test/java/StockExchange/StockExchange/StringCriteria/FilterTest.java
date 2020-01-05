@@ -6,7 +6,10 @@ import StockExchange.StockExchange.Entities.Offer_;
 import StockExchange.StockExchange.Entities.Trader_;
 import org.junit.Assert;
 import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
 import org.mockito.MockitoAnnotations;
 import org.springframework.boot.test.context.SpringBootTest;
 
@@ -20,13 +23,14 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 
 
 @SpringBootTest()
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class FilterTest {
 
     Filter filter1;
     Filter filter2;
     Filter filter3;
     String name = "name";
-    @Before
+    @BeforeAll
     public void init(){
         MockitoAnnotations.initMocks(this);
         Offer_.cost = new MockAttribute<>("cost");
@@ -39,6 +43,7 @@ public class FilterTest {
         filter2 = new Filter(Entities.Offer,List.of(filter1),new EnumMap<>(Map.of(Attributes.Cost,new double[]{4,8})),new EnumMap<>(Attributes.class));
         filter3 = new Filter(Entities.Trader, List.of(filter2), new EnumMap<>(Map.of(Attributes.Wealth, new double[]{5, 10})),new EnumMap<>(Map.of(Attributes.Name,name)));
     }
+
     @Test
     public void testSingleFilterAndCriteriaEquivalence(){
         TraderCriteriaBuilder builder = new TraderCriteriaBuilder();
@@ -60,9 +65,6 @@ public class FilterTest {
     public void testExclusionOfRepeatedNestedFilters(){
         TraderCriteriaBuilder builder = new TraderCriteriaBuilder();
         OfferCriteriaBuilder offer = new OfferCriteriaBuilder();
-        var a =builder.wealthInRange(5,10);
-        var b = builder.nameEquals(name);
-        var c = builder.joinOffer(offer.costInRange(4,8));
         var list = List.of(builder.wealthInRange(5,10),builder.nameEquals(name),builder.joinOffer(offer.costInRange(4,8)));
         var filterList = filter3.buildCriteria();
         Assert.assertEquals(list,filterList);

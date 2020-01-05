@@ -4,6 +4,7 @@ import StockExchange.StockExchange.Money.Currency;
 import StockExchange.StockExchange.Money.Money;
 import org.junit.Assert;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.engine.config.JupiterConfiguration;
 import org.junit.runner.RunWith;
 import org.mockito.BDDMockito;
@@ -12,11 +13,10 @@ import org.mockito.junit.MockitoJUnitRunner;
 import org.powermock.modules.junit4.PowerMockRunner;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
-import org.springframework.test.context.junit4.SpringRunner;
 
 import java.math.BigDecimal;
 
-@RunWith(SpringRunner.class)
+@ExtendWith(SpringExtension.class)
 public class MoneyTesting {
 
     @Test
