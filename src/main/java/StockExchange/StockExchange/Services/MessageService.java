@@ -10,7 +10,7 @@ import javax.persistence.PersistenceContext;
 import java.util.concurrent.atomic.AtomicInteger;
 
 @Service
-public class MessageService{
+public class MessageService {
 
     private final AccountRepository accountRepository;
     private final MessageRepository messageRepository;
@@ -23,13 +23,14 @@ public class MessageService{
     }
 
     public void createMessage(long senderId,
-                              long receiverId, String text, String title){
+                              long receiverId,
+                              String text,
+                              String title) {
         var sender = accountRepository.getOne(senderId);
         var receiver = accountRepository.getOne(receiverId);
-        var message = new Message(title,text,sender,receiver);
+        var message = new Message(title, text, sender, receiver);
         messageRepository.save(message);
     }
-
 
 
 }

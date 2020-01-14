@@ -25,25 +25,25 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(IllegalCallerException.class)
-    public ResponseEntity<String> handleIllegalCaller(Exception ex, WebRequest request){
-        return handleException(ex,HttpStatus.FORBIDDEN);
+    public ResponseEntity<String> handleIllegalCaller(Exception ex, WebRequest request) {
+        return handleException(ex, HttpStatus.FORBIDDEN);
     }
 
     @ExceptionHandler(UnsupportedOperationException.class)
-    public ResponseEntity<String> handleUnsupportedOperation(Exception ex, WebRequest request){
-        return handleException(ex,HttpStatus.BAD_REQUEST);
+    public ResponseEntity<String> handleUnsupportedOperation(Exception ex, WebRequest request) {
+        return handleException(ex, HttpStatus.BAD_REQUEST);
     }
 
-    private ResponseEntity<String> handleException(Exception e,HttpStatus status){
+    private ResponseEntity<String> handleException(Exception e, HttpStatus status) {
         return new ResponseEntity<>(getMessage(e.getMessage()), status);
     }
 
-    private String getMessage(String code){
+    private String getMessage(String code) {
         return service.getMessage(code);
     }
 
     @ExceptionHandler(EnumConstantNotPresentException.class)
-    public ResponseEntity<String> handleUnsupportedOperation(EnumConstantNotPresentException ex, WebRequest request){
+    public ResponseEntity<String> handleUnsupportedOperation(EnumConstantNotPresentException ex, WebRequest request) {
         if (ex.enumType().equals(Entities.class))
             return new ResponseEntity<>(getMessage(ErrorCodes.NoSuchEntity.name()), HttpStatus.BAD_REQUEST);
         if (ex.enumType().equals(Attributes.class))
@@ -52,14 +52,14 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(ConversionException.class)
-    public ResponseEntity<String> handleConversionException(Exception ex,WebRequest request){
+    public ResponseEntity<String> handleConversionException(Exception ex, WebRequest request) {
         var message = service.getMessage(ErrorCodes.ConversionError.name());
-        return new ResponseEntity<>(message,HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(message, HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(HttpMessageNotReadableException.class)
-    public ResponseEntity<String> handleJSONError(Exception ex,WebRequest request){
+    public ResponseEntity<String> handleJSONError(Exception ex, WebRequest request) {
         var message = service.getMessage(ErrorCodes.JSONError.name());
-        return new ResponseEntity<>(message,HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(message, HttpStatus.BAD_REQUEST);
     }
 }

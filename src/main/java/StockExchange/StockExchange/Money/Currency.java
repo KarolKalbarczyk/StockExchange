@@ -27,14 +27,15 @@ public enum Currency {
     USA("USD"),
     PL("PLN");
 
-
-    Currency(String name){this.name = name;};
-
     private final String name;
     private final String HTTP_ADRESS = "https://api.exchangerate-api.com/v4/latest/USD";
 
+    Currency(String name) {
+        this.name = name;
+    }
+
     public double getRate() {
-        try{
+        try {
             URL url = new URL(HTTP_ADRESS);
             HttpURLConnection con = (HttpURLConnection) url.openConnection();
             con.setRequestMethod("GET");
@@ -43,15 +44,13 @@ public enum Currency {
                 var jsonText = readAll(br);
                 var json = new JSONObject(jsonText);
                 var rates = json.get("rates");
-                return ((JSONObject)rates).getDouble(name);
+                return ((JSONObject) rates).getDouble(name);
             }
-        }
-        catch (IOException ignored){}
+        } catch (IOException ignored) {}
         return 0;
-
     }
 
-    private static String readAll(Reader rd) throws IOException {
+    private String readAll(Reader rd) throws IOException {
         StringBuilder sb = new StringBuilder();
         int cp;
         while ((cp = rd.read()) != -1) {
@@ -59,6 +58,4 @@ public enum Currency {
         }
         return sb.toString();
     }
-
-
 }

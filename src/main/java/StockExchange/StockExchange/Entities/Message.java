@@ -26,7 +26,7 @@ public class Message extends BasicEntity {
     public Message() {
     }
 
-    public Message(String title,String text, Account sender, Account receiver) {
+    public Message(String title, String text, Account sender, Account receiver) {
         this.title = title;
         this.text = text;
         this.sender = sender;

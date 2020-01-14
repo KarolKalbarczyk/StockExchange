@@ -24,8 +24,8 @@ public class Money {
 
     static int  multiply(long amount, BigDecimal rate){
         var money = new BigDecimal(amount);
-        var moneyToDisplay = money.multiply(rate).
-                setScale(0,RoundingMode.HALF_UP);
+        var moneyToDisplay = money.multiply(rate)
+                .setScale(0,RoundingMode.HALF_UP);
         return moneyToDisplay.intValue();
     }
 
@@ -33,6 +33,4 @@ public class Money {
         var money = new BigDecimal(amount);
         return money.multiply(HUNDRED).toString();
     }
-
-
 }

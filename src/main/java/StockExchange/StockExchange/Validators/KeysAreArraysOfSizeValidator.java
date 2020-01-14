@@ -9,7 +9,7 @@ import javax.validation.constraints.Size;
 import java.util.Map;
 import java.util.stream.Stream;
 
-public class KeysAreArraysOfSizeValidator  implements ConstraintValidator<KeysAreArraysOfSize, Map<Attributes,double[]>> {
+public class KeysAreArraysOfSizeValidator implements ConstraintValidator<KeysAreArraysOfSize, Map<Attributes, double[]>> {
 
     int size;
 
@@ -19,8 +19,7 @@ public class KeysAreArraysOfSizeValidator  implements ConstraintValidator<KeysAr
     }
 
     @Override
-    public void initialize(KeysAreArraysOfSize constraint){
+    public void initialize(KeysAreArraysOfSize constraint) {
         size = constraint.size();
     }
-
 }

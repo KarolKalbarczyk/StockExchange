@@ -22,7 +22,8 @@ public class ResponseService {
 
     public String getMessage(String name) {
         var locale = LocaleContextHolder.getLocale();
-        var response = repository.findOneByNameAndLocale(name,locale);
-        return response.map(Response::getText).orElse(DEFAULT_MESSAGE);
+        var response = repository.findOneByNameAndLocale(name, locale);
+        return response.map(Response::getText)
+                .orElse(DEFAULT_MESSAGE);
     }
 }

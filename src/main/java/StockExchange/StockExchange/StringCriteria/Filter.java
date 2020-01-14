@@ -13,9 +13,10 @@ public class Filter {
     private final Entities primary;
     private final List<Filter> secondary;
     @KeysAreArraysOfSize
-    private final EnumMap<Attributes,double[]> inRange;
-    private final EnumMap<Attributes,String> equalsString;
+    private final EnumMap<Attributes, double[]> inRange;
+    private final EnumMap<Attributes, String> equalsString;
     private final CriteriaBuilder builder;
+
     @JsonCreator
     public Filter(@JsonProperty("primary") Entities primary,
                   @JsonProperty("secondary") List<Filter> secondary,
@@ -28,8 +29,8 @@ public class Filter {
         builder = chooseBuilder();
     }
 
-    private CriteriaBuilder chooseBuilder(){
-        return switch(primary){
+    private CriteriaBuilder chooseBuilder() {
+        return switch (primary) {
             case Offer -> new OfferCriteriaBuilder();
             case Share -> new ShareCriteriaBuilder();
             case Trader -> new TraderCriteriaBuilder();
@@ -38,19 +39,22 @@ public class Filter {
         };
     }
 
-    private List<Criteria> getCriteria(EnumSet<Entities> excluded)
-    {
+    private List<Criteria> getCriteria(EnumSet<Entities> excluded) {
         var list = new LinkedList<Criteria>();
         excluded.add(primary);
-        inRange.forEach((name,range) -> list.add(builder.chooseMethod(name,range[0],range[1])));
-        equalsString.forEach((name,value) -> list.add(builder.chooseMethod(name,value)));
-        secondary.stream().filter(f->!excluded.contains(f.primary)).
-                forEach(filter ->
-                        list.add(builder.chooseJoin(filter.primary,filter.getCriteria(excluded).toArray(new Criteria[0]))));
+        inRange.forEach((name, range) -> list.add(builder.chooseMethod(name, range[0], range[1])));
+        equalsString.forEach((name, value) -> list.add(builder.chooseMethod(name, value)));
+        secondary.stream()
+                .filter(filter -> !excluded.contains(filter.primary))
+                .forEach(filter ->
+                        list.add(builder.chooseJoin(filter.primary,
+                                filter.getCriteria(excluded).toArray(new Criteria[0]))
+                        )
+                );
         return list;
     }
 
-    public List<Criteria> buildCriteria(){
+    public List<Criteria> buildCriteria() {
         return getCriteria(EnumSet.noneOf(Entities.class));
     }
 

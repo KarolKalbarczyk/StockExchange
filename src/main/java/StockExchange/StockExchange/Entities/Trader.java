@@ -10,13 +10,13 @@ import java.util.Objects;
 @Entity(name = "trader")
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.TRANSACTIONAL)
-public abstract class Trader  extends  BasicEntity{
+public abstract class Trader extends BasicEntity {
 
     protected String name;
     protected long wealth;
 
     @OneToMany(fetch = FetchType.LAZY,
-               mappedBy = "buyer")
+            mappedBy = "buyer")
     protected Collection<StockTransaction> transcationsBought = new ArrayList<>();
 
     @OneToMany(fetch = FetchType.LAZY,
@@ -24,12 +24,12 @@ public abstract class Trader  extends  BasicEntity{
     protected Collection<StockTransaction> transcationsSold = new ArrayList<>();
 
     @OneToMany(cascade = CascadeType.ALL,
-            fetch = FetchType.LAZY,orphanRemoval = true,
+            fetch = FetchType.LAZY, orphanRemoval = true,
             mappedBy = "owner")
     protected Collection<Share> ownedShares = new ArrayList<>();
 
     @OneToMany(cascade = CascadeType.ALL,
-            fetch = FetchType.LAZY,orphanRemoval = true,
+            fetch = FetchType.LAZY, orphanRemoval = true,
             mappedBy = "owner")
     protected Collection<Offer> offers = new ArrayList<>();
 
@@ -37,9 +37,10 @@ public abstract class Trader  extends  BasicEntity{
     @JoinColumn(name = "account_id")
     private Account account;
 
-    public Trader(){}
+    public Trader() {
+    }
 
-    public Trader(Account account){
+    public Trader(Account account) {
         this.account = account;
     }
 
@@ -51,10 +52,11 @@ public abstract class Trader  extends  BasicEntity{
                 '}';
     }
 
-    public void addWealth(long amount){
+    public void addWealth(long amount) {
         wealth += amount;
     }
-    public void subtractWealth(long amount){
+
+    public void subtractWealth(long amount) {
         wealth -= amount;
     }
 
@@ -103,9 +105,9 @@ public abstract class Trader  extends  BasicEntity{
         if (this == o) return true;
         if (!(o instanceof Trader)) return false;
         Trader trader = (Trader) o;
-        return Objects.equals(id,trader.getId()) &&
+        return Objects.equals(id, trader.getId()) &&
                 Objects.equals(name, trader.name) &&
-                Objects.equals(wealth,trader.getWealth());
+                Objects.equals(wealth, trader.getWealth());
     }
 
     @Override

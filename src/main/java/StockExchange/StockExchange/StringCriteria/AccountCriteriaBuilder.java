@@ -8,8 +8,8 @@ import StockExchange.StockExchange.Entities.Entities;
 
 public class AccountCriteriaBuilder extends GenericCriteriaBuilder {
 
-    public Criteria<Account> loginEquals(String login){
-        return stringEqual(Account.class, Account_.login,login);
+    public Criteria<Account> loginEquals(String login) {
+        return stringEqual(Account.class, Account_.login, login);
     }
 
     @Override

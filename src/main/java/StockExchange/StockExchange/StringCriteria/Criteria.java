@@ -7,19 +7,19 @@ import java.util.Objects;
 
 public class Criteria<T> {
 
-    private List<String> where = new ArrayList<>();
-    private List<String> join = new ArrayList<>();
-    private List<String> select = new ArrayList<>();
+    private final List<String> where = new ArrayList<>();
+    private final List<String> join = new ArrayList<>();
+    private final List<String> select = new ArrayList<>();
 
-    void addToWhere(String criteria){
+    void addToWhere(String criteria) {
         where.add(criteria);
     }
 
-    void addJoin(String join){
+    void addJoin(String join) {
         this.join.add(join);
     }
 
-    void addSelectAll(List<String> select){
+    void addSelectAll(List<String> select) {
         this.select.addAll(select);
     }
 
@@ -38,15 +38,15 @@ public class Criteria<T> {
         return Objects.hash(where, join, select);
     }
 
-    void addWhereAll(List<String> where){
+    void addWhereAll(List<String> where) {
         this.where.addAll(where);
     }
 
-    void addJoinAll(List<String> join){
+    void addJoinAll(List<String> join) {
         this.join.addAll(join);
     }
 
-    void addSelect(String select){
+    void addSelect(String select) {
         this.select.add(select);
     }
 

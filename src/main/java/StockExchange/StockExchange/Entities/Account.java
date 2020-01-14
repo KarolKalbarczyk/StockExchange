@@ -14,7 +14,7 @@ public class Account extends BasicEntity {
     private String password;
     @OneToOne(cascade = CascadeType.ALL,
             fetch = FetchType.LAZY,
-    mappedBy = "account")
+            mappedBy = "account")
     private Trader account;
     @OneToMany(fetch = FetchType.LAZY,
             cascade = CascadeType.REMOVE,
@@ -34,7 +34,8 @@ public class Account extends BasicEntity {
         this.account = account;
     }
 
-    public Account(){}
+    public Account() {
+    }
 
     public String getLogin() {
         return login;

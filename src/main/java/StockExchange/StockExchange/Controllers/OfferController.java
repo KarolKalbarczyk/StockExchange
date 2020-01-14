@@ -30,19 +30,19 @@ public class OfferController {
         this.offerService = offerService;
     }
 
-    @PostMapping()
+    @PostMapping
     public ResponseEntity<String> createOffer(@RequestParam long shareId,
                                               @RequestBody int cost,
-                                              Principal principal){
-        offerService.createOffer(shareId,principal.getName(),cost);
+                                              Principal principal) {
+        offerService.createOffer(shareId, principal.getName(), cost);
         var message = responseService.getMessage(CREATION_SUCCESS);
         return new ResponseEntity(message, HttpStatus.OK);
     }
 
     @DeleteMapping
     public ResponseEntity<String> revokeOffer(@RequestBody long offerId,
-                                              Principal principal){
-        offerService.revokeOffer(offerId,principal.getName());
+                                              Principal principal) {
+        offerService.revokeOffer(offerId, principal.getName());
         var message = responseService.getMessage(REVOKE_SUCCESS);
         return new ResponseEntity(message, HttpStatus.OK);
     }

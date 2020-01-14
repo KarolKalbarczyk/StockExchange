@@ -5,12 +5,14 @@ import StockExchange.StockExchange.Money.Money;
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.Collection;
+
 @Entity
 @Table(name = "company")
 @DiscriminatorValue("Company")
-public class Company extends Trader{
+public class Company extends Trader {
+
     @OneToMany(cascade = CascadeType.ALL,
-            fetch = FetchType.LAZY,orphanRemoval = true,
+            fetch = FetchType.LAZY, orphanRemoval = true,
             mappedBy = "company")
     private Collection<Share> shares = new ArrayList<>();
     private long value;
@@ -22,7 +24,7 @@ public class Company extends Trader{
         this.value = value;
     }
 
-    public Company(Account account){
+    public Company(Account account) {
         super(account);
     }
 
@@ -33,7 +35,7 @@ public class Company extends Trader{
                 '}';
     }
 
-    public Share newShare(){
+    public Share newShare() {
         var share = new Share(this);
         shares.add(share);
         return share;
@@ -51,7 +53,7 @@ public class Company extends Trader{
         return value;
     }
 
-    public long getValueInCurrency(){
+    public long getValueInCurrency() {
         return Money.getMoneyInPresentCurrency(value);
     }
 

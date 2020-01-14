@@ -18,7 +18,8 @@ public class Offer extends BasicEntity {
     }
 
     public Offer(int cost,
-                 Share share, Trader owner) {
+                 Share share,
+                 Trader owner) {
         this.cost = cost;
         this.share = share;
         share.setOffer(this);
@@ -26,14 +27,14 @@ public class Offer extends BasicEntity {
     }
 
     @PreRemove
-    public void preRemove(){
+    public void preRemove() {
         owner.getOffers().remove(this);
         share.setOffer(null);
         owner = null;
         share = null;
     }
 
-    public boolean isOwner(Trader trader){
+    public boolean isOwner(Trader trader) {
         return owner.equals(trader);
     }
 
@@ -66,7 +67,7 @@ public class Offer extends BasicEntity {
         if (this == o) return true;
         if (!(o instanceof Offer)) return false;
         Offer offer = (Offer) o;
-        return Objects.equals(cost, offer.cost) && Objects.equals(id,offer.id);
+        return Objects.equals(cost, offer.cost) && Objects.equals(id, offer.id);
     }
 
     @Override
