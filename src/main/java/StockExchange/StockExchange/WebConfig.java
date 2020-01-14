@@ -12,13 +12,10 @@ import org.springframework.web.servlet.i18n.LocaleChangeInterceptor;
 @Configuration
 public class WebConfig implements WebMvcConfigurer {
 
-
     @Bean
     public LocaleResolver localeResolver(){
         return new AcceptHeaderLocaleResolver();
     }
-
-
 
     @Override
     public void addInterceptors(InterceptorRegistry registry){
