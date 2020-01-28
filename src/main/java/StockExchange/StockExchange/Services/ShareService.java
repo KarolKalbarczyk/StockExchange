@@ -3,12 +3,17 @@ package StockExchange.StockExchange.Services;
 import StockExchange.StockExchange.Controllers.ErrorCodes;
 import StockExchange.StockExchange.Entities.*;
 import StockExchange.StockExchange.Entities.DTO.ShareDTO;
+import StockExchange.StockExchange.Repositories.AccountRepository;
 import StockExchange.StockExchange.Repositories.OfferRepository;
 import StockExchange.StockExchange.Repositories.ShareRepository;
 import StockExchange.StockExchange.Repositories.TraderRepository;
+import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Collection;
 
 @Service
 public class ShareService {
@@ -18,14 +23,18 @@ public class ShareService {
     private final ShareRepository shareRepository;
     private final TraderRepository traderRepository;
 
-    public ShareService(TranscationService transcationService, OfferRepository offerRepository, ShareRepository shareRepository, TraderRepository traderRepository) {
+    @Autowired
+    public ShareService(TranscationService transcationService,
+                        OfferRepository offerRepository,
+                        ShareRepository shareRepository,
+                        TraderRepository traderRepository) {
         this.transcationService = transcationService;
         this.offerRepository = offerRepository;
         this.shareRepository = shareRepository;
         this.traderRepository = traderRepository;
     }
 
-    @Transactional()
+    @Transactional
     public void exchangeShare(long offerId, String accountName) {
         var optOffer = offerRepository.findOneById(offerId);
         var buyer = traderRepository.findOneByAccountLogin(accountName);
@@ -36,7 +45,6 @@ public class ShareService {
                 });
     }
 
-    @Transactional
     private void exchangeShare(Offer offer, Trader buyer) {
         if (offer.getOwner().equals(buyer))
             throw new IllegalCallerException(ErrorCodes.YoureOwner.name());
@@ -71,6 +79,7 @@ public class ShareService {
         var offer = new Offer(cost, share, company);
         shareRepository.save(share);
         offerRepository.save(offer);
+        System.out.println("AAAAAAAAAAAAAAAAAA");
         return share;
     }
 

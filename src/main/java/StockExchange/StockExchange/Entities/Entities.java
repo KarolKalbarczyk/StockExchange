@@ -1,7 +1,7 @@
 package StockExchange.StockExchange.Entities;
 
 public enum Entities {
-    Account(Account.class),
+    Account(Entities.Account_),
     Company(Company.class),
     Offer(Offer.class),
     Person(Person.class),

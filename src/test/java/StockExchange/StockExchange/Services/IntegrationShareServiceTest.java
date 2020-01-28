@@ -65,7 +65,7 @@ public class IntegrationShareServiceTest {
     @Sql("/offerNotPresent.sql")
     @Sql(scripts = {"/revertOfferNotPresent.sql"},executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
     public void testMoneyExchangeWhenNotEnoughMoney(){
-        Mockito.when(responseService.getMessage("noMoney")).thenReturn("noMoney");
+        Mockito.when(responseService.getMessage("noMoney")).thenReturn(null);
         var trader1 = traderRepository.findOneById(idperson1);
         var trader2 = traderRepository.findOneById(idperson2);
         var money = 50;
@@ -77,7 +77,7 @@ public class IntegrationShareServiceTest {
     @Sql("/offerNotPresent.sql")
     @Sql(scripts = {"/revertOfferNotPresent.sql"},executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
     public void testMoneyExchangeWhenEnoughMoney(){
-        Mockito.when(responseService.getMessage("noMoney")).thenReturn("noMoney");
+        Mockito.when(responseService.getMessage("noMoney")).thenReturn(null);
         var trader1 = traderRepository.findOneById(idperson1);
         var trader2 = traderRepository.findOneById(idperson2);
         var moneya = trader1.getWealth();
@@ -93,24 +93,22 @@ public class IntegrationShareServiceTest {
     @Sql("/offerNotPresent.sql")
     @Sql(scripts = {"/revertOfferNotPresent.sql"},executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
     public void testCreatingShareWhenNotCompany(){
-        Mockito.when(responseService.getMessage("noMoney")).thenReturn("notCompany");
+        Mockito.when(responseService.getMessage("noMoney")).thenReturn(null);
         var trader1 = traderRepository.findOneById(idperson1);
         Assertions.assertThrows(IllegalCallerException.class,() ->shareService.createShareAndOfferIfCompany(trader1.getName(),50));
     }
 
     @Test
-    @Transactional
     @Sql("/offerNotPresent.sql")
     @Sql(scripts = {"/revertOfferAndShareCreation.sql","/revertOfferNotPresent.sql",},executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
     public void testCreatingShareWhenCompany(){
-        Mockito.when(responseService.getMessage("noMoney")).thenReturn("notCompany");
+        Mockito.when(responseService.getMessage("noMoney")).thenReturn(null);
         var trader1 = traderRepository.findOneById(idcompany2);
         shareService.createShareAndOfferIfCompany(trader1.getName(),50);
         var shares = shareRepository.findAllByOwner(trader1);
         Assertions.assertFalse(shares.isEmpty());
         var optionalOffer = offerRepository.findOneByShare(shares.get(0));
         Assertions.assertTrue(optionalOffer.isPresent());
-        var trader12 = traderRepository.findOneById(idcompany2);
         var offer = optionalOffer.get();
         var money = 50;
         Assertions.assertEquals(offer.getCost(),money);
@@ -120,7 +118,7 @@ public class IntegrationShareServiceTest {
     @Sql(scripts = {"/offerNotPresent.sql","/offerPresent.sql"})
     @Sql(scripts = {"/revertOfferPresent.sql","/revertOfferNotPresent.sql"},executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
     public void testRevokingShareWhenNotOwner(){
-        Mockito.when(responseService.getMessage("notOwner")).thenReturn("notOwner");
+        Mockito.when(responseService.getMessage("notOwner")).thenReturn(null);
         Assertions.assertThrows(IllegalCallerException.class,() -> shareService.revokeShare("acc2",idshare));
     }
 
@@ -128,7 +126,7 @@ public class IntegrationShareServiceTest {
     @Sql(scripts = {"/offerNotPresent.sql","/offerPresent.sql"})
     @Sql(scripts = {"/revertOfferPresent.sql","/revertOfferNotPresent.sql"},executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
     public void testRevokingShareWhenOwnerButNotCompany(){
-        Mockito.when(responseService.getMessage("notOwner")).thenReturn("notOwner");
+        Mockito.when(responseService.getMessage("notOwner")).thenReturn(null);
         Assertions.assertThrows(IllegalCallerException.class,() -> shareService.revokeShare("acc1",idshare));
     }
 
@@ -136,7 +134,7 @@ public class IntegrationShareServiceTest {
     @Sql(scripts = {"/offerNotPresent.sql","/offerPresent.sql"})
     @Sql(scripts = {"/revertOfferPresent.sql","/revertOfferNotPresent.sql"},executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
     public void testRevokingShareWhenCompanyButNotOwner(){
-        Mockito.when(responseService.getMessage("notOwner")).thenReturn("notOwner");
+        Mockito.when(responseService.getMessage("notOwner")).thenReturn(null);
         Assertions.assertThrows(IllegalCallerException.class,() -> shareService.revokeShare("acc0",idshare));
     }
 
@@ -144,7 +142,7 @@ public class IntegrationShareServiceTest {
     @Sql(scripts = {"/shareInHandsOfCompany.sql","/offerPresent.sql"})
     @Sql(scripts = {"/revertOfferPresent.sql","/revertOfferNotPresent.sql"},executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
     public void testRevokingShareWhenCompanyAndOwner(){
-        Mockito.when(responseService.getMessage("notOwner")).thenReturn("notOwner");
+        Mockito.when(responseService.getMessage("notOwner")).thenReturn(null);
         var trader = traderRepository.findOneById(idcompany);
         shareService.revokeShare("acc0",idshare);
         var shares = shareRepository.findAllByOwner(trader);

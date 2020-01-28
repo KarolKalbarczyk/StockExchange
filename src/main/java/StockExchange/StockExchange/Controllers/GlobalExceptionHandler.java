@@ -2,6 +2,7 @@ package StockExchange.StockExchange.Controllers;
 
 import StockExchange.StockExchange.Entities.Attributes;
 import StockExchange.StockExchange.Entities.Entities;
+import StockExchange.StockExchange.Entities.Response;
 import StockExchange.StockExchange.Services.ResponseService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.convert.ConversionException;
@@ -25,25 +26,25 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(IllegalCallerException.class)
-    public ResponseEntity<String> handleIllegalCaller(Exception ex, WebRequest request) {
+    public ResponseEntity<Response> handleIllegalCaller(Exception ex, WebRequest request) {
         return handleException(ex, HttpStatus.FORBIDDEN);
     }
 
     @ExceptionHandler(UnsupportedOperationException.class)
-    public ResponseEntity<String> handleUnsupportedOperation(Exception ex, WebRequest request) {
+    public ResponseEntity<Response> handleUnsupportedOperation(Exception ex, WebRequest request) {
         return handleException(ex, HttpStatus.BAD_REQUEST);
     }
 
-    private ResponseEntity<String> handleException(Exception e, HttpStatus status) {
+    private ResponseEntity<Response> handleException(Exception e, HttpStatus status) {
         return new ResponseEntity<>(getMessage(e.getMessage()), status);
     }
 
-    private String getMessage(String code) {
+    private Response getMessage(String code) {
         return service.getMessage(code);
     }
 
     @ExceptionHandler(EnumConstantNotPresentException.class)
-    public ResponseEntity<String> handleUnsupportedOperation(EnumConstantNotPresentException ex, WebRequest request) {
+    public ResponseEntity<Response> handleUnsupportedOperation(EnumConstantNotPresentException ex, WebRequest request) {
         if (ex.enumType().equals(Entities.class))
             return new ResponseEntity<>(getMessage(ErrorCodes.NoSuchEntity.name()), HttpStatus.BAD_REQUEST);
         if (ex.enumType().equals(Attributes.class))
@@ -52,13 +53,13 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(ConversionException.class)
-    public ResponseEntity<String> handleConversionException(Exception ex, WebRequest request) {
+    public ResponseEntity<Response> handleConversionException(Exception ex, WebRequest request) {
         var message = service.getMessage(ErrorCodes.ConversionError.name());
         return new ResponseEntity<>(message, HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(HttpMessageNotReadableException.class)
-    public ResponseEntity<String> handleJSONError(Exception ex, WebRequest request) {
+    public ResponseEntity<Response> handleJSONError(Exception ex, WebRequest request) {
         var message = service.getMessage(ErrorCodes.JSONError.name());
         return new ResponseEntity<>(message, HttpStatus.BAD_REQUEST);
     }

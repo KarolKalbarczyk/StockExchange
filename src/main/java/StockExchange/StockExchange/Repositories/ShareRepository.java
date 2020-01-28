@@ -18,6 +18,6 @@ public interface ShareRepository extends JpaRepository<Share,Long>, JpaSpecifica
      List<Share> findAllByOwner(Trader owner);
      List<Share> findAllByCompany(Company company);
 
-    @EntityGraph(attributePaths = {"offer","company","owner"})
+    @EntityGraph(attributePaths = {"offer","company","owner","transactions"})
     Optional<Share> findOneById(long id);
 }

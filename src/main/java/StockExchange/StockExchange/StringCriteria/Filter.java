@@ -13,31 +13,23 @@ public class Filter {
     private final Entities primary;
     private final List<Filter> secondary;
     @KeysAreArraysOfSize
-    private final EnumMap<Attributes, double[]> inRange;
-    private final EnumMap<Attributes, String> equalsString;
+    private final Map<String, double[]> inRange;
+    private final Map<String, String> equalsString;
     private final CriteriaBuilder builder;
 
     @JsonCreator
     public Filter(@JsonProperty("primary") Entities primary,
                   @JsonProperty("secondary") List<Filter> secondary,
-                  @JsonProperty("inRange") EnumMap<Attributes, double[]> inRange,
-                  @JsonProperty("equalsString") EnumMap<Attributes, String> equalsString) {
+                  @JsonProperty("inRange") Map<String, double[]> inRange,
+                  @JsonProperty("equalsString") Map<String, String> equalsString) {
         this.primary = primary;
         this.secondary = secondary;
         this.inRange = inRange;
         this.equalsString = equalsString;
-        builder = chooseBuilder();
+        builder = new GenericCriteriaBuilder();
     }
 
-    private CriteriaBuilder chooseBuilder() {
-        return switch (primary) {
-            case Offer -> new OfferCriteriaBuilder();
-            case Share -> new ShareCriteriaBuilder();
-            case Trader -> new TraderCriteriaBuilder();
-            case Company -> new CompanyCriteriaBuilder();
-            default -> throw new IllegalArgumentException();
-        };
-    }
+
 
     private List<Criteria> getCriteria(EnumSet<Entities> excluded) {
         var list = new LinkedList<Criteria>();

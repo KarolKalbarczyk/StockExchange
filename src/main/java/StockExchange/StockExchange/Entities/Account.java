@@ -24,6 +24,9 @@ public class Account extends BasicEntity {
             cascade = CascadeType.REMOVE,
             mappedBy = "receiver")
     private List<Message> receivedMessages = new ArrayList<>();
+    @OneToMany(fetch = FetchType.LAZY,
+            mappedBy = "account")
+    private List<LogEntry> logEntries = new ArrayList<>();
 
     public Account(String login) {
         this.login = login;

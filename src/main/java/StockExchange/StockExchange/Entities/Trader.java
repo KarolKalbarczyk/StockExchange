@@ -100,6 +100,22 @@ public abstract class Trader extends BasicEntity {
         this.account = account;
     }
 
+    public Collection<StockTransaction> getTranscationsBought() {
+        return transcationsBought;
+    }
+
+    public void setTranscationsBought(Collection<StockTransaction> transcationsBought) {
+        this.transcationsBought = transcationsBought;
+    }
+
+    public Collection<StockTransaction> getTranscationsSold() {
+        return transcationsSold;
+    }
+
+    public void setTranscationsSold(Collection<StockTransaction> transcationsSold) {
+        this.transcationsSold = transcationsSold;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

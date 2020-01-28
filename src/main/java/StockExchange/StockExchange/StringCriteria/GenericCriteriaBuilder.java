@@ -2,35 +2,41 @@ package StockExchange.StockExchange.StringCriteria;
 
 //import StockExchange.StockExchange.StockExchange.StockExchange.StockExchange.Entities.Entities.Trader_;
 
-import javax.persistence.metamodel.Attribute;
-import java.math.BigDecimal;
-import java.math.RoundingMode;
+import com.company.Attribute;
+
 import java.util.*;
 import java.util.function.Function;
 
 import static java.util.stream.Collectors.toList;
 
-public abstract class GenericCriteriaBuilder implements CriteriaBuilder {
+public class GenericCriteriaBuilder implements CriteriaBuilder {
 
     protected String NO_SUCH_METHOD = "NoSuchMethod";
     protected UnsupportedOperationException exception = new UnsupportedOperationException(NO_SUCH_METHOD);
+    private double EPSILON = 0.001;
 
-    public <T> Criteria<T> valueInRange(Class<T> clazz, Attribute<T, ?> attr, double min, double max) {
+    public <T> Criteria<T> valueInRange(Attribute<T, ?> attr, double min, double max) {
         var query = String.format(Locale.ENGLISH, " %s.%s between %s and %s",
-                clazz.getSimpleName().toLowerCase(), attr.getName(), min, max);
-        return buildCriteria(query, clazz);
+                attr.gettClass().getSimpleName().toLowerCase(), attr.getName(), min, max);
+        return buildCriteria(query, attr.gettClass());
     }
 
-    public <T> Criteria<T> valueEqual(Class<T> clazz, Attribute<T, ?> attr, double value) {
-        var query = String.format(Locale.ENGLISH, " %s.%s = %s",
-                clazz.getSimpleName().toLowerCase(), attr.getName(), value);
-        return buildCriteria(query, clazz);
+    public <T> Criteria<T> valueEqual(Attribute<T, ?> attr, double value) {
+        var min = value - EPSILON;
+        var max = value + EPSILON;
+        return valueInRange(attr,min,max);
     }
 
-    public <T> Criteria<T> stringEqual(Class<T> clazz, Attribute<T, String> attr, String name) {
-        var query = String.format(" %s.%s = '%s'", clazz.getSimpleName().toLowerCase(),
+    public <T> Criteria<T> stringEqual(Attribute<T, String> attr, String name) {
+        var query = String.format(" %s.%s = '%s'", attr.gettClass().getSimpleName().toLowerCase(),
                 attr.getName(), name);
-        return buildCriteria(query, clazz);
+        return buildCriteria(query, attr.gettClass());
+    }
+
+    public <T> Criteria<T>[] count(Criteria<T>... criterias){
+        if(criterias.length > 0)
+            criterias[0].getSelect().set(0,"count(*)");
+        return criterias;
     }
 
     private <T> Criteria<T> buildCriteria(String query, Class<T> clazz) {
@@ -41,43 +47,18 @@ public abstract class GenericCriteriaBuilder implements CriteriaBuilder {
     }
 
     public <T, K> Criteria<T> join(Attribute<T, K> attr,
-                                   Class<T> clazz,
-                                   List<Criteria<K>> criterias,
-                                   Class<K> kClass) {
-        return joinBasedOnAttrName(attr.getName(), clazz, criterias, kClass);
-    }
-
-    public <T, K> Criteria<T> joinCollection(Attribute<T, Collection<K>> attr,
-                                             Class<T> clazz,
-                                             List<Criteria<K>> criterias,
-                                             Class<K> kClass) {
-        return joinBasedOnAttrName(attr.getName(), clazz, criterias, kClass);
-    }
-
-    private <T, K> Criteria<T> joinBasedOnAttrName(String attrName,
-                                                   Class<T> clazz,
-                                                   List<Criteria<K>> criterias,
-                                                   Class<K> kClass) {
+                                   List<Criteria<K>> criterias) {
         var criteria = new Criteria<T>();
         var query = String.format(" join %s.%s %s",
-                clazz.getSimpleName().toLowerCase(), attrName, kClass.getSimpleName().toLowerCase());
+                attr.gettClass().getSimpleName().toLowerCase(),
+                attr.getName(),
+                attr.getkClass().getSimpleName().toLowerCase());
         criteria.addJoin(query);
-        criteria.addJoinAll(getJoinsFromCriterias(criterias));
-        criteria.addWhereAll(getWheresFromCriterias(criterias));
-        criteria.addSelectAll(getSelectsFromCriterias(criterias));
+        criteria.addJoinAll(getFieldFromCriterias(criterias, Criteria::getJoin));
+        criteria.addWhereAll(getFieldFromCriterias(criterias, Criteria::getWhere));
+        criteria.addSelectAll(getFieldFromCriterias(criterias, Criteria::getSelect));
+        criteria.addSelect(String.format("%s"));
         return criteria;
-    }
-
-    private <T> List<String> getWheresFromCriterias(List<Criteria<T>> criteria) {
-        return getFieldFromCriterias(criteria, Criteria::getWhere);
-    }
-
-    private <T> List<String> getJoinsFromCriterias(List<Criteria<T>> criteria) {
-        return getFieldFromCriterias(criteria, Criteria::getJoin);
-    }
-
-    private <T> List<String> getSelectsFromCriterias(List<Criteria<T>> criteria) {
-        return getFieldFromCriterias(criteria, Criteria::getSelect);
     }
 
     private <T> List<String> getFieldFromCriterias(

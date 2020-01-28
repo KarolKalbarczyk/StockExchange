@@ -4,6 +4,7 @@ import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
 import javax.validation.constraints.Size;
+import java.time.LocalDateTime;
 import java.util.Calendar;
 
 @Entity
@@ -20,8 +21,8 @@ public class Message extends BasicEntity {
     @JoinColumn(name = "receiver_id")
     private Account receiver;
     @CreationTimestamp
-    @Temporal(TemporalType.TIMESTAMP)
-    Calendar creationTime;
+    LocalDateTime creationTime;
+    private boolean read = false;
 
     public Message() {
     }
@@ -65,11 +66,19 @@ public class Message extends BasicEntity {
         this.receiver = receiver;
     }
 
-    public Calendar getCreationTime() {
+    public LocalDateTime getCreationTime() {
         return creationTime;
     }
 
-    public void setCreationTime(Calendar creationTime) {
+    public void setCreationTime(LocalDateTime creationTime) {
         this.creationTime = creationTime;
+    }
+
+    public boolean isRead() {
+        return read;
+    }
+
+    public void setRead(boolean read) {
+        this.read = read;
     }
 }

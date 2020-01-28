@@ -55,7 +55,6 @@ public class IntegrationStockTranscationTest {
 
     }
     @Test()
-    @Transactional
     public void testTranscationCreationWhenExchangingShare(){
         var login = "a";
         var acc = accountRepository.save(new Account(login));
@@ -63,13 +62,8 @@ public class IntegrationStockTranscationTest {
         var seller = traderRepository.save(new Company(10));
         var share = shareRepository.save(new Share(seller));
         var offer = offerRepository.save(new Offer(0,share,seller));
-        //var trans = transactionRepository.save(new StockTransaction(offer,buyer));
-
-        //var transcation = transactionRepository.findAllByShareId(share.getId());
         shareService.exchangeShare(offer.getId(),login);
         assertThat(transactionRepository.count()).isEqualTo(1);
-        //assertThat(traderRepository.getOne(buyer.getId()).)
-        var share1 = shareRepository.findOneById(share.getId()).get();
-        assertThat(share1.getTransactions()).hasSize(1);
+        assertThat(transactionRepository.findAll()).hasSize(1);
     }
 }

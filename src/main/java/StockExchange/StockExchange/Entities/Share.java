@@ -22,9 +22,9 @@ public class Share extends BasicEntity{
     private Collection<StockTransaction> transactions = new HashSet<>();
 
     @OneToOne(orphanRemoval = true,
-            cascade = CascadeType.ALL
-            ,mappedBy = "share",
-    fetch = FetchType.LAZY)
+            cascade = CascadeType.ALL,
+            mappedBy = "share",
+            fetch = FetchType.LAZY)
     private Offer offer;
 
     int test;
@@ -32,6 +32,10 @@ public class Share extends BasicEntity{
     public Share(Company company){
         owner = company;
         this.company = company;
+    }
+
+    public Share(int test) {
+        this.test = test;
     }
 
     public Share(){}
@@ -64,10 +68,10 @@ public class Share extends BasicEntity{
         this.test = test;
     }
 
-    @PreRemove
-    public void remove(){
-        offer = null;
-    }
+   // @PreRemove
+   // public void remove(){
+   //     offer = null;
+    //}
 
     public Company getCompany() {
         return company;

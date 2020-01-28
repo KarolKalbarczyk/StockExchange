@@ -34,6 +34,10 @@ public class StockTransaction extends BasicEntity {
         this.buyer = buyer;
     }
 
+    public StockTransaction(Share share) {
+        this.share = share;
+    }
+
     public Share getShare() {
         return share;
     }

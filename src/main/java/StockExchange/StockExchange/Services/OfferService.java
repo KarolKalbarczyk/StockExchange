@@ -39,7 +39,7 @@ public class OfferService {
 
     @Transactional
     public void revokeOffer(long offerId, String accountLogin) {
-        possesionCheck(offerId, accountLogin, (offer) -> offerRepository.delete(offer), ErrorCodes.NotOwner.name());
+        possesionCheck(offerId, accountLogin, offerRepository::delete, ErrorCodes.NotOwner.name());
     }
 
     @Transactional
@@ -47,7 +47,7 @@ public class OfferService {
         possesionCheck(offerId, accountLogin, (offer) -> offer.setCost(newCost), ErrorCodes.NotOwner.name());
     }
 
-    @Transactional
+    @Transactional(readOnly = true)
     public void possesionCheck(long offerId,
                                String accountLogin,
                                Consumer<Offer> run,
