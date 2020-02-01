@@ -29,7 +29,7 @@ public class Filter {
         builder = new GenericCriteriaBuilder();
     }
 
-
+    private Criteria getCriteria()
 
     private List<Criteria> getCriteria(EnumSet<Entities> excluded) {
         var list = new LinkedList<Criteria>();
