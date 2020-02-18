@@ -1,7 +1,7 @@
 package StockExchange.StockExchange.aspect;
 
-import StockExchange.StockExchange.Entities.Response;
-import StockExchange.StockExchange.Services.LogEntryService;
+import StockExchange.StockExchange.entities.Response;
+import StockExchange.StockExchange.services.LogEntryService;
 import org.aspectj.lang.annotation.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
