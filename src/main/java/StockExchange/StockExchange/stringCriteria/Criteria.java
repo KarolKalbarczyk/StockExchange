@@ -1,14 +1,18 @@
 package StockExchange.StockExchange.stringCriteria;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 public class Criteria<T> {
 
     private final List<String> where = new ArrayList<>();
     private final List<String> join = new ArrayList<>();
     private final List<String> select = new ArrayList<>();
+
+    public Map<String, String> getParamsToInject() {
+        return paramsToInject;
+    }
+
+    private final Map<String,String> paramsToInject = new HashMap<>();
 
     void addToWhere(String criteria) {
         where.add(criteria);
@@ -20,6 +24,10 @@ public class Criteria<T> {
 
     void addSelectAll(List<String> select) {
         this.select.addAll(select);
+    }
+
+    void addToParam(String key, String value){
+        paramsToInject.put(key, value);
     }
 
     @Override
@@ -48,6 +56,8 @@ public class Criteria<T> {
     void addSelect(String select) {
         this.select.add(select);
     }
+
+    void addParamAll(Map<String, String> paramsToInject){this.paramsToInject.putAll(paramsToInject);}
 
     public List<String> getWhere() {
         return where;

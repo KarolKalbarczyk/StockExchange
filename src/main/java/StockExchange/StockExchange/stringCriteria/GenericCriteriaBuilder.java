@@ -28,9 +28,12 @@ public class GenericCriteriaBuilder implements CriteriaBuilder {
     }
 
     public <T> Criteria<T> stringEqual(Attribute<T, String> attr, String name) {
+        var paramName =  attr.gettClass().getSimpleName()+attr.getName();
         var query = String.format(" %s.%s = '%s'", attr.gettClass().getSimpleName().toLowerCase(),
-                attr.getName(), name);
-        return buildCriteria(query, attr.gettClass());
+                attr.getName(), paramName);
+        var criteria =  buildCriteria(query, attr.gettClass());
+        criteria.addToParam(paramName,name);
+        return criteria;
     }
 
     public <T> Criteria<T>[] count(Criteria<T>... criterias){
@@ -57,6 +60,7 @@ public class GenericCriteriaBuilder implements CriteriaBuilder {
         criteria.addJoinAll(getFieldFromCriterias(criterias, Criteria::getJoin));
         criteria.addWhereAll(getFieldFromCriterias(criterias, Criteria::getWhere));
         criteria.addSelectAll(getFieldFromCriterias(criterias, Criteria::getSelect));
+        criterias.forEach(crit -> criteria.addParamAll(crit.getParamsToInject()));
         criteria.addSelect(String.format("%s"));
         return criteria;
     }
@@ -69,4 +73,5 @@ public class GenericCriteriaBuilder implements CriteriaBuilder {
                 .flatMap(Collection::stream)
                 .collect(toList());
     }
+
 }

@@ -18,7 +18,7 @@ public class QueryConstructorImpl implements QueryConstructor {
     private EntityManager manager;
 
     @Override
-    public <T> String createQuery(Class<T> clazz, Criteria<T>... criterias) {
+    public <T> Query createQuery(Class<T> clazz, Criteria<T>... criterias) {
         var classname = clazz.getSimpleName();
         var lowercase = classname.toLowerCase();
         var select = String.format("select %s from %s %s", lowercase, classname, lowercase);
@@ -26,20 +26,28 @@ public class QueryConstructorImpl implements QueryConstructor {
         var where = new StringBuilder(WHERE);
         analyzeCriteria(criterias, join, where);
         String query = select + join.toString() + where.toString();
-        return query;
+        var jpqlQuery = manager.createQuery(query);
+        injectParams(jpqlQuery,criterias);
+        return jpqlQuery;
+    }
+
+    private void injectParams(Query jpqlQuery, Criteria[] criterias){
+        for (int i = 0; i <criterias.length ; i++) {
+           criterias[i].getParamsToInject().forEach((k,v) -> jpqlQuery.setParameter((String)k,v));
+        }
     }
 
     @Override
-    public <T> List<T> executeQuery(String query, int offset, int limit) {
+    public <T> List<T> executeQuery(Query query, int offset, int limit) {
         Query query1 = switch (limit) {
-            case 0 -> manager.createQuery(query);
-            default -> manager.createQuery(query).setFirstResult(offset).setMaxResults(limit);
+            case 0 -> query;
+            default -> query.setFirstResult(offset).setMaxResults(limit);
         };
         return query1.getResultList();
     }
 
     private void analyzeCriteria(Criteria[] criterias, StringBuilder join, StringBuilder where) {
-        for (var criteria : criterias) {
+        for (Criteria<? extends Object> criteria : criterias) {
             analyzeList(criteria.getJoin(), join, EMPTY);
             analyzeList(criteria.getWhere(), where, AND);
         }
